@@ -1,0 +1,15 @@
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{asset('frontend/css/open-iconic-bootstrap.min.css')}}">
+<link rel="stylesheet" href="{{asset('frontend/css/animate.css')}}">
+<link rel="stylesheet" href="{{asset('frontend/css/owl.carousel.min.css')}}">
+<link rel="stylesheet" href="{{asset('frontend/css/owl.theme.default.min.css')}}">
+<link rel="stylesheet" href="{{asset('frontend/css/magnific-popup.css')}}">
+<link rel="stylesheet" href="{{asset('frontend/css/aos.css')}}">
+<link rel="stylesheet" href="{{asset('frontend/css/ionicons.min.css')}}">
+<link rel="stylesheet" href="{{asset('frontend/css/bootstrap-datepicker.css')}}">
+<link rel="stylesheet" href="{{asset('frontend/css/jquery.timepicker.css')}}">
+<link rel="stylesheet" href="{{asset('frontend/css/flaticon.css')}}">
+<link rel="stylesheet" href="{{asset('frontend/css/icomoon.css')}}">
+<link rel="stylesheet" href="{{asset('frontend/css/style.css')}}">
+{{--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"--}}
+{{--      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">--}}

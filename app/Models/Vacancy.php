@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Models;
+
+namespace App\Models;
+
+use Astrotomic\Translatable\Translatable;
+use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
+use Illuminate\Support\Carbon;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
+use Illuminate\Database\Eloquent\Model;
+
+class Vacancy extends Model
+{
+    use LogsActivity;
+    public function scopeActive($query)
+    {
+        return $query->where('end_time', '>=',Carbon::now()->toDateString())->get();
+    }
+    protected $guarded = [];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->logOnly(['age', 'email', 'phone', 'salary']);
+    }
+}

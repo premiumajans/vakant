@@ -1,0 +1,35 @@
+<?php
+
+return [
+    '404-2' => 'Sorry, the page you are looking for does not exist.',
+    'about' => 'About',
+    'accept-cv' => 'Submit your resume (Word, PDF only)',
+    'apply' => 'Apply',
+    'bio' => 'Autobiography',
+    'company' => 'Company',
+    'confirm-cert' => 'Our certificates of conformity',
+    'contact-informations' => 'Contact informations',
+    'continue' => 'Continue',
+    'customers' => 'Customers',
+    'enter-email' => 'Enter your e-mail address..',
+    'faq' => 'Frequently asked questions',
+    'fatherName' => 'Father Name',
+    'find-a-candidate' => 'Resumes',
+    'find-a-job' => 'Vacancies',
+    'history' => 'Tarixçə',
+    'maximum' => 'Maximum',
+    'minimum' => 'Minimum',
+    'our-products' => 'Our products',
+    'post-a-job' => 'Post a Job',
+    'search' => 'Search',
+    'subscribe' => 'SUBSCRIBE',
+    'write-us' => 'WRITE TO US',
+    'candidate-requirements' => 'Candidate Requirements',
+    'relevant-people' => 'Relevant person',
+    'post-a-vacancy' => 'Post',
+    'about-job' => 'Job description',
+    'my-profile' => 'My Profile',
+    'packages' => 'Packages',
+
+
+];

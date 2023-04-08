@@ -847,6 +847,11 @@ fieldset:disabled a.btn {
     border-left: 0.3em solid transparent;
 }
 
+.pending-vacancy {
+    background-color: #e8e8e8;
+    border-radius: 7px;
+}
+
 .dropdown-toggle:empty::after {
     margin-left: 0;
 }

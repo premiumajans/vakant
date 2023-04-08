@@ -50,7 +50,7 @@
                                                                 class="text-danger">*</span></label>
                                                         <input type="text" name="title[{{ $lan->code }}]"
                                                                class="form-control" id="validationCustom"
-                                                               data-parsley-minlength="6" required=""
+                                                              required=""
                                                                placeholder="@lang('backend.title')">
                                                         <div class="valid-feedback">
                                                             @lang('backend.title') @lang('messages.is-correct')

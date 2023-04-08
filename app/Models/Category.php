@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\RelationshipsTrait;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -15,7 +16,7 @@ class Category extends Model implements TranslatableContract
         return $this->hasMany(AltCategory::class, 'category_id');
     }
 
-    use Translatable, LogsActivity;
+    use Translatable, LogsActivity,RelationshipsTrait;
 
     public $translatedAttributes = ['name'];
     protected $fillable = ['slug'];
@@ -24,5 +25,4 @@ class Category extends Model implements TranslatableContract
     {
         return LogOptions::defaults()->logOnly(['slug']);
     }
-
 }

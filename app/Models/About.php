@@ -11,4 +11,6 @@ class About extends Model implements TranslatableContract
     use Translatable;
 
     public $translatedAttributes = ['content'];
+
+
 }

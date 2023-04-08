@@ -58,7 +58,7 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::post('/package/add-new-component/', [BPackageComponent::class, 'addNewComponent'])->name('addNewComponent');
     Route::get('/vacancies/approved', [BVacancy::class, 'approved'])->name('approvedVacancies');
     Route::get('/vacancies/pending', [BVacancy::class, 'pending'])->name('pendingVacancies');
-
+    Route::get('/vacancy/append/{id}',[BVacancy::class,'approveVacancy'])->name('approve-vacancy');
 
 
 //Resources

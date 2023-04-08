@@ -28,13 +28,18 @@ Route::group(['prefix' => '/', 'as' => 'frontend.', 'middleware' => 'frontLangua
 });
 
 Route::group(['prefix' => '/user', 'as' => 'user.'], function () {
+    Route::get('/', function () {
+        return redirect()->route('user.loginForm');
+    });
     Route::get('login', [UAuth::class, 'loginForm'])->name('loginForm');
     Route::get('register', [UAuth::class, 'registerForm'])->name('registerForm');
     Route::post('register', [UAuth::class, 'registerUser'])->name('registerUser');
     Route::post('login', [UAuth::class, 'loginUser'])->name('loginUser');
-    Route::get('/', function () {
-        return redirect()->route('user.loginForm');
-    });
+    Route::get('forgot-password', [UAuth::class, 'forgotPasswordForm'])->name('forgotPasswordForm');
+    Route::get('/login/google', [UAuth::class, 'redirectToGoogle'])->name('loginGoogle');
+    Route::get('/login/google/callback', [UAuth::class, 'handleGoogleCallback'])->name('loginGoogleCallback');
+    Route::get('/login/facebook', [UAuth::class, 'redirectToFacebook'])->name('loginFacebook');
+    Route::get('/login/facebook/callback', [UAuth::class, 'handleFacebookCallback'])->name('loginFacebookCallback');
     Route::post('/check-user', [FVacancy::class, 'checkUser'])->name('checkUser');
     Route::post('/logout', [UAuth::class, 'logout'])->name('logout');
     Route::group(['prefix' => '/profile', 'middleware' => 'auth:admin'], function () {

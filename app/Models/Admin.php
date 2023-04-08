@@ -21,8 +21,7 @@ class Admin extends Authenticatable
         HasFactory,
         HasProfilePhoto,
         Notifiable,
-        TwoFactorAuthenticatable,
-        LogsActivity;
+        TwoFactorAuthenticatable;
 
     protected $guard = 'admin';
 
@@ -33,7 +32,7 @@ class Admin extends Authenticatable
 
     public function package()
     {
-        return $this->belongsToMany(Package::class, 'admin_packages', 'admin_id', 'package_id');
+        return $this->belongsToMany(Package::class, 'admin_packages', 'admin_id', 'package_id')->withPivot('current_ads_count');
     }
 
     protected $fillable = [
@@ -56,9 +55,4 @@ class Admin extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()->logOnly(['name', 'email', 'password', 'login']);
-    }
 }

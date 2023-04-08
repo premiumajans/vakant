@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
-use App\Models\CategoryTranslation;
+use App\Http\Enums\CompanyEnum;
+use App\Http\Enums\VacancyAdminEnum;
+use App\Http\Requests\Backend\Create\VacancyRequest;
 use App\Models\Vacancy;
-use App\Models\VacancyTranslation;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class VacancyController extends Controller
 {
+
     public function index()
     {
         abort_if(Gate::denies('vacancy edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -31,48 +32,54 @@ class VacancyController extends Controller
     public function approved()
     {
         abort_if(Gate::denies('vacancy index'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $vacancies = Vacancy::where('admin_status', 1)->get();
+        $vacancies = DB::table('vacancies')->where('admin_status', 1)->get();
         return view('backend.vacancies.approved', get_defined_vars());
     }
 
     public function pending()
     {
         abort_if(Gate::denies('vacancy index'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $vacancies = Vacancy::where('admin_status', 0)->get();
+        $vacancies = DB::table('vacancies')->where('admin_status', 0)->get();
         return view('backend.vacancies.pending', get_defined_vars());
     }
 
     public function create()
     {
         abort_if(Gate::denies('vacancy create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        return view('backend.about.vacancy.create');
+        return view('backend.vacancies.create');
     }
 
-    public function store(Request $request)
+    public function store(VacancyRequest $request)
     {
-        dd($request->all());
         abort_if(Gate::denies('vacancy create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         try {
             $vacancy = new Vacancy();
-            $vacancy->age = $request->age;
-            $vacancy->salary = $request->salary;
             $vacancy->email = $request->email;
             $vacancy->phone = $request->phone;
+            $vacancy->position = $request->position;
+            $vacancy->category_id = $request->category;
+            $vacancy->max_salary = $request->maximum_salary;
+            $vacancy->min_salary = $request->minimum_salary;
+            $vacancy->max_age = $request->maximum_age;
+            $vacancy->min_age = $request->minimum_age;
+            $vacancy->city_id = $request->city;
+            $vacancy->education_id = $request->education;
+            $vacancy->experience_id = $request->experience;
+            $vacancy->company_type = CompanyEnum::ADMIN;
+            $vacancy->company = $request->company;
+            $vacancy->relevant_people = $request->relevant_people;
+            $vacancy->candidate_requirement = $request->candidate_requirements;
+            $vacancy->job_description = $request->about_job;
+            $vacancy->tags = $request->tags;
+            $vacancy->admin_status = VacancyAdminEnum::Approved;
+            $vacancy->admin_id = auth()->user()->id;
+            vacancy_time($vacancy);
             $vacancy->save();
-            foreach (active_langs() as $lang) {
-                $translation = new VacancyTranslation();
-                $translation->title = $request->title[$lang->code];
-                $translation->education = $request->education[$lang->code];
-                $translation->experience = $request->experience[$lang->code];
-                $translation->locale = $lang->code;
-                $translation->vacancy_id = $vacancy->id;
-                $translation->save();
-            }
             alert()->success(__('messages.success'));
-            return redirect()->route('backend.about.vacancies.index');
+            return redirect()->route('backend.approvedVacancies');
         } catch (\Exception $e) {
             alert()->error(__('messages.error'));
-            return redirect()->route('backend.about.vacancies.index');
+            return redirect()->route('backend.approvedVacancies');
         }
     }
 
@@ -80,30 +87,53 @@ class VacancyController extends Controller
     {
         abort_if(Gate::denies('vacancy edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $vacancy = Vacancy::find($id);
-        return view('backend.about.vacancy.edit', get_defined_vars());
+        return view('backend.vacancies.edit', get_defined_vars());
     }
 
     public function update(Request $request, Vacancy $vacancy)
     {
         abort_if(Gate::denies('vacancy edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         try {
-            DB::transaction(function () use ($request, $vacancy) {
-                $vacancy->age = $request->age;
-                $vacancy->email = $request->email;
-                $vacancy->phone = $request->phone;
-                $vacancy->salary = $request->salary;
-                foreach (active_langs() as $lang) {
-                    $vacancy->translate($lang->code)->title = $request->title[$lang->code];
-                    $vacancy->translate($lang->code)->experience = $request->experience[$lang->code];
-                    $vacancy->translate($lang->code)->education = $request->education[$lang->code];
-                }
-                $vacancy->save();
-            });
+            $vacancy->email = $request->email;
+            $vacancy->phone = $request->phone;
+            $vacancy->position = $request->position;
+            $vacancy->category_id = $request->category;
+            $vacancy->max_salary = $request->maximum_salary;
+            $vacancy->min_salary = $request->minimum_salary;
+            $vacancy->max_age = $request->maximum_age;
+            $vacancy->min_age = $request->minimum_age;
+            $vacancy->city_id = $request->city;
+            $vacancy->education_id = $request->education;
+            $vacancy->experience_id = $request->experience;
+            $vacancy->company_type = CompanyEnum::ADMIN;
+            $vacancy->company = $request->company;
+            $vacancy->relevant_people = $request->relevant_people;
+            $vacancy->candidate_requirement = $request->candidate_requirements;
+            $vacancy->job_description = $request->about_job;
+            $vacancy->tags = $request->tags;
+            $vacancy->admin_id = auth()->user()->id;
+            $vacancy->save();
             alert()->success(__('messages.success'));
-            return redirect(route('backend.about.vacancies.index'));
+            return redirect()->back();
         } catch (Exception $e) {
             alert()->error(__('messages.error'));
-            return redirect(route('backend.about.vacancies.index'));
+            return redirect()->back();
+        }
+    }
+
+    public function approveVacancy($id)
+    {
+        abort_if(Gate::denies('vacancy create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        try {
+            $vacancy = Vacancy::find($id);
+            $vacancy->admin_status = 1;
+            $vacancy->admin_id = auth()->user()->id;
+            $vacancy->save();
+            alert()->success(__('messages.success'));
+            return redirect()->route('backend.pendingVacancies');
+        } catch (Exception $e) {
+            alert()->error(__('messages.error'));
+            return redirect()->route('backend.pendingVacancies');
         }
     }
 
@@ -113,10 +143,10 @@ class VacancyController extends Controller
         try {
             Vacancy::find($id)->delete();
             alert()->success(__('messages.success'));
-            return redirect()->route('backend.about.vacancies.index');
+            return redirect()->route('backend.pendingVacancies');
         } catch (\Exception $e) {
             alert()->error(__('messages.error'));
-            return redirect()->route('backend.about.vacancies.index');
+            return redirect()->route('backend.pendingVacancies');
         }
     }
 }

@@ -2,6 +2,7 @@
 
 use App\Models\SiteLanguage;
 use App\Models\Setting;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 
 if (!function_exists('upload')) {
@@ -71,6 +72,30 @@ if (!function_exists('statistic')) {
     function statistic($name)
     {
         return \App\Models\Statistics::where('name', $name)->value('count');
+    }
+}
+
+if (!function_exists('vacancy_tags')) {
+    function vacancy_tags($tags)
+    {
+        try {
+            $tagsArray = [];
+            $array = json_decode($tags);
+            foreach ($array as $t){
+                array_push($tagsArray,$t->value);
+            }
+            return $tagsArray;
+        } catch (Exception $e) {
+            return redirect()->back();
+        }
+    }
+}
+
+if (!function_exists('vacancy_time')) {
+    function vacancy_time($vacancy)
+    {
+        $vacancy->start_time = Carbon::now();
+        $vacancy->end_time = Carbon::now()->addDay(settings('vacancy_day'));
     }
 }
 

@@ -56,7 +56,8 @@
                                                                     <option value="">@lang('backend.cities')</option>
                                                                     @foreach($cities as $city)
                                                                         <option
-                                                                            value="{{ $city->id }}">{{ $city->translate(app()->getLocale())->name ?? '-' }}</option>
+                                                                            value="{{ $city->id }}">{{ $city->translate(app()->getLocale())->name ?? '-' }}
+                                                                        </option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>

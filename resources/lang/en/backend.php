@@ -163,6 +163,7 @@ return array (
   'title' => 'Title',
   'try-again' => 'Please try again',
   'updated' => 'Updated',
+  'used' => 'has been used',
   'user-setting' => 'User Setting',
   'username' => 'Username',
   'users' => 'Users',
@@ -173,4 +174,6 @@ return array (
   'work-mode' => 'Work Mode',
   'write-contact-us' => 'If you would like to see your name on this list, write to the "<a href="/contact-us">Contact Us</a>" page.',
   'writers' => 'Writers',
+  'your-item-message' => 'Your ad is waiting for review. Remember the ad number to edit and delete the ad.',
+  'your-item-number' => 'Your ad number',
 );

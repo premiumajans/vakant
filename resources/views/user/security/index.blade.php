@@ -4,7 +4,7 @@
         <div class="row mx-0 gy-3 px-lg-5">
             <div class="card mb-4">
                 <h5 class="card-header">@lang('backend.security')</h5>
-                <div class="card-body ">
+                <div class="card-body">
                     <form id="formAccountSettings"
                           action="{{ route('user.updateProfile',auth()->guard('admin')->user()->id) }}" method="POST"
                           enctype="multipart/form-data">

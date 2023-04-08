@@ -23,13 +23,13 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $sliders = Slider::where('status', 1)->orderBy('order', 'asc')->get();
-        $productLists = Productlist::where('status', 1)->get();
-        $about = About::first();
-        $services = Service::where('status', 1)->get()->take(6);
-        $projects = Project::where('status', 1)->get()->take(3);
-        $news = News::all();
-        $supports = Support::all();
+//        $sliders = Slider::where('status', 1)->orderBy('order', 'asc')->get();
+//        $productLists = Productlist::where('status', 1)->get();
+//        $about = About::first();
+//        $services = Service::where('status', 1)->get()->take(6);
+//        $projects = Project::where('status', 1)->get()->take(3);
+//        $news = News::all();
+//        $supports = Support::all();
         return view('frontend.index', get_defined_vars());
     }
 

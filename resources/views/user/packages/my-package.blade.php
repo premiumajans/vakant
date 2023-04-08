@@ -13,8 +13,8 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center mb-1 mt-3">
-                        <span>{{  0 .'/'. $package->ads_count }}</span>
-                        <span>80% Completed</span>
+                        <span>{{ $package->ads_count - $package->pivot->current_ads_count .'/'. $package->ads_count }}</span>
+                        <span>{{ 100 - (($package->pivot->current_ads_count / $package->ads_count ) * 100) }}% @lang('backend.used')</span>
                     </div>
                     <div class="progress mb-1" style="height: 8px;">
                         <div class="progress-bar" role="progressbar" style="width: 80%;" aria-valuenow="80"

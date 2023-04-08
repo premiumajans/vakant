@@ -26,7 +26,7 @@
                                         <div class="mb-3">
                                             <label>@lang('backend.name') <span class="text-danger">*</span></label>
                                             <input type="text" name="name" class="form-control" required=""
-                                                   data-parsley-minlength="6" placeholder="Premium Ajans MMC">
+                                                  placeholder="Premium Ajans MMC">
                                             <div class="valid-feedback">
                                                 @lang('backend.name') @lang('messages.is-correct')
                                             </div>
@@ -37,7 +37,7 @@
                                         <div class="mb-3">
                                             <label>@lang('backend.email') <span class="text-danger">*</span></label>
                                             <input type="text" name="email" class="form-control" required=""
-                                                   data-parsley-minlength="6" placeholder="taleh@vakant.az">
+                                                  placeholder="taleh@vakant.az">
                                             <div class="valid-feedback">
                                                 @lang('backend.email') @lang('messages.is-correct')
                                             </div>
@@ -61,7 +61,7 @@
                                         <div class="mb-3">
                                             <label>@lang('backend.adress') <span class="text-danger">*</span></label>
                                             <input type="text" name="address" class="form-control" required=""
-                                                   data-parsley-minlength="6" placeholder="Bakı, Azərbaycan">
+                                                  placeholder="Bakı, Azərbaycan">
                                             <div class="valid-feedback">
                                                 @lang('backend.address') @lang('messages.is-correct')
                                             </div>
@@ -73,7 +73,7 @@
                                         <div class="mb-3">
                                             <label>@lang('backend.voen') <span class="text-danger">*</span></label>
                                             <input type="text" name="voen" class="form-control" required=""
-                                                   data-parsley-minlength="6" placeholder="@lang('backend.voen')">
+                                                  placeholder="@lang('backend.voen')">
                                             <div class="valid-feedback">
                                                 @lang('backend.voen') @lang('messages.is-correct')
                                             </div>
@@ -140,7 +140,7 @@
                                         <div class="mb-3">
                                             <label>@lang('backend.name') <span class="text-danger">*</span></label>
                                             <input type="text" name="name" class="form-control" required=""
-                                                   data-parsley-minlength="6" value="{{ $company->name ?? '-' }}">
+                                                  value="{{ $company->name ?? '-' }}">
                                             <div class="valid-feedback">
                                                 @lang('backend.name') @lang('messages.is-correct')
                                             </div>
@@ -151,7 +151,7 @@
                                         <div class="mb-3">
                                             <label>@lang('backend.email') <span class="text-danger">*</span></label>
                                             <input type="text" name="email" class="form-control" required=""
-                                                   data-parsley-minlength="6" value="{{ $company->email ?? '-' }}">
+                                                  value="{{ $company->email ?? '-' }}">
                                             <div class="valid-feedback">
                                                 @lang('backend.email') @lang('messages.is-correct')
                                             </div>
@@ -163,7 +163,7 @@
                                         <div class="mb-3">
                                             <label>@lang('backend.phone') <span class="text-danger">*</span></label>
                                             <input type="text" name="phone" class="form-control" required=""
-                                                   data-parsley-minlength="6" value="{{ $company->phone ?? '-' }}">
+                                                  value="{{ $company->phone ?? '-' }}">
                                             <div class="valid-feedback">
                                                 @lang('backend.phone') @lang('messages.is-correct')
                                             </div>
@@ -175,7 +175,7 @@
                                         <div class="mb-3">
                                             <label>@lang('backend.adress') <span class="text-danger">*</span></label>
                                             <input type="text" name="address" class="form-control" required=""
-                                                   data-parsley-minlength="6" value="{{ $company->adress ?? '-' }}">
+                                                  value="{{ $company->adress ?? '-' }}">
                                             <div class="valid-feedback">
                                                 @lang('backend.address') @lang('messages.is-correct')
                                             </div>
@@ -187,7 +187,7 @@
                                         <div class="mb-3">
                                             <label>@lang('backend.voen') <span class="text-danger">*</span></label>
                                             <input type="text" name="voen" class="form-control" required=""
-                                                   data-parsley-minlength="6" value="{{ $company->voen ?? '-' }}">
+                                                  value="{{ $company->voen ?? '-' }}">
                                             <div class="valid-feedback">
                                                 @lang('backend.voen') @lang('messages.is-correct')
                                             </div>

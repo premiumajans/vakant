@@ -4,14 +4,14 @@
         <div class="row mx-0 gy-3 px-lg-5">
             <div class="card mb-4">
                 <h5 class="card-header">@lang('backend.post-an-ad')</h5>
-                <form class="card-body">
+                <form class="card-body" action="{{ route('user.item.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label" for="multicol-username">@lang('backend.position')</label>
                             <input type="text" class="form-control" name="position"
                                    placeholder="@lang('backend.position')"/>
                         </div>
-
                         <div class="col-md-6">
                             <label class="form-label" for="multicol-country">@lang('backend.categories')</label>
                             <select id="multicol-country" class="form-select" data-allow-clear="true">

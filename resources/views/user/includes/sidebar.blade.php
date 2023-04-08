@@ -42,12 +42,14 @@
                 <div>@lang('backend.my-company')</div>
             </a>
         </li>
+        @if(\Illuminate\Support\Facades\Auth::guard('admin')->user()->provider_id == null)
+            <li class="menu-item @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'user.security') active @endif">
+                <a href="{{ route('user.security') }}" class="menu-link">
+                    <i class="menu-icon fas fa-shield-alt"></i>
+                    <div>@lang('backend.security')</div>
+                </a>
+            </li>
+        @endif
 
-        <li class="menu-item @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'user.security') active @endif">
-            <a href="{{ route('user.security') }}" class="menu-link">
-                <i class="menu-icon fas fa-shield-alt"></i>
-                <div>@lang('backend.security')</div>
-            </a>
-        </li>
     </ul>
 </aside>

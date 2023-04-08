@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBiginteger('admin_id')->unsigned();
             $table->unsignedBiginteger('package_id')->unsigned();
+            $table->integer('current_ads_count');
             $table->foreign('admin_id')->references('id')
                 ->on('admins')->onDelete('cascade');
             $table->foreign('package_id')->references('id')

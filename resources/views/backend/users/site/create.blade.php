@@ -20,7 +20,7 @@
                                     <div class="mb-3">
                                         <label>@lang('backend.name') <span class="text-danger">*</span></label>
                                         <input type="text" name="name" class="form-control" required=""
-                                               data-parsley-minlength="6" placeholder="Taleh Maharramov">
+                                              placeholder="Taleh Maharramov">
                                         <div class="valid-feedback">
                                             @lang('backend.name') @lang('messages.is-correct')
                                         </div>
@@ -31,7 +31,7 @@
                                     <div class="mb-3">
                                         <label>@lang('backend.email') <span class="text-danger">*</span></label>
                                         <input type="text" name="email" class="form-control" required=""
-                                               data-parsley-minlength="6" placeholder="taleh@vakant.az">
+                                              placeholder="taleh@vakant.az">
                                         <div class="valid-feedback">
                                             @lang('backend.email') @lang('messages.is-correct')
                                         </div>
@@ -42,7 +42,7 @@
                                     <div class="mb-3">
                                         <label>@lang('backend.password') <span class="text-danger">*</span></label>
                                         <input type="password" name="password" class="form-control" required=""
-                                               data-parsley-minlength="6" placeholder="@lang('backend.password')">
+                                              placeholder="@lang('backend.password')">
                                         <div class="valid-feedback">
                                             @lang('backend.password') @lang('messages.is-correct')
                                         </div>

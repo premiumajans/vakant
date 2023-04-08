@@ -13,25 +13,35 @@ class SecurityController extends Controller
 {
     public function index()
     {
-        return view('user.security.index');
+        if (auth()->guard('admin')->user()->provider_id == null) {
+            return view('user.security.index');
+        }
+        else{
+            return redirect()->route('user.index');
+        }
     }
 
     public function update(SecurityRequest $request, $id)
     {
-        try {
-            $admin = \App\Models\Admin::find($id);
-            if (Hash::check($request->currentPassword, $admin->password)) {
-                $admin->update([
-                    'password' => Hash::make($request->newPassword),
-                ]);
-            } else {
-                throw new Exception();
+        if (auth()->guard('admin')->user()->provider_id == null) {
+            try {
+                $admin = \App\Models\Admin::find($id);
+                if (Hash::check($request->currentPassword, $admin->password)) {
+                    $admin->update([
+                        'password' => Hash::make($request->newPassword),
+                    ]);
+                } else {
+                    throw new Exception();
+                }
+
+                alert()->success(__('messages.success'));
+                return redirect(route('user.security'));
+            } catch (Exception $e) {
+                alert()->error(__('messages.error'));
+                return redirect(route('user.index'));
             }
-            alert()->success(__('messages.success'));
-            return redirect(route('user.security'));
-        } catch (Exception $e) {
-            alert()->error(__('messages.error'));
-            return redirect(route('user.security'));
+        } else {
+            return redirect()->route('user.index');
         }
     }
 }

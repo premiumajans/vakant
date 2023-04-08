@@ -10,64 +10,30 @@
 <body>
 <div class="container-xxl">
     <div class="authentication-wrapper authentication-basic container-p-y">
-        <div class="authentication-inner">
+        <div class="authentication-inner py-4">
             <div class="card">
                 <div class="card-body">
                     <div class="app-brand justify-content-center">
-                        <a href="{{ route('frontend.index') }}" class="app-brand-link gap-2">
-                            <span class="app-brand-text demo fw-bolder" style="color: #696cff">Vakant.az</span>
+                        <a href="index-2.html" class="app-brand-link gap-2">
+                            <span class="app-brand-logo demo"></span>
+                            <span class="app-brand-text demo text-body fw-bolder">vakant.az</span>
                         </a>
                     </div>
-                    <h4 class="mb-2">@lang('auth.login-to-account')</h4>
-                    <p class="mb-4">@lang('auth.welcome')</p>
-                    <form id="formAuthentication" class="mb-3"
-                          action="{{ route('user.loginUser') }}"
+                    <h4 class="mb-4">@lang('auth.forgot-password') 🔒</h4>
+                    <form id="formAuthentication"
+                          class="mb-3"
+                          action=""
                           method="POST">
-                        @csrf
                         <div class="mb-3">
                             <label for="email" class="form-label">@lang('backend.email')</label>
                             <input type="text" class="form-control" id="email" name="email"
                                    placeholder="@lang('auth.enter-your-mail')" autofocus>
                         </div>
-                        <div class="mb-3 form-password-toggle">
-                            <div class="d-flex justify-content-between">
-                                <label class="form-label" for="password">@lang('backend.password')</label>
-                                <a href="{{ route('user.forgotPasswordForm') }}">
-                                    <small>@lang('auth.forgot-password')</small>
-                                </a>
-                            </div>
-                            <div class="input-group input-group-merge">
-                                <input type="password" id="password" class="form-control" name="password"
-                                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                       aria-describedby="password"/>
-                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <div class="form-check">
-                                <input class="form-check-input" name="remember_me" value="1" type="checkbox"
-                                       id="remember-me">
-                                <label class="form-check-label" for="remember-me">
-                                    @lang('auth.remember-me')
-                                </label>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <button class="btn btn-primary d-grid w-100" type="submit">@lang('backend.login')</button>
-                        </div>
+                        <button class="btn btn-primary d-grid w-100">@lang('backend.send')</button>
                     </form>
-                    <p class="text-center">
-                        <a href="{{ route('user.registerForm') }}">
-                            <span>@lang('auth.create-an-account')</span>
-                        </a>
-                    </p>
-                    <div class="d-flex justify-content-center">
-                        <a href="{{ route('user.loginFacebook') }}" class="btn btn-icon btn-label-facebook me-3">
-                            <i class="tf-icons bx bxl-facebook"></i>
-                        </a>
-                        <a href="{{ route('user.loginGoogle') }}" class="btn btn-icon btn-label-google-plus me-3">
-                            <i class="tf-icons bx bxl-google"></i>
-                        </a>
+                    <div class="text-center">
+                        <a href="{{ route('frontend.index') }}" class="d-flex align-items-center justify-content-center">
+                            <i class="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>@lang('backend.back-to-home')</a>
                     </div>
                 </div>
             </div>
@@ -131,4 +97,5 @@
     });
 </script>
 </body>
+
 </html>

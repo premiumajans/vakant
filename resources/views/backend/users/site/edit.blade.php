@@ -21,7 +21,7 @@
                                     <div class="mb-3">
                                         <label>@lang('backend.name') <span class="text-danger">*</span></label>
                                         <input type="text" name="name" class="form-control" required=""
-                                               data-parsley-minlength="6" value="{{ $admin->name }}">
+                                              value="{{ $admin->name }}">
                                         <div class="valid-feedback">
                                             @lang('backend.name') @lang('messages.is-correct')
                                         </div>
@@ -32,7 +32,7 @@
                                     <div class="mb-3">
                                         <label>@lang('backend.email') <span class="text-danger">*</span></label>
                                         <input type="text" name="email" class="form-control" required=""
-                                               data-parsley-minlength="6" value="{{ $admin->email }}">
+                                              value="{{ $admin->email }}">
                                         <div class="valid-feedback">
                                             @lang('backend.email') @lang('messages.is-correct')
                                         </div>

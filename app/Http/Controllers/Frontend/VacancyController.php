@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Enums\CompanyEnum;
+use App\Http\Enums\VacancyAdminEnum;
 use App\Http\Requests\Frontend\CheckUserRequest;
 use App\Http\Requests\Frontend\Create\VacancyRequest;
 use App\Models\Admin;
@@ -35,20 +37,20 @@ class VacancyController extends Controller
             $vacancy->city_id = $request->city;
             $vacancy->education_id = $request->education;
             $vacancy->experience_id = $request->experience;
-            $vacancy->company_type = 1;
+            $vacancy->company_type = CompanyEnum::SINGLE;
             $vacancy->company = $request->company;
             $vacancy->relevant_people = $request->relevant_people;
             $vacancy->candidate_requirement = $request->candidate_requirements;
             $vacancy->job_description = $request->about_job;
-            $vacancy->admin_status = 0;
             $vacancy->tags = $request->tags;
+            $vacancy->admin_status = VacancyAdminEnum::Pending;
             $vacancy->admin_id = 0;
-            $vacancy->start_time = Carbon::now();
-            $vacancy->end_time = Carbon::now()->addMonth();
+            vacancy_time($vacancy);
             $vacancy->save();
-
+            return view('frontend.vacancies.pending', ['id' => $vacancy->id,'position' => $vacancy->position]);
         } catch (Exception $exception) {
-
+            alert()->error(__('messages.error'));
+            return redirect(route('frontend.new-vacancy'));
         }
     }
 

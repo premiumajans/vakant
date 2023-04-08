@@ -44,7 +44,7 @@
                                                         <label>@lang('backend.title') <span class="text-danger">*</span></label>
                                                         <input name="title[{{ $lan->code }}]" type="text"
                                                                class="form-control" required=""
-                                                               data-parsley-minlength="6"
+
                                                                value="{{ $post->translate($lan->code)->title }}"
                                                                placeholder="@lang('backend.title')">
                                                         <div class="valid-feedback">
@@ -106,7 +106,7 @@
                                         <div class="mb-3">
                                             <label>@lang('backend.photo') <span class="text-danger">*</span></label>
                                             <input name="photo" type="file" class="form-control"
-                                                   data-parsley-minlength="6">
+                                                 >
                                             <div class="valid-feedback">
                                                 @lang('backend.photo') @lang('messages.is-correct')
                                             </div>

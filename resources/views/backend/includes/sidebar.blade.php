@@ -18,6 +18,7 @@
                             <span>@lang('backend.vacancies')</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
+                            <li><a href="{{ route('backend.vacancies.create') }}">@lang('backend.add-new')</a></li>
                             <li><a href="{{ route('backend.approvedVacancies') }}">@lang('backend.approved-vacancies')</a></li>
                             <li><a href="{{ route('backend.pendingVacancies') }}">@lang('backend.pending-vacancies')</a></li>
                         </ul>

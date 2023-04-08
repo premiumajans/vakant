@@ -38,6 +38,7 @@ return array (
   'check-uncheck' => 'Hamısını seç / Heç birini seçmə',
   'choose-payment-method' => 'Ödəniş üsulunuzu seçin',
   'cities' => 'Şəhərlər',
+  'city' => 'Şəhər',
   'clean-all' => 'Hamısını Təmizlə',
   'cnew-password' => 'Yeni şifrəni təsdiqlə',
   'code' => 'Kod',
@@ -165,6 +166,7 @@ return array (
   'try-again' => 'Yenidən cəhd edin',
   'unread' => 'Oxunmayıb',
   'updated' => 'Yeniləndi',
+  'used' => 'istifadə olunub',
   'user-setting' => 'İstifadəçi tənzimləmələri',
   'username' => 'İstifadəçi adı',
   'users' => 'İstifadəçilər',
@@ -174,4 +176,6 @@ return array (
   'voen' => 'Vöen',
   'work-mode' => 'İş rejimi',
   'writers' => 'Yazıçılar',
+  'your-item-message' => 'Elanınız nəzərdən keçirilməsini gözləyir.Elanı redaktə etmək və silmək üçün elanın nömrəsini yadda saxlayın.',
+  'your-item-number' => 'Elanınızın nömrəsi',
 );

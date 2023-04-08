@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->integer('education_id');
             $table->integer('experience_id');
             $table->integer('city_id');
+            $table->integer('mode_id');
             $table->integer('company_type');
             $table->string('company')->nullable();
             $table->string('relevant_people');

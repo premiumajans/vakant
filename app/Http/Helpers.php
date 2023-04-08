@@ -75,14 +75,21 @@ if (!function_exists('statistic')) {
     }
 }
 
+if (!function_exists('validation_m')) {
+    function validation_m($name)
+    {
+        return '<div class="valid-feedback">' . __($name) . ' ' . __('messages.is-correct') . '</div><div class="invalid-feedback">' . __($name) . ' ' . __('messages.not-correct') . '</div>';
+    }
+}
+
 if (!function_exists('vacancy_tags')) {
     function vacancy_tags($tags)
     {
         try {
             $tagsArray = [];
             $array = json_decode($tags);
-            foreach ($array as $t){
-                array_push($tagsArray,$t->value);
+            foreach ($array as $t) {
+                array_push($tagsArray, $t->value);
             }
             return $tagsArray;
         } catch (Exception $e) {

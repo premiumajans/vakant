@@ -57,7 +57,7 @@ class ItemController extends Controller
                 if (auth()->guard('admin')->user()->package()->first()->pivot->current_ads_count == 0) {
                     auth()->guard('admin')->user()->package()->first()->delete();
                 }
-                return redirect('user.item.index');
+                return redirect()->route('user.item.index');
             } catch (Exception $exception) {
                 alert()->error(__('messages.error'));
                 return redirect(route('frontend.new-vacancy'));

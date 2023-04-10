@@ -14,12 +14,16 @@ use Illuminate\Database\Eloquent\Model;
 class Vacancy extends Model
 {
     use LogsActivity;
+
+    public $timestamps = false;
+
     public function scopeActive($query)
     {
-        return $query->where('end_time', '>=',Carbon::now()->toDateString())->get();
+        return $query->where('end_time', '>=', Carbon::now()->toDateString())->get();
     }
-    protected $guarded = [];
 
+    protected $guarded = [];
+    
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->logOnly(['age', 'email', 'phone', 'salary']);

@@ -5,9 +5,9 @@
         e.flatpickr({allowInput: !0, monthSelectorType: "static"})
     }), document.querySelectorAll(".needs-validation"));
     Array.prototype.slice.call(e).forEach(function (a) {
-        a.addEventListener("submit", function (e) {
-            a.checkValidity() ? alert("Submitted!!!") : (e.preventDefault(), e.stopPropagation()), a.classList.add("was-validated")
-        }, !1)
+        // a.addEventListener("submit", function (e) {
+        //     a.checkValidity() ? alert("Submitted!!!") : (e.preventDefault(), e.stopPropagation()), a.classList.add("was-validated")
+        // }, !1)
     })
 }(), document.addEventListener("DOMContentLoaded", function (e) {
     {

@@ -32,7 +32,7 @@ class Admin extends Authenticatable
 
     public function package()
     {
-        return $this->belongsToMany(Package::class, 'admin_packages', 'admin_id', 'package_id')->withPivot('current_ads_count');
+        return $this->belongsToMany(Package::class, 'admin_packages', 'admin_id', 'package_id')->withPivot('current_ads_count', 'status');
     }
 
     protected $fillable = [

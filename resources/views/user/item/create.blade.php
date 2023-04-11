@@ -138,31 +138,37 @@
                                       class="form-control"></textarea>
                             {!! validation_m('frontend.candidate-requirements') !!}
                         </div>
-                        <div class="col-md-4">
-                            <label class="form-label" for="multicol-email">@lang('backend.email')</label>
-                                <input type="text" id="multicol-email" class="form-control" name="email" required
-                                       placeholder="example@site.com"/>
-                            {!! validation_m('backend.email') !!}
+                        <div class="col-md-6">
+                            <label class="form-label" for="multicol-phone">@lang('frontend.company')</label>
+                            <input type="text" name="company"
+                                   class="form-control" required
+                                   placeholder="@lang('frontend.company')"/>
+                            {!! validation_m('frontend.company') !!}
                         </div>
-
-                        <div class="col-md-4">
-                            <label class="form-label" for="multicol-phone">@lang('backend.phone')</label>
-                            <input type="text" class="form-control phone-mask" name="phone" required
-                                   placeholder="+994 50 000 0510"/>
-                            {!! validation_m('backend.phone') !!}
-                        </div>
-
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label class="form-label" for="multicol-phone">@lang('frontend.relevant-people')</label>
                             <input type="text" name="relevant_people"
                                    class="form-control" required
                                    placeholder="@lang('frontend.relevant-people')"/>
                             {!! validation_m('frontend.relevant-people') !!}
                         </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="multicol-email">@lang('backend.email')</label>
+                                <input type="text" id="multicol-email" class="form-control" name="email" required
+                                       placeholder="example@site.com"/>
+                            {!! validation_m('backend.email') !!}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label" for="multicol-phone">@lang('backend.phone')</label>
+                            <input type="text" class="form-control phone-mask" name="phone" required
+                                   placeholder="+994 50 000 0510"/>
+                            {!! validation_m('backend.phone') !!}
+                        </div>
 
                         <div class="col-12 mb-4">
                             <label for="TagifyBasic" class="form-label">@lang('backend.keywords')</label>
-                            <input id="TagifyBasic" class="form-control" name="name"
+                            <input id="TagifyBasic" class="form-control" name="tags"
                                    value="Vakansiya, İş elanları, Bakı"/>
                         </div>
 

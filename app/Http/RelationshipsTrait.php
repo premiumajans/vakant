@@ -21,7 +21,6 @@ trait RelationshipsTrait
             }
             try {
                 $return = $method->invoke($model);
-
                 if ($return instanceof Relation) {
                     $relationships[$method->getName()] = [
                         'type' => (new ReflectionClass($return))->getShortName(),

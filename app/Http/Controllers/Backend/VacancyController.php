@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Http\Enums\CompanyEnum;
+use App\Http\Enums\CauserEnum;
 use App\Http\Enums\VacancyAdminEnum;
 use App\Http\Requests\Backend\Create\VacancyRequest;
 use App\Models\Vacancy;
@@ -39,7 +39,7 @@ class VacancyController extends Controller
     public function pending()
     {
         abort_if(Gate::denies('vacancy index'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $vacancies = DB::table('vacancies')->where('admin_status', 0)->get();
+        $vacancies = Vacancy::where('admin_status',0)->get();
         return view('backend.vacancies.pending', get_defined_vars());
     }
 
@@ -65,7 +65,7 @@ class VacancyController extends Controller
             $vacancy->city_id = $request->city;
             $vacancy->education_id = $request->education;
             $vacancy->experience_id = $request->experience;
-            $vacancy->company_type = CompanyEnum::ADMIN;
+            $vacancy->company_type = CauserEnum::ADMIN;
             $vacancy->company = $request->company;
             $vacancy->relevant_people = $request->relevant_people;
             $vacancy->candidate_requirement = $request->candidate_requirements;
@@ -105,7 +105,7 @@ class VacancyController extends Controller
             $vacancy->city_id = $request->city;
             $vacancy->education_id = $request->education;
             $vacancy->experience_id = $request->experience;
-            $vacancy->company_type = CompanyEnum::ADMIN;
+            $vacancy->company_type = CauserEnum::ADMIN;
             $vacancy->company = $request->company;
             $vacancy->relevant_people = $request->relevant_people;
             $vacancy->candidate_requirement = $request->candidate_requirements;

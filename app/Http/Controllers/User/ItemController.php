@@ -3,10 +3,15 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Enums\CompanyEnum;
+use App\Http\Controllers\General\VacancyController;
+use App\Http\Enums\CauserEnum;
 use App\Http\Enums\VacancyAdminEnum;
 use App\Models\Vacancy;
+use App\Models\VacancyDescription;
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ItemController extends Controller
 {
@@ -25,43 +30,31 @@ class ItemController extends Controller
 
     public function store(Request $request)
     {
-        if (!auth()->guard('admin')->user()->package()->exists()) {
+        if (!auth()->guard('admin')->user()->package()->wherePivot('status', 1)->exists()) {
             alert()->error(__('messages.dont-have-package'));
             return redirect()->route('user.packageForm');
         } else {
-            try {
+//            try {
                 $vacancy = new Vacancy();
-                $vacancy->email = $request->email;
-                $vacancy->phone = $request->phone;
-                $vacancy->position = $request->position;
-                $vacancy->category_id = $request->category;
-                $vacancy->max_salary = $request->maximum_salary;
-                $vacancy->min_salary = $request->minimum_salary;
-                $vacancy->max_age = $request->maximum_age;
-                $vacancy->min_age = $request->minimum_age;
-                $vacancy->city_id = $request->city;
-                $vacancy->mode_id = $request->mode;
-                $vacancy->education_id = $request->education;
-                $vacancy->experience_id = $request->experience;
-                $vacancy->company_type = CompanyEnum::COMPANY;
-                $vacancy->company = $request->company;
-                $vacancy->relevant_people = $request->relevant_people;
-                $vacancy->candidate_requirement = $request->candidate_requirements;
-                $vacancy->job_description = $request->about_job;
-                $vacancy->tags = $request->tags;
+                $vacancy->causer_type = CauserEnum::COMPANY;
+                $vacancy->causer_id = auth()->guard('admin')->user()->id;
                 $vacancy->admin_status = VacancyAdminEnum::Pending;
-                $vacancy->admin_id = 0;
-                vacancy_time($vacancy);
+                $vacancy->shared_time = Carbon::now();
                 $vacancy->save();
-                auth()->guard('admin')->user()->package()->first()->pivot->decrement('current_ads_count');
-                if (auth()->guard('admin')->user()->package()->first()->pivot->current_ads_count == 0) {
-                    auth()->guard('admin')->user()->package()->first()->delete();
+                (new VacancyController())->_addNewVacancy($vacancy, $request);
+                $currentPackage = auth()->guard('admin')->user()->package()->where('status', 1)->first();
+                $currentPackage->pivot->decrement('current_ads_count');
+                if ($currentPackage->pivot->current_ads_count == 0) {
+                    DB::table('admin_packages')
+                        ->where('admin_id', '=', auth()->guard('admin')->user()->id)
+                        ->where('package_id', '=', $currentPackage->id)
+                        ->update(['status' => 0]);
                 }
-                return redirect()->route('user.item.index');
-            } catch (Exception $exception) {
-                alert()->error(__('messages.error'));
-                return redirect(route('frontend.new-vacancy'));
-            }
+//                return redirect()->route('user.item.index');
+//            } catch (Exception $exception) {
+//                alert()->error(__('messages.error'));
+//                return redirect(route('frontend.new-vacancy'));
+//            }
         }
     }
 
@@ -84,4 +77,5 @@ class ItemController extends Controller
     {
 
     }
+
 }

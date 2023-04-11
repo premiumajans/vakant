@@ -9,6 +9,10 @@ class HomeController extends Controller
 {
     public function index()
     {
-        return view('user.index');
+        $counts = [
+            'vacancies' => 0,
+            'packages' => auth()->guard('admin')->user()->package()->count(),
+        ];
+        return view('user.index', get_defined_vars());
     }
 }

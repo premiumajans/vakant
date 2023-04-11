@@ -4,7 +4,7 @@ namespace App\Http\Enums;
 
 use Illuminate\Validation\Rules\Enum;
 
-class CompanyEnum extends Enum
+class CauserEnum extends Enum
 {
     const SINGLE = 1; // Əgər tək səfərlik elan daxil olunubsa
     const COMPANY = 2; //Şirkət kimi qeydiyyatdan keçib paylaşılıbsa

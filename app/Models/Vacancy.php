@@ -17,13 +17,18 @@ class Vacancy extends Model
 
     public $timestamps = false;
 
+    public function description()
+    {
+        return $this->hasOne(VacancyDescription::class);
+    }
+
     public function scopeActive($query)
     {
         return $query->where('end_time', '>=', Carbon::now()->toDateString())->get();
     }
 
     protected $guarded = [];
-    
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->logOnly(['age', 'email', 'phone', 'salary']);

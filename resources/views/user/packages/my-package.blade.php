@@ -2,6 +2,7 @@
 @section('user-content')
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row mx-0 gy-3 px-lg-5">
+            <h5>@lang('backend.current-package')</h5>
             <div class="card mb-4">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
@@ -26,6 +27,36 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="row mx-0 gy-3 px-lg-5">
+            <h5>@lang('backend.old-packages')</h5>
+            @foreach($myOldPackages as $myPackage)
+                <div class="col-xl-4 col-lg-6 col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex align-items-start">
+                                <div class="d-flex align-items-start">
+                                    <div class="me-2">
+                                        <h5 class="mb-1"><a href="javascript:;" class="h5 stretched-link">{{ $myPackage->translate(app()->getLocale())->title ?? '-' }}</a></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center flex-wrap">
+                                <div class="bg-lighter p-2 rounded me-auto mb-3">
+                                    <h6 class="mb-1">$2.4k <span class="text-body fw-normal">/ 1.8k</span></h6>
+{{--                                    <span>Total Budget</span>--}}
+                                </div>
+                                <div class="text-end mb-3">
+                                    <h6 class="mb-1">@lang('backend.date-of-purchase'): <span class="text-body fw-normal">{{ $myPackage->created_at->format('d.m.y') }}</span></h6>
+{{--                                    <h6 class="mb-1">Deadline: <span class="text-body fw-normal">21/6/22</span></h6>--}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
         </div>
     </div>
 @endsection

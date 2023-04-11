@@ -23,10 +23,10 @@ class DatabaseSeeder extends Seeder
             EducationSeeder::class,
             ExperienceSeeder::class,
             SalarySeeder::class,
-
             AdminSeeder::class,
             PermissionsSeeder::class,
             UserSeeder::class,
+            PackageSeeder::class,
         ]);
     }
 }

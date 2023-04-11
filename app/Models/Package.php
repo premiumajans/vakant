@@ -18,7 +18,7 @@ class Package extends Model implements TranslatableContract
 
     public function admin()
     {
-        return $this->belongsToMany(Admin::class, 'admin_packages', 'package_id', 'admin_id')->withPivot('current_ads_count','status');
+        return $this->belongsToMany(Admin::class, 'admin_packages', 'package_id', 'admin_id')->withPivot('current_ads_count', 'status', 'created_at', 'updated_at');
     }
 
     use Translatable, LogsActivity;

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Enums\StatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -32,8 +33,20 @@ class Admin extends Authenticatable
 
     public function package()
     {
-        return $this->belongsToMany(Package::class, 'admin_packages', 'admin_id', 'package_id')->withPivot('current_ads_count', 'status');
+        return $this->belongsToMany(Package::class, 'admin_packages', 'admin_id', 'package_id')->withPivot('current_ads_count', 'status','created_at','updated_at');
     }
+
+    public function scopeActive($query)
+    {
+        return $query->package()
+            ->wherePivot('status',StatusEnum::ACTIVE);
+    }
+//    public function scopeActive($query)
+//    {
+//        return $query->whereHas('packages', function ($q) {
+//            $q->wherePivot('status', 1);
+//        });
+//    }
 
     protected $fillable = [
         'name',

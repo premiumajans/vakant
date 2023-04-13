@@ -25,7 +25,7 @@
                                             <span class="text-danger">*</span>
                                         </label>
                                         <input type="text" name="position" class="form-control" required=""
-                                               value="{{ $vacancy->position }}">
+                                               value="{{ $vacancy->description->position }}">
                                         <div class="valid-feedback">
                                             @lang('backend.position') @lang('messages.is-correct')
                                         </div>
@@ -40,7 +40,7 @@
                                                 @foreach($categories as $cat)
                                                     <optgroup label="{{ $cat->name }}">
                                                         @foreach($cat->alt as $altCat)
-                                                            <option @if($altCat->id == $vacancy->category_id) selected
+                                                            <option @if($altCat->id == $vacancy->description->category_id) selected
                                                                     @endif
                                                                     value="{{ $altCat->id }}">{{ $altCat->name }}</option>
                                                         @endforeach
@@ -49,14 +49,25 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="mb-3">
-                                        <label>@lang('backend.city') <span class="text-danger">*</span></label>
-                                        <select class="form-control" name="city">
-                                            @foreach($cities as $city)
-                                                <option @if($city->id == $vacancy->city_id) selected @endif
-                                                value="{{ $city->id }}">{{ $city->translate(app()->getLocale())->name ?? '-' }}</option>
-                                            @endforeach
-                                        </select>
+                                    <div class="row">
+                                        <div class="mb-3 col-6">
+                                            <label>@lang('backend.city') <span class="text-danger">*</span></label>
+                                            <select class="form-control" name="city">
+                                                @foreach($cities as $city)
+                                                    <option @if($city->id == $vacancy->description->city_id) selected @endif
+                                                    value="{{ $city->id }}">{{ $city->translate(app()->getLocale())->name ?? '-' }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="mb-3 col-6">
+                                            <label>@lang('backend.work-mode') <span class="text-danger">*</span></label>
+                                            <select class="form-control" name="mode">
+                                                @foreach($modes as $mode)
+                                                    <option @if($city->id == $vacancy->description->mode_id) selected @endif
+                                                    value="{{ $mode->id }}">{{ $mode->translate(app()->getLocale())->name ?? '-' }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="mb-3 row">
                                         <div class="col-6">
@@ -66,7 +77,7 @@
                                                 @foreach($salaries as $salary_min)
                                                     <option
                                                         value="{{ $salary_min->id }}"
-                                                        @if($salary_min->id == $vacancy->min_salary) selected @endif
+                                                        @if($salary_min->id == $vacancy->description->min_salary) selected @endif
                                                     ">{{ $salary_min->salary ?? '-' }}
                                                     ₼
                                                     </option>
@@ -79,7 +90,7 @@
                                             <select class="form-control" name="maximum_salary">
                                                 @foreach($salaries as $salary)
                                                     <option value="{{ $salary->id }}"
-                                                            @if($salary->id == $vacancy->max_salary) selected @endif>{{ $salary->salary ?? '-' }}
+                                                            @if($salary->id == $vacancy->description->max_salary) selected @endif>{{ $salary->salary ?? '-' }}
                                                         ₼
                                                     </option>
                                                 @endforeach
@@ -91,7 +102,7 @@
                                             <label>@lang('backend.min-age') <span class="text-danger">*</span></label>
                                             <select class="form-control" name="minimum_age">
                                                 @for($i=18;$i<66;$i++)
-                                                    <option @if($i == $vacancy->min_age) selected
+                                                    <option @if($i == $vacancy->description->min_age) selected
                                                             @endif value="{{$i}}">{{$i}}</option>
                                                 @endfor
                                             </select>
@@ -100,7 +111,7 @@
                                             <label>@lang('backend.max-age') <span class="text-danger">*</span></label>
                                             <select class="form-control" name="maximum_age">
                                                 @for($i=65;$i>=18;$i--)
-                                                    <option @if($i == $vacancy->max_age) selected
+                                                    <option @if($i == $vacancy->description->max_age) selected
                                                             @endif value="{{$i}}">{{$i}}</option>
                                                 @endfor
                                             </select>
@@ -111,7 +122,7 @@
                                             <label>@lang('backend.education') <span class="text-danger">*</span></label>
                                             <select class="form-control" name="education">
                                                 @foreach($educations as $education)
-                                                    <option @if($education->id == $vacancy->education_id) selected
+                                                    <option @if($education->id == $vacancy->description->education_id) selected
                                                             @endif
                                                             value="{{$education->id}}">{{ $education->translate(app()->getLocale())->name ?? '-' }}</option>
                                                 @endforeach
@@ -122,7 +133,7 @@
                                                     class="text-danger">*</span></label>
                                             <select class="form-control" name="experience">
                                                 @foreach($experiences as $experience)
-                                                    <option @if($experience->id == $vacancy->experience_id) selected
+                                                    <option @if($experience->id == $vacancy->description->experience_id) selected
                                                             @endif
                                                             value="{{$experience->id}}">{{ $experience->translate(app()->getLocale())->name ?? '-' }}</option>
                                                 @endforeach
@@ -133,7 +144,7 @@
                                         <div class="col-6">
                                             <label>@lang('frontend.company') <span class="text-danger">*</span></label>
                                             <input name="company" class="form-control" required
-                                                   value="{{ $vacancy->company }}">
+                                                   value="{{ $vacancy->description->company }}">
                                             <div class="valid-feedback">
                                                 @lang('frontend.company') @lang('messages.is-correct')
                                             </div>
@@ -144,7 +155,7 @@
                                         <div class="col-6">
                                             <label>@lang('frontend.relevant-people') <span class="text-danger">*</span></label>
                                             <input name="relevant_people" class="form-control" required
-                                                   value="{{ $vacancy->relevant_people }}">
+                                                   value="{{ $vacancy->description->relevant_people }}">
                                             <div class="valid-feedback">
                                                 @lang('frontend.relevant-people') @lang('messages.is-correct')
                                             </div>
@@ -156,7 +167,7 @@
                                     <div class="mb-3 row">
                                         <div class="col-6">
                                             <label>@lang('backend.email') <span class="text-danger">*</span></label>
-                                            <input name="email" class="form-control" value="{{ $vacancy->email }}"
+                                            <input name="email" class="form-control" value="{{ $vacancy->description->email }}"
                                                    required>
                                             <div class="valid-feedback">
                                                 @lang('frontend.email') @lang('messages.is-correct')
@@ -167,7 +178,7 @@
                                         </div>
                                         <div class="col-6">
                                             <label>@lang('backend.phone') <span class="text-danger">*</span></label>
-                                            <input name="phone" class="form-control" value="{{ $vacancy->phone }}"
+                                            <input name="phone" class="form-control" value="{{ $vacancy->description->phone }}"
                                                    required>
                                             <div class="valid-feedback">
                                                 @lang('frontend.phone') @lang('messages.is-correct')
@@ -181,7 +192,7 @@
                                         <label>@lang('frontend.candidate-requirements') <span
                                                 class="text-danger">*</span></label>
                                         <textarea required id="elmaz1"
-                                                  name="candidate_requirements">{!! $vacancy->candidate_requirement !!}</textarea>
+                                                  name="candidate_requirements">{!! $vacancy->description->candidate_requirement !!}</textarea>
                                         <div class="valid-feedback">
                                             @lang('frontend.candidate-requirements') @lang('messages.is-correct')
                                         </div>
@@ -192,7 +203,7 @@
                                     <div class="mb-3">
                                         <label>@lang('frontend.about-job') <span class="text-danger">*</span></label>
                                         <textarea required id="elmaz2"
-                                                  name="about_job">{!! $vacancy->job_description !!}</textarea>
+                                                  name="about_job">{!! $vacancy->description->job_description !!}</textarea>
                                         <div class="valid-feedback">
                                             @lang('frontend.about-job') @lang('messages.is-correct')
                                         </div>
@@ -203,7 +214,7 @@
                                     <div class="col-12 mb-4">
                                         <label for="TagifyBasic" class="form-label">@lang('backend.keywords')</label>
                                         <input id="TagifyBasic" class="form-control" name="tags"
-                                               value="@foreach(vacancy_tags($vacancy->tags) as $tag)
+                                               value="@foreach(vacancy_tags($vacancy->description->tags) as $tag)
                                                 {{ $tag }}@if(!$loop->last),@endif
                                             @endforeach"/>
                                     </div>

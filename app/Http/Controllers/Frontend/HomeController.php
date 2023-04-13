@@ -23,19 +23,19 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $packages = [
-            ['ads_count' => 1, 'monthly_payment' => 1, 'status' => 1, 'translations' => ['az' => 'Standart', 'en' => 'Standart', 'ru' => 'Стандарт']],
-            ['ads_count' => 3, 'monthly_payment' => 40, 'status' => 1, 'translations' => ['az' => 'Biznes', 'en' => 'Business', 'ru' => 'Бизнес']],
-            ['ads_count' => 10, 'monthly_payment' => 120, 'status' => 1, 'translations' => ['az' => 'Premium', 'en' => 'Premium', 'ru' => 'Премиум']],
-        ];
-        dd($packages[0]['ads_count']);
-//        $sliders = Slider::where('status', 1)->orderBy('order', 'asc')->get();
-//        $productLists = Productlist::where('status', 1)->get();
-//        $about = About::first();
-//        $services = Service::where('status', 1)->get()->take(6);
-//        $projects = Project::where('status', 1)->get()->take(3);
-//        $news = News::all();
-//        $supports = Support::all();
+//        $packages = [
+//            ['ads_count' => 1, 'monthly_payment' => 1, 'status' => 1, 'translations' => ['az' => 'Standart', 'en' => 'Standart', 'ru' => 'Стандарт']],
+//            ['ads_count' => 3, 'monthly_payment' => 40, 'status' => 1, 'translations' => ['az' => 'Biznes', 'en' => 'Business', 'ru' => 'Бизнес']],
+//            ['ads_count' => 10, 'monthly_payment' => 120, 'status' => 1, 'translations' => ['az' => 'Premium', 'en' => 'Premium', 'ru' => 'Премиум']],
+//        ];
+//        dd($packages[0]['ads_count']);
+////        $sliders = Slider::where('status', 1)->orderBy('order', 'asc')->get();
+////        $productLists = Productlist::where('status', 1)->get();
+////        $about = About::first();
+////        $services = Service::where('status', 1)->get()->take(6);
+////        $projects = Project::where('status', 1)->get()->take(3);
+////        $news = News::all();
+////        $supports = Support::all();
         return view('frontend.index', get_defined_vars());
     }
 

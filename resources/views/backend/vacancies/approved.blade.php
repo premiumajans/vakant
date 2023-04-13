@@ -39,10 +39,10 @@
                             @foreach($vacancies as $vacancy)
                                 <tr>
                                     <td class="text-center">{{ $vacancy->id }}</td>
-                                    <td class="text-center">{{ $vacancy->company ?? '-' }}</td>
-                                    <td class="text-center">{{ $vacancy->position ?? '-' }}</td>
-                                    <td><a href="mailto:{{ $vacancy->email }}">{{ $vacancy->email}}</a></td>
-                                    <td><a href="tel:{{ $vacancy->phone }}">{{ $vacancy->phone}}</a></td>
+                                    <td class="text-center">{{ $vacancy->description->company ?? '-' }}</td>
+                                    <td class="text-center">{{ $vacancy->description->position ?? '-' }}</td>
+                                    <td><a href="mailto:{{ $vacancy->description->email }}">{{ $vacancy->description->email}}</a></td>
+                                    <td><a href="tel:{{ $vacancy->description->phone }}">{{ $vacancy->description->phone}}</a></td>
                                     <td class="text-center">
                                         <div class="dropdown">
                                             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">

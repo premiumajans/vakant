@@ -45,15 +45,27 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="mb-3">
-                                        <label>@lang('backend.city') <span class="text-danger">*</span></label>
-                                        <select class="form-control" name="city">
-                                            @foreach($cities as $city)
-                                                <option
-                                                    value="{{ $city->id }}">{{ $city->translate(app()->getLocale())->name ?? '-' }}</option>
-                                            @endforeach
-                                        </select>
+                                    <div class="row">
+                                        <div class="mb-3 col-6">
+                                            <label>@lang('backend.city') <span class="text-danger">*</span></label>
+                                            <select class="form-control" name="city">
+                                                @foreach($cities as $city)
+                                                    <option
+                                                        value="{{ $city->id }}">{{ $city->translate(app()->getLocale())->name ?? '-' }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="mb-3 col-6">
+                                            <label>@lang('backend.work-mode') <span class="text-danger">*</span></label>
+                                            <select class="form-control" name="mode">
+                                                @foreach($modes as $mode)
+                                                    <option
+                                                        value="{{ $mode->id }}">{{ $mode->translate(app()->getLocale())->name ?? '-' }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
+
                                     <div class="mb-3 row">
                                         <div class="col-6">
                                             <label>@lang('backend.min-salary') <span
@@ -150,13 +162,7 @@
                                         </div>
                                         <div class="col-6">
                                             <label>@lang('backend.phone') <span class="text-danger">*</span></label>
-                                            <input name="phone" class="form-control" required>
-                                            <div class="valid-feedback">
-                                                @lang('frontend.phone') @lang('messages.is-correct')
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                @lang('frontend.phone') @lang('messages.not-correct')
-                                            </div>
+                                            <input name="phone" class="form-control">
                                         </div>
                                     </div>
                                     <div class="mb-3">

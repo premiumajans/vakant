@@ -14,10 +14,8 @@ class VacancyRequest extends FormRequest
     {
         return [
             'email' => 'required|email',
-            'phone' => 'required|min:7',
             'position' => 'required',
             'company' => 'required',
-            'relevant_people' => 'required',
             'candidate_requirements' => 'required',
             'about_job' => 'required',
         ];

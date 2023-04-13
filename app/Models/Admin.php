@@ -3,16 +3,17 @@
 namespace App\Models;
 
 use App\Http\Enums\StatusEnum;
+use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
-use Spatie\Activitylog\LogOptions;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
 
 class Admin extends Authenticatable
 {
@@ -23,6 +24,23 @@ class Admin extends Authenticatable
         HasProfilePhoto,
         Notifiable,
         TwoFactorAuthenticatable;
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function createToken(Request $request)
+    {
+        $user = $request->user();
+        $token = $user->createToken('My Token');
+        return ['token' => $token->plainTextToken];
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 
     protected $guard = 'admin';
 

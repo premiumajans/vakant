@@ -66,6 +66,8 @@ return [
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
         Spatie\Analytics\AnalyticsServiceProvider::class,
         Laravolt\Avatar\ServiceProvider::class,
+        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+
     ],
 
 
@@ -74,6 +76,8 @@ return [
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
         'Avatar'    => Laravolt\Avatar\Facade::class,
         'Analytics' => Spatie\Analytics\AnalyticsFacade::class,
+        'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
+        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
     ])->toArray(),
 
 ];

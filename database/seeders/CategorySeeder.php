@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\AltCategory;
-use App\Models\AltcategoryTranslation;
+use App\Models\AltCategoryTranslation;
 use App\Models\Category;
 use App\Models\CategoryTranslation;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -132,7 +132,7 @@ class CategorySeeder extends Seeder
                 $newAltCategory = new AltCategory();
                 $newCategory->alt()->save($newAltCategory);
                 foreach ($altCategory as $keyAltLang => $altCategoryTrans) {
-                    $newAltCategoryTranslation = new AltcategoryTranslation();
+                    $newAltCategoryTranslation = new AltCategoryTranslation();
                     $newAltCategoryTranslation->locale = $keyAltLang;
                     $newAltCategoryTranslation->alt_category_id = $newAltCategory->id;
                     $newAltCategoryTranslation->name = $altCategoryTrans;

@@ -5,9 +5,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up()
+    public function up(): void
     {
-        Schema::create('altcategory_translations', function (Blueprint $table) {
+        Schema::create('alt_category_translations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('alt_category_id')->unsigned();
             $table->string('locale')->index();
@@ -20,8 +20,8 @@ return new class extends Migration {
         });
     }
 
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('altcategory_translations');
+        Schema::dropIfExists('alt_category_translations');
     }
 };

@@ -9,8 +9,5 @@ use Illuminate\Database\Eloquent\Model;
 class About extends Model implements TranslatableContract
 {
     use Translatable;
-
     public $translatedAttributes = ['content'];
-
-
 }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class AltcategoryTranslation extends Model
+class AltCategoryTranslation extends Model
 {
     use LogsActivity;
     public $timestamps = false;

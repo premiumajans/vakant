@@ -12,10 +12,11 @@ return new class extends Migration {
             $table->string('name')->nullable();
             $table->string('email')->unique();
             $table->string('password')->nullable();
-            $table->rememberToken();
             $table->timestamp('last_seen')->nullable();
+            $table->unsignedInteger('current_ad_count');
             $table->string('profile_photo_path', 2048)->nullable();
             $table->string('provider_id')->nullable();
+            $table->rememberToken();
             $table->timestamps();
         });
     }

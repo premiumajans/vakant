@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\BackendLanguage;
 use App\Http\Middleware\FrontLanguage;
+use App\Http\Middleware\TokenMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -58,5 +59,6 @@ class Kernel extends HttpKernel
         'abilities' => \Laravel\Sanctum\Http\Middleware\CheckAbilities::class,
         'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
         'adminPanel' => \App\Http\Middleware\User\Admin::class,
+        'apiMid' =>  \App\Http\Middleware\TokenMiddleware::class,
     ];
 }

@@ -7,8 +7,11 @@ return [
         'guard' => 'web',
         'passwords' => 'users',
     ],
-
     'guards' => [
+        'api' => [
+            'driver' => 'jwt',
+            'provider' => 'admins',
+        ],
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
@@ -17,13 +20,7 @@ return [
             'driver' => 'session',
             'provider' => 'admins',
         ],
-        'api' => [
-            'driver' => 'jwt',
-            'provider' => 'admins',
-        ],
     ],
-
-
     'providers' => [
         'users' => [
             'driver' => 'eloquent',

@@ -67,7 +67,7 @@ return [
         Spatie\Analytics\AnalyticsServiceProvider::class,
         Laravolt\Avatar\ServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
-
+        L5Swagger\L5SwaggerServiceProvider::class,
     ],
 
 

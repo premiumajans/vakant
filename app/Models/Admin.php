@@ -13,9 +13,9 @@ use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
-
-class Admin extends Authenticatable
+class Admin extends Authenticatable implements JWTSubject
 {
     use HasRoles,
         HasPermissions,
@@ -24,23 +24,6 @@ class Admin extends Authenticatable
         HasProfilePhoto,
         Notifiable,
         TwoFactorAuthenticatable;
-
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    public function createToken(Request $request)
-    {
-        $user = $request->user();
-        $token = $user->createToken('My Token');
-        return ['token' => $token->plainTextToken];
-    }
-
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
 
     protected $guard = 'admin';
 
@@ -59,12 +42,6 @@ class Admin extends Authenticatable
         return $query->package()
             ->wherePivot('status',StatusEnum::ACTIVE);
     }
-//    public function scopeActive($query)
-//    {
-//        return $query->whereHas('packages', function ($q) {
-//            $q->wherePivot('status', 1);
-//        });
-//    }
 
     protected $fillable = [
         'name',
@@ -86,4 +63,13 @@ class Admin extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 }

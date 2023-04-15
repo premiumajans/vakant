@@ -98,7 +98,7 @@ return array (
   'min-age' => 'Select a minimum age',
   'min-salary' => 'Select the minimum wage',
   'most-view' => 'Most watched',
-  'my-ads' => 'My announcements',
+  'my-ads' => '-',
   'my-company' => 'My Company',
   'name' => 'Name',
   'new' => 'New',

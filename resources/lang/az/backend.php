@@ -102,7 +102,7 @@ return array (
   'min-age' => 'Minimum yaş seçin',
   'min-salary' => 'Minimum əmək haqqı seçin',
   'most-view' => 'Ən çox izlənilənlər',
-  'my-ads' => 'Elanlarım',
+  'my-ads' => 'Payaşdığım elanlar',
   'my-company' => 'Şirkətim',
   'name' => 'Ad',
   'new' => 'Yeni',

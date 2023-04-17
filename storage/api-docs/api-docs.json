@@ -178,7 +178,7 @@
                                             "type": "number",
                                             "example": "success"
                                         },
-                                        "testItems": {
+                                        "authorisation": {
                                             "description": "The survey ID",
                                             "type": "array",
                                             "items": {

@@ -6,12 +6,11 @@
         "version": "1.0"
     },
     "paths": {
-        "/api/": {
-            "get": {
+        "/api/login": {
+            "post": {
                 "tags": [
-                    "Vakant"
+                    "Auth"
                 ],
-                "summary": "Create Vakant",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -19,10 +18,10 @@
                                 "properties": {
                                     "": {
                                         "properties": {
-                                            "title": {
+                                            "email": {
                                                 "type": "string"
                                             },
-                                            "content": {
+                                            "password": {
                                                 "type": "string"
                                             }
                                         },
@@ -31,8 +30,8 @@
                                 },
                                 "type": "object",
                                 "example": {
-                                    "title": "example title",
-                                    "content": "example content"
+                                    "email": "example@gmail.com",
+                                    "password": "Password"
                                 }
                             }
                         }
@@ -80,6 +79,111 @@
                                         "msg": {
                                             "type": "string",
                                             "example": "fail"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "": {
+                                        "properties": {
+                                            "token": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vdmFrYW50LnRlc3QvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2ODE3MTIyMjQsImV4cCI6MTY4MTcxNTgyNCwibmJmIjoxNjgxNzEyMjI0LCJqdGkiOiJwWjExckJxTUl1bnNBak5jIiwic3ViIjoiMSIsInBydiI6ImRmODgzZGI5N2JkMDVlZjhmZjg1MDgyZDY4NmM0NWU4MzJlNTkzYTkifQ.H4gd3Iez5hJKCV_GExHFFFPo08ga8WtqFhm0mHaAL-s"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "number",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "successfully-logged-out"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/refresh": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "": {
+                                        "properties": {
+                                            "token": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vdmFrYW50LnRlc3QvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2ODE3MTIyMjQsImV4cCI6MTY4MTcxNTgyNCwibmJmIjoxNjgxNzEyMjI0LCJqdGkiOiJwWjExckJxTUl1bnNBak5jIiwic3ViIjoiMSIsInBydiI6ImRmODgzZGI5N2JkMDVlZjhmZjg1MDgyZDY4NmM0NWU4MzJlNTkzYTkifQ.H4gd3Iez5hJKCV_GExHFFFPo08ga8WtqFhm0mHaAL-s"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "number",
+                                            "example": "success"
+                                        },
+                                        "authorisation": {
+                                            "description": "The survey ID",
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
                                         }
                                     },
                                     "type": "object"

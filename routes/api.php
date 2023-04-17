@@ -27,6 +27,8 @@ Route::resource('city', City::class)->only(['index', 'show']);
 
 Route::group(['prefix' => '/auth'], function () {
     Route::post('/login', [\App\Http\Controllers\Api\UserController::class, 'login']);
+    Route::post('/register', [\App\Http\Controllers\Api\UserController::class, 'register']);
+    Route::post('/logout', [\App\Http\Controllers\Api\UserController::class, 'logout']);
     Route::post('/refresh', [\App\Http\Controllers\Api\UserController::class, 'refresh']);
     Route::post('/change-password', [\App\Http\Controllers\Api\UserController::class, 'changePassword']);
 });

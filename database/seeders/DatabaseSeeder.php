@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             PermissionsSeeder::class,
             UserSeeder::class,
             PackageSeeder::class,
+            TermSeeder::class,
         ]);
     }
 }

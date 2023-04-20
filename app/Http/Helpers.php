@@ -11,7 +11,7 @@ if (!function_exists('upload')) {
         try {
             $img = $file;
             $extension = $img->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
+            $filename = uniqid() . '.' . $extension;
             $img->move('images/' . $path, $filename);
             $data['photo'] = 'images/' . $path . '/' . $filename;
             return $data['photo'];

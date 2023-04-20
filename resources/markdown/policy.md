@@ -1,3 +1,1 @@
-# Dırnıs Xeyriyyə Cəmiyyəti
-
-dxc
+Vakant

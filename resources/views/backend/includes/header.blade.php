@@ -4,10 +4,10 @@
             <div class="navbar-brand-box">
                 <a href="" class="logo logo-light">
                      <span class="logo-sm justify-content-center">
-                         <img src="{{asset('backend/images/logo.png')}}" alt="logo-sm-light" height="35">
+                         <img src="{{asset('backend/images/logo2.png')}}" alt="logo-sm-light" height="35">
                      </span>
                     <span class="logo-lg justify-content-center">
-                        <img src="{{asset('backend/images/logo.png')}}" alt="logo-light" height="50">
+                        <img style="padding: 5px;" src="{{asset('backend/images/logo2.png')}}" alt="logo-light" height="50">
                      </span>
                 </a>
             </div>
@@ -15,7 +15,6 @@
                 <i class="ri-menu-2-line align-middle"></i>
             </button>
         </div>
-
         <div class="d-flex">
             <div class="dropdown d-sm-inline-block">
                 <button type="button" class="btn header-item waves-effect"

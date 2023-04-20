@@ -11,6 +11,14 @@
                     </li>
                 @endcan
                 <li class="menu-title">@lang('backend.site-setting')</li>
+                @can('site-users index')
+                    <li>
+                        <a href="{{ route('backend.site-users.index') }}" class="waves-effect">
+                            <i class="fas fa-users"></i>
+                            <span>@lang('backend.site-users')</span>
+                        </a>
+                    </li>
+                @endcan
                 @can('vacancy index')
                     <li>
                         <a href="javascript: void(0);" class="has-arrow waves-effect">
@@ -19,8 +27,11 @@
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
                             <li><a href="{{ route('backend.vacancies.create') }}">@lang('backend.add-new')</a></li>
-                            <li><a href="{{ route('backend.approvedVacancies') }}">@lang('backend.approved-vacancies')</a></li>
-                            <li><a href="{{ route('backend.pendingVacancies') }}">@lang('backend.pending-vacancies')</a></li>
+                            <li>
+                                <a href="{{ route('backend.approvedVacancies') }}">@lang('backend.approved-vacancies')</a>
+                            </li>
+                            <li><a href="{{ route('backend.pendingVacancies') }}">@lang('backend.pending-vacancies')</a>
+                            </li>
                         </ul>
                     </li>
                 @endcan
@@ -96,16 +107,6 @@
                         </a>
                     </li>
                 @endcan
-
-                @can('site-users index')
-                    <li>
-                        <a href="{{ route('backend.site-users.index') }}" class="waves-effect">
-                            <i class="fas fa-users"></i>
-                            <span>@lang('backend.site-users')</span>
-                        </a>
-                    </li>
-                @endcan
-
                 @can('appeals index')
                     <li>
                         <a href="{{ route('backend.appeals.index') }}" class="waves-effect">
@@ -114,7 +115,14 @@
                         </a>
                     </li>
                 @endcan
-
+                @can('term index')
+                    <li>
+                        <a href="{{ route('backend.appeals.index') }}" class="waves-effect">
+                            <i class="fas fa-paste"></i>
+                            <span>@lang('backend.terms-and-conditions')</span>
+                        </a>
+                    </li>
+                @endcan
 
 
                 @can('slider index')
@@ -149,31 +157,14 @@
                         </a>
                     </li>
                 @endcan
-
-                @can('statistics index')
-                    <li>
-                        <a href="{{ route('backend.statistics.index') }}" class="waves-effect">
-                            <i class="fas fa-chart-bar"></i>
-                            <span>@lang('backend.statistics')</span>
-                        </a>
-                    </li>
-                @endcan
-                @can('faq index')
-                    <li>
-                        <a href="{{ route('backend.faq.index') }}" class="waves-effect">
-                            <i class="fa fa-question-circle"></i>
-                            <span>@lang('frontend.faq')</span>
-                        </a>
-                    </li>
-                @endcan
-                @can('technical-support index')
-                    <li>
-                        <a href="{{ route('backend.support.index') }}" class="waves-effect">
-                            <i class="fas fa-cog"></i>
-                            <span>@lang('menus.technical-support')</span>
-                        </a>
-                    </li>
-                @endcan
+{{--                @can('faq index')--}}
+{{--                    <li>--}}
+{{--                        <a href="{{ route('backend.faq.index') }}" class="waves-effect">--}}
+{{--                            <i class="fa fa-question-circle"></i>--}}
+{{--                            <span>@lang('frontend.faq')</span>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+{{--                @endcan--}}
                 @can('languages index')
                     <li>
                         <a href="{{ route('backend.site-languages.index') }}" class="waves-effect">
@@ -190,14 +181,6 @@
                         </a>
                     </li>
                 @endcan
-                @can('newsletter index')
-                    <li>
-                        <a href="{{ route('backend.newsletter.index') }}" class="waves-effect">
-                            <i class="fas fa-user-friends"></i>
-                            <span>@lang('backend.subscribers')</span>
-                        </a>
-                    </li>
-                @endcan
                 @can('settings index')
                     <li>
                         <a href="{{ route('backend.settings.index') }}" class="waves-effect">
@@ -206,9 +189,10 @@
                         </a>
                     </li>
                 @endcan
-                @can('users index')
+                @canany(['users index','permissions index','new-permission index','report index'])
                     <li class="menu-title">@lang('backend.ap-setting')</li>
-
+                @endcanany
+                @can('users index')
                     <li>
                         <a href="{{ route('backend.users.index') }}" class=" waves-effect">
                             <i class="ri-account-circle-fill"></i>

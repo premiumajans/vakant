@@ -166,7 +166,7 @@
                   line-height: 25px;
                 ">
                             <p style="margin: 0">
-                                Hörmətli, {{ $admin_name }}
+                                @lan, {{ $admin_name }}
                             </p>
                             {{-- <p style="margin: 0;color: black">--}}
                             {{-- Saytda hal hazırda təsdiqlənməyi gözləyən paylaşımlar var.--}}

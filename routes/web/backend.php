@@ -15,7 +15,6 @@ use App\Http\Controllers\Backend\AdminController as BAdmin;
 use App\Http\Controllers\Backend\InformationController as BInformation;
 use App\Http\Controllers\Backend\NewsletterController as BNewsletter;
 use App\Http\Controllers\Backend\ReportController as BReport;
-use App\Http\Controllers\Backend\Statistics as BStatistics;
 use App\Http\Controllers\Backend\SliderController as BSlider;
 use App\Http\Controllers\Backend\PermissionController as BPermission;
 use App\Http\Controllers\Backend\VacancyController as BVacancy;
@@ -26,7 +25,6 @@ use App\Http\Controllers\Backend\AltCategories as BAltCat;
 use App\Http\Controllers\Backend\ProductController as BProduct;
 use App\Http\Controllers\Backend\NewsController as BNews;
 use App\Http\Controllers\Backend\ServiceController as BService;
-use App\Http\Controllers\Backend\TechnicalSupportControlller as BTech;
 use App\Http\Controllers\Backend\ModeController as BMode;
 use App\Http\Controllers\Backend\SalaryController as BSalary;
 use App\Http\Controllers\Backend\CityController as BCity;
@@ -35,6 +33,7 @@ use App\Http\Controllers\Backend\ExperienceController as BExperience;
 use App\Http\Controllers\Backend\PackagesController as BPackage;
 use App\Http\Controllers\Backend\PackageComponentController as BPackageComponent;
 use App\Http\Controllers\Backend\SiteUsersController as BSiteUsers;
+use App\Http\Controllers\Backend\TermController as BTerm;
 
 
 Route::group(['middleware' => 'auth:web'], function () {
@@ -70,7 +69,6 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::resource('/about', BAbout::class);
     Route::resource('/information', BInformation::class);
     Route::resource('/newsletter', BNewsletter::class);
-    Route::resource('/statistics', BStatistics::class);
     Route::resource('/slider', BSlider::class);
     Route::resource('/permissions', BPermission::class);
     Route::resource('/faq', BFaq::class);
@@ -78,7 +76,6 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::resource('/alt-categories', BAltCat::class);
     Route::resource('/products', BProduct::class);
     Route::resource('/services', BService::class);
-    Route::resource('/support', BTech::class);
     Route::resource('/cities', BCity::class);
     Route::resource('/salaries', BSalary::class);
     Route::resource('/education', BEducation::class);
@@ -88,6 +85,7 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::resource('/packages', BPackage::class);
     Route::resource('/site-users', BSiteUsers::class);
     Route::resource('/appeals', BAppeals::class);
+    Route::resource('/term', BTerm::class);
     Route::resource('/package-components', BPackageComponent::class);
 
     Route::get('/slider/{id}/change-order', [BSlider::class, 'sliderOrder'])->name('sliderOrder');
@@ -120,7 +118,6 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::get('/report/clean-all', [BReport::class, 'cleanAllReport'])->name('cleanAllReport');
     Route::get('/permission/{id}/delete', [BPermission::class, 'delPermission'])->name('delPermission');
     Route::get('/newsletter/{id}/delete', [BNewsletter::class, 'delNewsletter'])->name('delNewsletter');
-    Route::get('/statistics/{id}/delete', [BStatistics::class, 'delStat'])->name('delStat');
     Route::get('/about/vacancies/{id}/delete', [BVacancy::class, 'delVacancy'])->name('delVacancy');
     Route::get('/faq/{id}/delete', [BFaq::class, 'delFAQ'])->name('delFAQ');
     Route::get('/project/{id}/delete', [BProject::class, 'delProject'])->name('delProject');
@@ -129,7 +126,6 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::get('/news/{id}/delete', [BNews::class, 'delete'])->name('delNews');
     Route::get('/service/{id}/delete', [BService::class, 'delete'])->name('delService');
     Route::get('/appeals/{id}/delete', [BAppeals::class, 'delete'])->name('delAppeals');
-    Route::get('/support/{id}/delete', [BTech::class, 'delete'])->name('delSupport');
     Route::get('/education/{id}/delete', [BEducation::class, 'delete'])->name('delEducation');
     Route::get('/experience/{id}/delete', [BExperience::class, 'delete'])->name('delExperience');
     Route::get('/cities/{id}/delete', [BCity::class, 'delete'])->name('delCity');

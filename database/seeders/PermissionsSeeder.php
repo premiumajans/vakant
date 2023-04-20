@@ -28,7 +28,6 @@ class PermissionsSeeder extends Seeder
             'categories create',
             'categories edit',
             'categories delete',
-
             'languages index',
             'languages create',
             'languages edit',
@@ -109,10 +108,6 @@ class PermissionsSeeder extends Seeder
             'services delete',
             'services index',
 
-            'statistics create',
-            'statistics edit',
-            'statistics delete',
-            'statistics index',
             'faq create',
             'faq edit',
             'faq delete',
@@ -142,6 +137,12 @@ class PermissionsSeeder extends Seeder
             'packages create',
             'packages edit',
             'packages delete',
+            'site-users index',
+            'site-users create',
+            'site-users edit',
+            'site-users delete',
+            'term index',
+            'term edit',
         ];
         foreach ($permissions as $permission) {
             Permission::create([

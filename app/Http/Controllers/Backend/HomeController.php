@@ -13,10 +13,10 @@ class HomeController extends Controller
     public function index()
     {
 //        $permissions = [
-//            'vacancies index',
-//            'vacancies create',
-//            'vacancies edit',
-//            'vacancies delete',
+//            'term index',
+//            'term create',
+//            'term edit',
+//            'term delete',
 //        ];
 //        foreach ($permissions as $p) {
 //            $pp = new Permission();

@@ -165,6 +165,7 @@ return array (
   'teams' => 'Komandalar',
   'teams-details' => 'Komanda Məlumatları',
   'teams-elements' => 'Komanda Elementləri',
+  'terms-and-conditions' => 'Şərtlər və Qaydalar',
   'time' => 'Vaxt',
   'title' => 'Başlıq',
   'try-again' => 'Yenidən cəhd edin',

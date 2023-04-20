@@ -41,6 +41,17 @@
                                         </div>
                                     </div>
                                     <div class="mb-3">
+                                        <label>@lang('backend.ads-count') <span class="text-danger">*</span></label>
+                                        <input type="text" name="current_ad_count" class="form-control" required=""
+                                               value="{{ $admin->current_ad_count }}">
+                                        <div class="valid-feedback">
+                                            @lang('backend.ads-count') @lang('messages.is-correct')
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            @lang('backend.ads-count') @lang('messages.not-correct')
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
                                         <label>@lang('backend.password') <span class="text-danger">*</span></label>
                                         <input type="password" name="password" class="form-control"
                                                placeholder="@lang('backend.password')">

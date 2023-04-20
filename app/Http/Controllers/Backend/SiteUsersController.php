@@ -37,6 +37,7 @@ class SiteUsersController extends Controller
             $admin = new Admin();
             $admin->name = $request->name;
             $admin->email = $request->email;
+            $admin->current_ad_count = 1;
             $admin->password = Hash::make($request->password);
             $admin->save();
             alert()->success(__('messages.success'));
@@ -61,6 +62,7 @@ class SiteUsersController extends Controller
             $admin = Admin::find($id);
             $admin->update([
                 'name' => $request->name,
+                'current_ad_count' => $request->current_ad_count,
                 'email' => $request->email,
             ]);
             if (!(is_null($request->password))) {
@@ -76,7 +78,6 @@ class SiteUsersController extends Controller
             alert()->error(__('messages.error'));
             return redirect(route('backend.site-users.index'));
         }
-
     }
 
     public function company($id)

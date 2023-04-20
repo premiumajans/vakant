@@ -4,33 +4,35 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\Term;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use PharIo\Version\Exception;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use App\Rules\MatchOldPassword;
 
 class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('apiMid', ['except' => ['login', 'register']]);
+        $this->middleware('apiMid', ['except' => ['login', 'register', 'forgotPassword', 'term']]);
     }
+
     public function register(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(),[
+            $validator = Validator::make($request->all(), [
                 'name' => 'required|min:3',
                 'email' => 'required|string|email|unique:admins',
                 'password' => 'required|string',
-                'password_confirmation' => 'same:password'
+                'password_confirmation' => 'same:password',
+                'term' => 'required',
             ]);
             if ($validator->fails()) {
                 return $validator->messages()->toJson();
-            }
-            else{
+            } else {
                 $user = new Admin();
                 $user->name = $request->name;
                 $user->email = $request->email;
@@ -52,6 +54,27 @@ class UserController extends Controller
                 'status' => 'error',
             ], 500);
         }
+    }
+
+    public function forgotPassword(Request $request)
+    {
+        $user = Admin::where('email', $request->email)->first();
+        $user->reset_token = md5($request->email);
+        $user->save();
+        $email = $user->email;
+        $data = [
+            'name' => $user->name,
+            'reset_token' => $user->reset_token,
+        ];
+        Mail::send('backend.mail.forget-password', $data, function ($message) use ($email) {
+            $message->to($email);
+            $message->subject(__('backend.confirm-your-password'));
+        });
+    }
+
+    public function resetPassword()
+    {
+
     }
 
     public function login(Request $request)
@@ -142,5 +165,12 @@ class UserController extends Controller
                 'message' => 'not-logged-out',
             ]);
         }
+    }
+
+    public function term()
+    {
+        return response()->json([
+            'term' => Term::first(),
+        ]);
     }
 }

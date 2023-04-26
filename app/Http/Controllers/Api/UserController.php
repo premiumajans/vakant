@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Socialite\Facades\Socialite;
 use PharIo\Version\Exception;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -18,6 +19,31 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('apiMid', ['except' => ['login', 'register', 'forgotPassword', 'term']]);
+    }
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+        ]);
+        $credentials = $request->only('email', 'password');
+        $token = Auth::guard('admin')->attempt($credentials);
+        if (!$token) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Unauthorized',
+            ], 401);
+        }
+        $user = Auth::guard('admin')->user();
+        return response()->json([
+            'status' => 'success',
+            'user' => $user,
+            'authorisation' => [
+                'token' => JWTAuth::fromUser($user),
+                'type' => 'bearer',
+            ],
+        ]);
     }
 
     public function register(Request $request)
@@ -77,36 +103,11 @@ class UserController extends Controller
 
     }
 
-    public function login(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
-        $credentials = $request->only('email', 'password');
-        $token = Auth::guard('admin')->attempt($credentials);
-        if (!$token) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized',
-            ], 401);
-        }
-        $user = Auth::guard('admin')->user();
-        return response()->json([
-            'status' => 'success',
-            'user' => $user,
-            'authorisation' => [
-                'token' => JWTAuth::fromUser($user),
-                'type' => 'bearer',
-            ],
-        ]);
-    }
-
     public function refresh()
     {
-        $token = JWTAuth::parseToken();
-        $user = $token->authenticate();
-        $refreshedToken = $token->refresh();
+//        $token = auth('api')->getToken();
+        $user = auth('api')->authenticate();
+        $refreshedToken = auth('api')->refresh();
         return response()->json([
             'status' => 'success',
             'user' => $user,
@@ -114,33 +115,55 @@ class UserController extends Controller
                 'token' => $refreshedToken,
                 'type' => 'bearer',
             ]
-        ]);
+        ],200);
     }
 
     public function changePassword(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(), [
-                'email' => 'required|email',
-                'new_password' => 'required',
-                'current_password' => 'required|different:new_password',
-                'new_confirm_password' => 'same:new_password',
-            ]);
-            if ($validator->fails()) {
-                return $validator->messages()->toJson();
-            } else {
-                $currentUser = Admin::where('email', $request->email)->first();
-                if (Hash::check($request->current_password, $currentUser->password)) {
+            if (!$request->has('new_password') and !$request->has('current_password') and !$request->has('new_confirm_password')) {
+                $validator = Validator::make($request->all(), [
+                    'email' => 'required|email',
+                    'username' => 'required',
+                ]);
+                if ($validator->fails()) {
+                    return $validator->messages()->toJson();
+                } else {
+                    $currentUser = Admin::where('email', $request->email)->first();
                     $currentUser->update([
-                        'password' => Hash::make($request->new_password),
+                        'name' => $request->username,
                     ]);
                     return response()->json([
-                        'status' => 'password-was-changed-successfully',
+                        'status' => 'profile-was-updated-successfully',
                     ], 200);
+                }
+            } else {
+                $validator = Validator::make($request->all(), [
+                    'email' => 'required|email',
+                    'new_password' => 'required',
+                    'username' => 'required',
+                    'current_password' => 'required|different:new_password',
+                    'new_confirm_password' => 'same:new_password',
+                ]);
+                if ($validator->fails()) {
+                    return $validator->messages()->toJson();
                 } else {
-                    return response()->json([
-                        'status' => 'current_password_is_not_correct',
-                    ], 500);
+                    $currentUser = Admin::where('email', $request->email)->first();
+                    $currentUser->update([
+                        'name' => $request->username,
+                    ]);
+                    if (Hash::check($request->current_password, $currentUser->password)) {
+                        $currentUser->update([
+                            'password' => Hash::make($request->new_password),
+                        ]);
+                        return response()->json([
+                            'status' => 'password-was-changed-successfully',
+                        ], 200);
+                    } else {
+                        return response()->json([
+                            'status' => 'current_password_is_not_correct',
+                        ], 500);
+                    }
                 }
             }
         } catch (Exception $exception) {
@@ -172,5 +195,54 @@ class UserController extends Controller
         return response()->json([
             'term' => Term::first(),
         ]);
+    }
+
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function handleGoogleCallback()
+    {
+        try{
+            $user = Socialite::driver('google')->user();
+            $this->_registerOrLoginUser($user);
+            alert()->success(__('messages.success'));
+            return redirect()->route('user.index');
+        } catch (\Exception $e) {
+            alert()->error(__('messages.error'));
+            return redirect()->back();
+        }
+    }
+
+    public function redirectToFacebook()
+    {
+        return Socialite::driver('facebook')->redirect();
+    }
+
+    public function handleFacebookCallback()
+    {
+        $user = Socialite::driver('facebook')->user();
+    }
+
+    protected function _registerOrLoginUser($data)
+    {
+        $user = Admin::where('email','=',$data->email)->first();
+        if(!$user){
+            $user = new Admin();
+            $user->name = $data->name;
+            $user->email = $data->email;
+            $user->provider_id = $data->id;
+            $user->save();
+        }
+        $token = JWTAuth::fromUser($user);
+        return response()->json([
+            'status' => 'success',
+            'user' => $user,
+            'authorisation' => [
+                'token' => $token,
+                'type' => 'bearer',
+            ],
+        ], 201);
     }
 }

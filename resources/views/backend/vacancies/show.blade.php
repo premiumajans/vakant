@@ -10,11 +10,13 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="col-12">
-                                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                                        <div
+                                            class="page-title-box d-sm-flex align-items-center justify-content-between">
                                             <h4 class="mb-sm-0">@lang('backend.vacancy') : #{{ $vacancy->id }}</h4>
                                             <div>
                                                 <a href="{{ route('backend.approve-vacancy',$vacancy->id) }}"
-                                                   class="btn btn-success waves-effect mt-4"><i class="fas fa-check"></i>
+                                                   class="btn btn-success waves-effect mt-4"><i
+                                                        class="fas fa-check"></i>
                                                     @lang('backend.approve')</a>
                                                 <a href="{{ route('backend.delVacancy',$vacancy->id) }}"
                                                    class="btn btn-danger waves-effect mt-4"><i class="fas fa-times"></i>
@@ -33,34 +35,43 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <h5>@lang('backend.position'): {{ $vacancy->description->position }}</h5>
+                                        <h5>@lang('backend.position'): {{ $vacancy->description->position ?? '-'}}</h5>
                                         <h5>@lang('backend.category')
-                                            : {{ \App\Models\AltCategory::where('id',$vacancy->description->category_id)->first()->translate(app()->getLocale())->name ?? '-' }}</h5>
+                                            : {{ alt_category($vacancy->descriprion?->category_id) }}</h5>
                                         <h5>@lang('backend.email'): <a
-                                                href="mailto:{{ $vacancy->description->mail }}">{{ $vacancy->description->email }}</a></h5>
+                                                href="mailto:{{ $vacancy->description?->mail ?? '-'}}">{{ $vacancy->description->email ?? '-'}}</a>
+                                        </h5>
                                         <h5>
                                             @lang('backend.salary'):
-                                            {{ \Illuminate\Support\Facades\DB::table('salaries')->where('id','=',$vacancy->description->min_salary)->first()->salary }}
+                                            {{ $vacancy->description?->min_salary ?? '-' }}
                                             -
-                                            {{ \Illuminate\Support\Facades\DB::table('salaries')->where('id','=',$vacancy->description->max_salary)->first()->salary }}
+                                            {{ $vacancy->description?->max_salary ?? '-'}}
                                             AZN
                                         </h5>
                                         <h5>
                                             @lang('backend.age'):
-                                            {{ $vacancy->description->min_age }}
+                                            {{ $vacancy->description->min_age  ?? '-' }}
                                             -
-                                            {{ $vacancy->description->max_age }}
+                                            {{ $vacancy->description->max_age  ?? '-' }}
                                         </h5>
-                                        <h5>@lang('backend.experience'): {{ \App\Models\Experience::find($vacancy->description->experience_id)->translate(app()->getLocale())->name ?? '-' }}</h5>
-                                        <h5>@lang('backend.education'): {{ \App\Models\Education::find($vacancy->description->education_id)->translate(app()->getLocale())->name ?? '-' }}</h5>
-                                        <h5>@lang('backend.city'): {{ \App\Models\City::find($vacancy->description->experience_id)->translate(app()->getLocale())->name ?? '-' }}</h5>
-                                        <h5>@lang('frontend.company'): {{ $vacancy->description->company }}</h5>
-                                        <h5>@lang('frontend.relevant-people'): {{ $vacancy->description->relevant_people }}</h5>
-                                        <h5>@lang('frontend.candidate-requirements'): <br> {!! $vacancy->description->candidate_requirement !!}</h5>
-                                        <h5>@lang('frontend.about-job'): <br> {!! $vacancy->description->job_description !!}</h5>
+                                        <h5>@lang('backend.experience')
+                                            : {{ \App\Models\Experience::find($vacancy->description?->experience_id)->translate(app()->getLocale())->name ?? '-' }}</h5>
+                                        <h5>@lang('backend.education')
+                                            : {{ \App\Models\Education::find($vacancy->description?->education_id)->translate(app()->getLocale())->name ?? '-' }}</h5>
+                                        <h5>@lang('backend.city')
+                                            : {{ \App\Models\City::find($vacancy->description?->experience_id ?? '-' )->translate(app()->getLocale())->name ?? '-' }}</h5>
+                                        <h5>@lang('frontend.company'): {{ $vacancy->description?->company  ?? '-' }}</h5>
+                                        <h5>@lang('frontend.relevant-people')
+                                            : {{ $vacancy->description->relevant_people  ?? '-' }}</h5>
+                                        <h5>@lang('frontend.candidate-requirements'):
+                                            <br> {!! $vacancy->description->candidate_requirement  ?? '-' !!}</h5>
+                                        <h5>@lang('frontend.about-job'):
+                                            <br> {!! $vacancy->description->job_description  ?? '-'  !!}</h5>
                                         <h5>@lang('backend.tags'): <br>
-                                            @foreach(vacancy_tags($vacancy->description->tags) as $tag)
-                                                <span>#{{ $tag }}@if(!$loop->last),@endif</span>
+                                            @foreach(vacancy_tags($vacancy->description->tags ?? '-' ) as $tag)
+                                                <span>#{{ $tag }}@if(!$loop->last)
+                                                        ,
+                                                    @endif</span>
                                             @endforeach
                                         </h5>
 

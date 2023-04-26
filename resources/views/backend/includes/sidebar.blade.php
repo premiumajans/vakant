@@ -26,11 +26,21 @@
                             <span>@lang('backend.vacancies')</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
-                            <li><a href="{{ route('backend.vacancies.create') }}">@lang('backend.add-new')</a></li>
                             <li>
-                                <a href="{{ route('backend.approvedVacancies') }}">@lang('backend.approved-vacancies')</a>
+                                <a href="{{ route('backend.vacancies.create') }}">
+                                    @lang('backend.add-new')
+                                </a>
                             </li>
-                            <li><a href="{{ route('backend.pendingVacancies') }}">@lang('backend.pending-vacancies')</a>
+                            <li>
+                                <a href="{{ route('backend.approvedVacancies') }}">
+                                    @lang('backend.approved-vacancies')
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('backend.pendingVacancies') }}">
+                                    @lang('backend.pending-vacancies')
+                                    <span class="badge rounded-pill bg-success float-end">{{ $countPendingVacancies  }}</span>
+                                </a>
                             </li>
                         </ul>
                     </li>
@@ -117,7 +127,7 @@
                 @endcan
                 @can('term index')
                     <li>
-                        <a href="{{ route('backend.appeals.index') }}" class="waves-effect">
+                        <a href="{{ route('backend.term.index') }}" class="waves-effect">
                             <i class="fas fa-paste"></i>
                             <span>@lang('backend.terms-and-conditions')</span>
                         </a>

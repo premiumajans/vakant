@@ -19,7 +19,8 @@
                         <div class="col-12">
                             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                                 <h4 class="mb-sm-0">@lang('backend.approved-vacancies'):</h4>
-                                <a href="{{ route('backend.vacancies.create') }}" class="btn btn-primary mb-3"><i class="fas fa-plus"></i> &nbsp;@lang('backend.add-new')
+                                <a href="{{ route('backend.vacancies.create') }}" class="btn btn-primary mb-3"><i
+                                        class="fas fa-plus"></i> &nbsp;@lang('backend.add-new')
                                 </a>
                             </div>
                         </div>
@@ -41,17 +42,31 @@
                                     <td class="text-center">{{ $vacancy->id }}</td>
                                     <td class="text-center">{{ $vacancy->description->company ?? '-' }}</td>
                                     <td class="text-center">{{ $vacancy->description->position ?? '-' }}</td>
-                                    <td><a href="mailto:{{ $vacancy->description->email }}">{{ $vacancy->description->email}}</a></td>
-                                    <td><a href="tel:{{ $vacancy->description->phone }}">{{ $vacancy->description->phone}}</a></td>
+                                    <td>
+                                        <a href="mailto:{{ $vacancy->description->email ?? '-'}}">{{ $vacancy->description->email ?? '-'}}</a>
+                                    </td>
+                                    <td>
+                                        <a href="tel:{{ $vacancy->description->phone ?? '-' }}">{{ $vacancy->description->phone ?? '-'}}</a>
+                                    </td>
                                     <td class="text-center">
                                         <div class="dropdown">
-                                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <button class="btn btn-primary dropdown-toggle" type="button"
+                                                    id="dropdownMenuButton2" data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
                                                 <i class="fas fa-cog"></i>
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                                                <li><a class="dropdown-item active" href="{{ route('backend.vacancies.edit',$vacancy->id) }}">@lang('backend.edit')</a></li>
-                                                <li><hr class="dropdown-divider"></li>
-                                                <li><a class="dropdown-item text-danger" href="{{ route('backend.delVacancy',$vacancy->id) }}">@lang('backend.delete')</a></li>
+                                                <li>
+                                                    <a class="dropdown-item active"
+                                                       href="{{ route('backend.vacancies.edit',$vacancy->id) }}">@lang('backend.edit')</a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item text-danger"
+                                                       href="{{ route('backend.delVacancy',$vacancy->id) }}">@lang('backend.delete')</a>
+                                                </li>
                                             </ul>
                                         </div>
                                     </td>

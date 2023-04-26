@@ -18,11 +18,11 @@ return [
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-        'redirect' => "http://localhost/vakant/public/user/login/google/callback",
+        'redirect' => "https://admin.vakant.az/api/auth/login/google/callback",
     ],
     'facebook' => [
         'client_id' => env('FACEBOOK_CLIENT_ID'),
         'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
-        'redirect' => "",
+        'redirect' => "https://admin.vakant.az/api/auth/facebook/google/callback",
     ],
 ];

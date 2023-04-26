@@ -31,7 +31,7 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware(['web', 'backendLanguage'])
                 ->prefix('/admin')
-                ->as('backend.')
+                ->name('backend.')
                 ->group(base_path('routes/web/backend.php'));
         });
     }

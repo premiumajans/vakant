@@ -34,10 +34,12 @@ use App\Http\Controllers\Backend\PackagesController as BPackage;
 use App\Http\Controllers\Backend\PackageComponentController as BPackageComponent;
 use App\Http\Controllers\Backend\SiteUsersController as BSiteUsers;
 use App\Http\Controllers\Backend\TermController as BTerm;
+use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
+Route::get('/auth/login',[AuthController::class,'showLoginForm'])->name('login');
+Route::post('/auth/login',[AuthenticatedSessionController::class,'store'])->name('loginPost');
 
 Route::group(['middleware' => 'auth:web'], function () {
-
     Route::get('/', [BHome::class, 'index']);
     Route::get('/change-language/{lang}', [LChangeLan::class, 'switchLang'])->name('switchLang');
     Route::get('/', [BHome::class, 'index'])->name('index');

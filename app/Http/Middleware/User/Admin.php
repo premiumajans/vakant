@@ -12,7 +12,7 @@ class Admin
     public function handle(Request $request, Closure $next)
     {
         if (!Auth::guard('web')->check()) {
-            return redirect(route('login'));
+            return redirect(route('backend.login'));
         }
         return $next($request);
     }

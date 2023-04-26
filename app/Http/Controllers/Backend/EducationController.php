@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Models\City;
-use App\Models\CityTranslation;
 use App\Models\Education;
 use App\Models\EducationTranslation;
 use Exception;

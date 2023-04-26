@@ -3,13 +3,8 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Backend\Mixins\LoginRequest;
-use Exception;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use function MongoDB\BSON\fromJSON;
 
 class AuthController extends Controller
 {

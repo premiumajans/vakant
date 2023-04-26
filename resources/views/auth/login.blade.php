@@ -12,7 +12,7 @@
                 </h4>
                 <div class="p-3">
                     <form class="form-horizontal mt-3 needs-validation" novalidate method="POST"
-                          action="{{ route('login') }}">
+                          action="{{ route('backend.loginPost') }}">
                         @csrf
                         <div class="form-group mb-3 row">
                             <div class="col-12">

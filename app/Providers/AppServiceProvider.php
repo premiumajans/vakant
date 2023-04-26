@@ -42,13 +42,7 @@ class AppServiceProvider extends ServiceProvider
         } else {
             $countApprovedVacancies = Cache::get('cities');
         }
-        if (!Cache::get('countPendingVacancies')) {
-            $countPendingVacancies = Cache::remember('countPendingVacancies', env('CACHE_TIME'), function () {
-                return Vacancy::where('admin_status', 0)->count();
-            });
-        } else {
-            $countPendingVacancies = Cache::get('countPendingVacancies');
-        }
+
         if (!Cache::get('educations')) {
             $educations = Cache::remember('educations', env('CACHE_TIME'), function () {
                 return Education::all();
@@ -91,6 +85,8 @@ class AppServiceProvider extends ServiceProvider
         } else {
             $salaries = Cache::get('salaries');
         }
+
+        $countPendingVacancies = Vacancy::where('admin_status', 0)->count();
         view()->share([
             'countApprovedVacancies' => $countApprovedVacancies,
             'countPendingVacancies' => $countPendingVacancies,

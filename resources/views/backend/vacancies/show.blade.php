@@ -37,7 +37,7 @@
                                     <div>
                                         <h5>@lang('backend.position'): {{ $vacancy->description->position ?? '-'}}</h5>
                                         <h5>@lang('backend.category')
-                                            : {{ alt_category($vacancy->descriprion?->category_id) }}</h5>
+                                            : {{ \App\Models\AltCategory::find($vacancy->description?->category_id)->translate(app()->getLocale())->name ?? '-' }}</h5>
                                         <h5>@lang('backend.email'): <a
                                                 href="mailto:{{ $vacancy->description?->mail ?? '-'}}">{{ $vacancy->description->email ?? '-'}}</a>
                                         </h5>
@@ -74,7 +74,6 @@
                                                     @endif</span>
                                             @endforeach
                                         </h5>
-
                                     </div>
                                 </div>
                             </div>

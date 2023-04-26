@@ -36,9 +36,11 @@ class UserController extends Controller
             ], 401);
         }
         $user = Auth::guard('admin')->user();
+        $hasCompany = Admin::find($user->id)->company()->exists();
         return response()->json([
             'status' => 'success',
             'user' => $user,
+            'company' => $hasCompany,
             'authorisation' => [
                 'token' => JWTAuth::fromUser($user),
                 'type' => 'bearer',
@@ -68,7 +70,7 @@ class UserController extends Controller
                 $token = JWTAuth::fromUser($user);
                 return response()->json([
                     'status' => 'success',
-                    'user' => $user,
+                    'user' => $user->with('company'),
                     'authorisation' => [
                         'token' => $token,
                         'type' => 'bearer',
@@ -84,18 +86,43 @@ class UserController extends Controller
 
     public function forgotPassword(Request $request)
     {
-        $user = Admin::where('email', $request->email)->first();
-        $user->reset_token = md5($request->email);
-        $user->save();
-        $email = $user->email;
-        $data = [
-            'name' => $user->name,
-            'reset_token' => $user->reset_token,
-        ];
-        Mail::send('backend.mail.forget-password', $data, function ($message) use ($email) {
-            $message->to($email);
-            $message->subject(__('backend.confirm-your-password'));
-        });
+        try {
+            if (!Admin::where('email', $request->email)->exists()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'user-not-found',
+                ], 200);
+            } else {
+                $user = Admin::where('email', $request->email)->first();
+                $user->reset_token = md5($request->email);
+                $user->save();
+                $email = $user->email;
+                $data = [
+                    'name' => $user->name,
+                    'email' => $email,
+                    'reset_token' => $user->reset_token,
+                ];
+                Mail::send('backend.mail.forget-password', $data, function ($message) use ($email) {
+                    $message->to($email);
+                    $message->subject(__('backend.confirm-your-password'));
+                });
+                return response()->json([
+                    'status' => 'success',
+                    'data' => [
+                        'token' => $user->reset_token,
+                        'email' => $user->email,
+                    ]
+                ], 200);
+            }
+        } catch (Exception $exception) {
+            return response()->json([
+                'status' => 'success',
+                'data' => [
+                    'token' => $user->reset_token,
+                    'email' => $user->email,
+                ]
+            ], 200);
+        }
     }
 
     public function resetPassword()
@@ -115,7 +142,7 @@ class UserController extends Controller
                 'token' => $refreshedToken,
                 'type' => 'bearer',
             ]
-        ],200);
+        ], 200);
     }
 
     public function changePassword(Request $request)
@@ -204,7 +231,7 @@ class UserController extends Controller
 
     public function handleGoogleCallback()
     {
-        try{
+        try {
             $user = Socialite::driver('google')->user();
             $this->_registerOrLoginUser($user);
             alert()->success(__('messages.success'));
@@ -227,8 +254,8 @@ class UserController extends Controller
 
     protected function _registerOrLoginUser($data)
     {
-        $user = Admin::where('email','=',$data->email)->first();
-        if(!$user){
+        $user = Admin::where('email', '=', $data->email)->first();
+        if (!$user) {
             $user = new Admin();
             $user->name = $data->name;
             $user->email = $data->email;

@@ -45,6 +45,7 @@ class AuthController extends Controller
         $admin = new Admin();
         $admin->name = $request->username;
         $admin->email = $request->email;
+        $admin->current_ad_count = 1;
         $admin->password = Hash::make($request->password);
         $admin->save();
         $firstPackage = Package::first();

@@ -11,8 +11,10 @@ use App\Http\Controllers\Api\SettingController as Setting;
 use App\Http\Controllers\Api\ModeController as Mode;
 use App\Http\Controllers\Api\VacancyController as Vacancy;
 
-Route::get('term',[\App\Http\Controllers\Api\UserController::class,'term']);
+Route::get('term', [\App\Http\Controllers\Api\UserController::class, 'term']);
 Route::post('/', [\App\Http\Controllers\Api\DocumentationController::class, 'index'])->name('index');
+Route::get('/get-company', [\App\Http\Controllers\Api\CompanyController::class, 'index']);
+
 Route::group(['prefix' => '/', 'as' => 'api.', 'middleware' => 'apiMid'], function () {
     Route::resource('settings', Setting::class)->only(['index', 'show']);
 });
@@ -37,7 +39,7 @@ Route::group(['prefix' => '/auth'], function () {
     Route::post('/refresh', [\App\Http\Controllers\Api\UserController::class, 'refresh']);
     Route::post('/change-password', [\App\Http\Controllers\Api\UserController::class, 'changePassword']);
     Route::post('/forgot-password', [\App\Http\Controllers\Api\UserController::class, 'forgotPassword']);
-    Route::get('/reset-password/{token}', [\App\Http\Controllers\Api\UserController::class, 'resetPassword']);
+    Route::post('/reset-password/{email}/{token}', [\App\Http\Controllers\Api\UserController::class, 'resetPassword']);
     Route::get('/login/google', [\App\Http\Controllers\Api\UserController::class, 'redirectToGoogle'])->name('loginGoogle');
     Route::get('/login/google/callback', [\App\Http\Controllers\Api\UserController::class, 'handleGoogleCallback'])->name('loginGoogleCallback');
     Route::get('/login/facebook', [\App\Http\Controllers\Api\UserController::class, 'redirectToFacebook'])->name('loginFacebook');

@@ -18,7 +18,7 @@ class Authenticate extends Middleware
         }
 
         if ($request->routeIs('user.*')) {
-            return route('frontend.index');
+            return route('backend.login');
         }
         return null;
     }

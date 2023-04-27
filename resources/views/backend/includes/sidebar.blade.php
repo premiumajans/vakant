@@ -42,6 +42,12 @@
                                     <span class="badge rounded-pill bg-success float-end">{{ $countPendingVacancies  }}</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ route('backend.pendingVacancies') }}">
+                                    @lang('backend.updated-vacancies')
+                                    <span class="badge rounded-pill bg-success float-end">{{ $countPendingVacancies  }}</span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 @endcan

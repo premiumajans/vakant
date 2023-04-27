@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('admin_id')->nullable();
             $table->string('shared_time');
             $table->string('approved_time')->nullable();
+            $table->string('updated_at')->nullable();
             $table->string('end_time')->nullable();
         });
     }

@@ -6,11 +6,6 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
 
 class VerifyCsrfToken extends Middleware
 {
-    /**
-     * The URIs that should be excluded from CSRF verification.
-     *
-     * @var array<int, string>
-     */
     protected $except = [
         'api/auth/login*',
         'api/auth/register*',
@@ -18,7 +13,9 @@ class VerifyCsrfToken extends Middleware
         'api/auth/refresh*',
         'api/auth/logout*',
         'api/vacancies/store*',
-//        'api/auth/login*',
+        'api/vacancies/{id}/update*',
+        'api/auth/forgot-password*',
+
 //        'api/auth/login*',
 //        'api/auth/login*',
 //        'api/auth/login*',

@@ -21,7 +21,10 @@ class Vacancy extends Model
     {
         return $this->hasOne(VacancyDescription::class);
     }
-
+    public function updates()
+    {
+        return $this->hasOne(VacancyUpdate::class);
+    }
     public function scopeActive($query)
     {
         return $query->where('end_time', '>=', Carbon::now()->toDateString())->get();

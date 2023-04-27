@@ -12,7 +12,6 @@ class CompanyController extends Controller
     {
         $this->middleware('apiMid', ['except' => ['']]);
     }
-
     public function index()
     {
         $user = auth('api')->authenticate();

@@ -23,14 +23,14 @@ class RouteServiceProvider extends ServiceProvider
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));
 
-            Route::middleware(['web', 'frontLanguage'])
-                ->group(base_path('routes/web.php'));
+//            Route::middleware(['web', 'frontLanguage'])
+//                ->group(base_path('routes/web.php'));
 
 //            Route::middleware('frontLanguage')
 //                ->group(base_path('routes/web.php'));
 
             Route::middleware(['web', 'backendLanguage'])
-                ->prefix('/admin')
+                ->prefix('/')
                 ->name('backend.')
                 ->group(base_path('routes/web/backend.php'));
         });

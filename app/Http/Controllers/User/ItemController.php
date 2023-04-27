@@ -42,14 +42,14 @@ class ItemController extends Controller
                 $vacancy->shared_time = Carbon::now();
                 $vacancy->save();
                 (new VacancyController())->_addNewVacancy($vacancy, $request);
-                $currentPackage = auth()->guard('admin')->user()->package()->where('status', 1)->first();
-                $currentPackage->pivot->decrement('current_ads_count');
-                if ($currentPackage->pivot->current_ads_count == 0) {
-                    DB::table('admin_packages')
-                        ->where('admin_id', '=', auth()->guard('admin')->user()->id)
-                        ->where('package_id', '=', $currentPackage->id)
-                        ->update(['status' => 0]);
-                }
+//                $currentPackage = auth()->guard('admin')->user()->package()->where('status', 1)->first();
+//                $currentPackage->pivot->decrement('current_ads_count');
+//                if ($currentPackage->pivot->current_ads_count == 0) {
+//                    DB::table('admin_packages')
+//                        ->where('admin_id', '=', auth()->guard('admin')->user()->id)
+//                        ->where('package_id', '=', $currentPackage->id)
+//                        ->update(['status' => 0]);
+//                }
 //                return redirect()->route('user.item.index');
 //            } catch (Exception $exception) {
 //                alert()->error(__('messages.error'));

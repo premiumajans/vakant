@@ -14,6 +14,11 @@ use App\Http\Controllers\Api\VacancyController as Vacancy;
 Route::get('term', [\App\Http\Controllers\Api\UserController::class, 'term']);
 Route::post('/', [\App\Http\Controllers\Api\DocumentationController::class, 'index'])->name('index');
 Route::get('/get-company', [\App\Http\Controllers\Api\CompanyController::class, 'index']);
+Route::get('/vacancies/{id}', [\App\Http\Controllers\Api\VacancyController::class, 'show']);
+Route::get('/vacancies/{id}/update', [\App\Http\Controllers\Api\VacancyController::class, 'update']);
+Route::post('/vacancies/{id}/delete', [\App\Http\Controllers\Api\VacancyController::class, 'delete']);
+
+Route::get('/my-items/', [\App\Http\Controllers\Api\VacancyController::class, 'myItems']);
 
 Route::group(['prefix' => '/', 'as' => 'api.', 'middleware' => 'apiMid'], function () {
     Route::resource('settings', Setting::class)->only(['index', 'show']);

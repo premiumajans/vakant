@@ -125,14 +125,41 @@ class UserController extends Controller
         }
     }
 
-    public function resetPassword()
+    public function resetPassword(Request $request)
     {
-
+        try {
+            $user = Admin::where('email', $request->email)->first();
+            if ($request->token == $user->reset_token) {
+                $validator = Validator::make($request->all(), [
+                    'new_password' => 'required|email',
+                    'password_confirmation' => 'same:new_password',
+                ]);
+                if ($validator->fails()) {
+                    return $validator->messages()->toJson();
+                } else {
+                    $user->password = Hash::make($request->new_password);
+                    $user->reset_token = '';
+                    $user->save();
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => 'password-changed-successfully',
+                    ], 200);
+                }
+            } else {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'token-is-not-match-email'
+                ], 500);
+            }
+        } catch (Exception $exception) {
+            return response()->json([
+                'status' => 'success',
+            ], 500);
+        }
     }
 
     public function refresh()
     {
-//        $token = auth('api')->getToken();
         $user = auth('api')->authenticate();
         $refreshedToken = auth('api')->refresh();
         return response()->json([
@@ -148,7 +175,7 @@ class UserController extends Controller
     public function changePassword(Request $request)
     {
         try {
-            if (!$request->has('new_password') and !$request->has('current_password') and !$request->has('new_confirm_password')) {
+            if ($request->has('new_password') and $request->has('current_password') and $request->has('new_confirm_password')) {
                 $validator = Validator::make($request->all(), [
                     'email' => 'required|email',
                     'username' => 'required',

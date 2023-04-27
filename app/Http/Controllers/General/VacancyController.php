@@ -11,18 +11,18 @@ class VacancyController extends Controller
 {
     public function _addNewVacancy($vacancy, $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'relevant_people' => 'required|min:6',
-            'candidate_requirement' => 'required|min:6',
-            'job_description' => 'required|min:6',
-            'company' => 'required',
-            'phone' => 'required|min:6',
-            'position' => 'required|min:3',
-        ]);
-        if ($validator->fails()) {
-            return $validator->messages()->toJson();
-        }
+//        $validator = Validator::make($request->all(), [
+//            'email' => 'required|email',
+//            'relevant_people' => 'required|min:6',
+//            'candidate_requirement' => 'required|min:6',
+//            'job_description' => 'required|min:6',
+//            'company' => 'required',
+//            'phone' => 'required|min:6',
+//            'position' => 'required|min:3',
+//        ]);
+//        if ($validator->fails()) {
+//            return $validator->messages()->toJson();
+//        }
         $vacancyDescription = new VacancyDescription();
         $vacancyDescription->vacancy_id = $vacancy->id;
         $vacancyDescription->relevant_people = $request->relevant_people;

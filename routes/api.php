@@ -13,10 +13,14 @@ use App\Http\Controllers\Api\VacancyController as Vacancy;
 
 Route::get('term', [\App\Http\Controllers\Api\UserController::class, 'term']);
 Route::post('/', [\App\Http\Controllers\Api\DocumentationController::class, 'index'])->name('index');
+
 Route::get('/get-company', [\App\Http\Controllers\Api\CompanyController::class, 'index']);
+Route::post('/company-update', [\App\Http\Controllers\Api\CompanyController::class, 'update']);
+Route::post('/company/update/photo', [\App\Http\Controllers\Api\CompanyController::class, 'updatePhoto']);
+
 Route::get('/vacancies/{id}', [\App\Http\Controllers\Api\VacancyController::class, 'show']);
-Route::get('/vacancies/{id}/update', [\App\Http\Controllers\Api\VacancyController::class, 'update']);
-Route::post('/vacancies/{id}/delete', [\App\Http\Controllers\Api\VacancyController::class, 'delete']);
+Route::post('/vacancies/{id}/update', [\App\Http\Controllers\Api\VacancyController::class, 'update']);
+Route::post('/vacancies/{id}/delete', [\App\Http\Controllers\Api\VacancyController::class, 'deleteVacancy']);
 
 Route::get('/my-items/', [\App\Http\Controllers\Api\VacancyController::class, 'myItems']);
 
@@ -44,7 +48,7 @@ Route::group(['prefix' => '/auth'], function () {
     Route::post('/refresh', [\App\Http\Controllers\Api\UserController::class, 'refresh']);
     Route::post('/change-password', [\App\Http\Controllers\Api\UserController::class, 'changePassword']);
     Route::post('/forgot-password', [\App\Http\Controllers\Api\UserController::class, 'forgotPassword']);
-    Route::post('/reset-password/{email}/{token}', [\App\Http\Controllers\Api\UserController::class, 'resetPassword']);
+    Route::post('/reset-password', [\App\Http\Controllers\Api\UserController::class, 'resetPassword']);
     Route::get('/login/google', [\App\Http\Controllers\Api\UserController::class, 'redirectToGoogle'])->name('loginGoogle');
     Route::get('/login/google/callback', [\App\Http\Controllers\Api\UserController::class, 'handleGoogleCallback'])->name('loginGoogleCallback');
     Route::get('/login/facebook', [\App\Http\Controllers\Api\UserController::class, 'redirectToFacebook'])->name('loginFacebook');

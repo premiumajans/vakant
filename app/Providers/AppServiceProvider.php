@@ -9,6 +9,7 @@ use App\Models\Salary;
 use App\Models\Mode;
 use App\Models\SiteLanguage;
 use App\Models\Vacancy;
+use App\Models\VacancyUpdate;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
 use App\Models\City;
@@ -19,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->register(\L5Swagger\L5SwaggerServiceProvider::class);
     }
+
     public function boot()
     {
         if (!Cache::get('categories')) {
@@ -85,11 +87,12 @@ class AppServiceProvider extends ServiceProvider
         } else {
             $salaries = Cache::get('salaries');
         }
-
+        $countUpdatedVacancies = VacancyUpdate::all()->count();
         $countPendingVacancies = Vacancy::where('admin_status', 0)->count();
         view()->share([
             'countApprovedVacancies' => $countApprovedVacancies,
             'countPendingVacancies' => $countPendingVacancies,
+            'countUpdatedVacancies' => $countUpdatedVacancies,
             'modes' => $modes,
             'salaries' => $salaries,
             'experiences' => $experiences,

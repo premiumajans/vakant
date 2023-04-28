@@ -36,8 +36,8 @@ use App\Http\Controllers\Backend\SiteUsersController as BSiteUsers;
 use App\Http\Controllers\Backend\TermController as BTerm;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
-Route::get('/auth/login',[AuthController::class,'showLoginForm'])->name('login');
-Route::post('/auth/login',[AuthenticatedSessionController::class,'store'])->name('loginPost');
+Route::get('/auth/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/auth/login', [AuthenticatedSessionController::class, 'store'])->name('loginPost');
 
 Route::group(['middleware' => 'auth:web'], function () {
     Route::get('/', [BHome::class, 'index']);
@@ -59,7 +59,8 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::post('/package/add-new-component/', [BPackageComponent::class, 'addNewComponent'])->name('addNewComponent');
     Route::get('/vacancies/approved', [BVacancy::class, 'approved'])->name('approvedVacancies');
     Route::get('/vacancies/pending', [BVacancy::class, 'pending'])->name('pendingVacancies');
-    Route::get('/vacancy/append/{id}',[BVacancy::class,'approveVacancy'])->name('approve-vacancy');
+    Route::get('/vacancies/updated', [BVacancy::class, 'updated'])->name('updatedVacancies');
+    Route::get('/vacancy/append/{id}', [BVacancy::class, 'approveVacancy'])->name('approve-vacancy');
 
 
 //Resources

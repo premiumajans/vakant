@@ -289,8 +289,8 @@
                 "
                     >
                         <p style="margin: 0">
-                            <a href="http://localhost:3000/{{ $email }}/{{$reset_token}}" target="_blank" style="color: #35b8e8"
-                            >http://localhost:3000/{{ $email }}/{{$reset_token}}</a
+                            <a href="http://localhost:3000/reset-password/{{ $email }}/{{$reset_token}}" target="_blank" style="color: #35b8e8"
+                            >http://localhost:3000/reset-password/{{ $email }}/{{$reset_token}}</a
                             >
                         </p>
                     </td>

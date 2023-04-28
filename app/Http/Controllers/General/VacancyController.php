@@ -21,7 +21,9 @@ class VacancyController extends Controller
 //            'position' => 'required|min:3',
 //        ]);
 //        if ($validator->fails()) {
-//            return $validator->messages()->toJson();
+//            return response()->json([
+    'errors' => $validator->errors(),
+], 422);
 //        }
         $vacancyDescription = new VacancyDescription();
         $vacancyDescription->vacancy_id = $vacancy->id;

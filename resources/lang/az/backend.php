@@ -171,6 +171,7 @@ return array (
   'try-again' => 'Yenidən cəhd edin',
   'unread' => 'Oxunmayıb',
   'updated' => 'Yeniləndi',
+  'updated-vacancies' => 'Yenilənmiş vakansiyalar',
   'used' => 'istifadə olunub',
   'user-setting' => 'İstifadəçi tənzimləmələri',
   'username' => 'İstifadəçi adı',

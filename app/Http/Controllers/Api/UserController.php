@@ -18,7 +18,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('apiMid', ['except' => ['login', 'register', 'forgotPassword', 'term']]);
+        $this->middleware('apiMid', ['except' => ['login', 'register', 'forgotPassword', 'term', 'resetPassword']]);
     }
 
     public function login(Request $request)
@@ -59,7 +59,9 @@ class UserController extends Controller
                 'term' => 'required',
             ]);
             if ($validator->fails()) {
-                return $validator->messages()->toJson();
+                return response()->json([
+                    'errors' => $validator->errors(),
+                ], 422);
             } else {
                 $user = new Admin();
                 $user->name = $request->name;
@@ -70,7 +72,8 @@ class UserController extends Controller
                 $token = JWTAuth::fromUser($user);
                 return response()->json([
                     'status' => 'success',
-                    'user' => $user->with('company'),
+                    'user' => $user,
+                    'company' => false,
                     'authorisation' => [
                         'token' => $token,
                         'type' => 'bearer',
@@ -91,7 +94,7 @@ class UserController extends Controller
                 return response()->json([
                     'status' => 'error',
                     'message' => 'user-not-found',
-                ], 200);
+                ], 404);
             } else {
                 $user = Admin::where('email', $request->email)->first();
                 $user->reset_token = md5($request->email);
@@ -116,44 +119,49 @@ class UserController extends Controller
             }
         } catch (Exception $exception) {
             return response()->json([
-                'status' => 'success',
-                'data' => [
-                    'token' => $user->reset_token,
-                    'email' => $user->email,
-                ]
-            ], 200);
+                'status' => 'error',
+            ], 500);
         }
     }
 
     public function resetPassword(Request $request)
     {
         try {
-            $user = Admin::where('email', $request->email)->first();
-            if ($request->token == $user->reset_token) {
-                $validator = Validator::make($request->all(), [
-                    'new_password' => 'required|email',
-                    'password_confirmation' => 'same:new_password',
-                ]);
-                if ($validator->fails()) {
-                    return $validator->messages()->toJson();
+            if (Admin::where('email', $request->email)->exists()) {
+                $user = Admin::where('email', $request->email)->first();
+                if ($request->token == $user->reset_token) {
+                    $validator = Validator::make($request->all(), [
+                        'new_password' => 'required',
+                        'password_confirmation' => 'same:new_password',
+                    ]);
+                    if ($validator->fails()) {
+                        return response()->json([
+                            'errors' => $validator->errors(),
+                        ], 422);
+                    } else {
+                        $user->password = Hash::make($request->new_password);
+                        $user->reset_token = '';
+                        $user->save();
+                        return response()->json([
+                            'status' => 'success',
+                            'message' => 'password-changed-successfully',
+                        ], 200);
+                    }
                 } else {
-                    $user->password = Hash::make($request->new_password);
-                    $user->reset_token = '';
-                    $user->save();
                     return response()->json([
                         'status' => 'success',
-                        'message' => 'password-changed-successfully',
-                    ], 200);
+                        'message' => 'token-is-not-match-email'
+                    ], 500);
                 }
             } else {
                 return response()->json([
-                    'status' => 'success',
-                    'message' => 'token-is-not-match-email'
+                    'status' => 'error',
+                    'message' => 'email-found',
                 ], 500);
             }
         } catch (Exception $exception) {
             return response()->json([
-                'status' => 'success',
+                'status' => 'error',
             ], 500);
         }
     }
@@ -175,23 +183,7 @@ class UserController extends Controller
     public function changePassword(Request $request)
     {
         try {
-            if ($request->has('new_password') and $request->has('current_password') and $request->has('new_confirm_password')) {
-                $validator = Validator::make($request->all(), [
-                    'email' => 'required|email',
-                    'username' => 'required',
-                ]);
-                if ($validator->fails()) {
-                    return $validator->messages()->toJson();
-                } else {
-                    $currentUser = Admin::where('email', $request->email)->first();
-                    $currentUser->update([
-                        'name' => $request->username,
-                    ]);
-                    return response()->json([
-                        'status' => 'profile-was-updated-successfully',
-                    ], 200);
-                }
-            } else {
+            if ($request->has('new_password') or $request->has('current_password') or $request->has('new_confirm_password')) {
                 $validator = Validator::make($request->all(), [
                     'email' => 'required|email',
                     'new_password' => 'required',
@@ -200,7 +192,9 @@ class UserController extends Controller
                     'new_confirm_password' => 'same:new_password',
                 ]);
                 if ($validator->fails()) {
-                    return $validator->messages()->toJson();
+                    return response()->json([
+                        'errors' => $validator->errors(),
+                    ], 422);
                 } else {
                     $currentUser = Admin::where('email', $request->email)->first();
                     $currentUser->update([
@@ -218,6 +212,24 @@ class UserController extends Controller
                             'status' => 'current_password_is_not_correct',
                         ], 500);
                     }
+                }
+            } else {
+                $validator = Validator::make($request->all(), [
+                    'email' => 'required|email',
+                    'username' => 'required',
+                ]);
+                if ($validator->fails()) {
+                    return response()->json([
+                        'errors' => $validator->errors(),
+                    ], 422);
+                } else {
+                    $currentUser = Admin::where('email', $request->email)->first();
+                    $currentUser->update([
+                        'name' => $request->username,
+                    ]);
+                    return response()->json([
+                        'status' => 'profile-was-updated-successfully',
+                    ], 200);
                 }
             }
         } catch (Exception $exception) {

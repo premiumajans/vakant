@@ -43,9 +43,9 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('backend.pendingVacancies') }}">
+                                <a href="{{ route('backend.updatedVacancies') }}">
                                     @lang('backend.updated-vacancies')
-                                    <span class="badge rounded-pill bg-success float-end">{{ $countPendingVacancies  }}</span>
+                                    <span class="badge rounded-pill bg-warning float-end">{{ $countUpdatedVacancies }}</span>
                                 </a>
                             </li>
                         </ul>

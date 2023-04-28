@@ -7,6 +7,7 @@ use App\Http\Enums\CauserEnum;
 use App\Http\Enums\VacancyAdminEnum;
 use App\Http\Requests\Backend\Create\VacancyRequest;
 use App\Models\Vacancy;
+use App\Models\VacancyUpdate;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -43,6 +44,13 @@ class VacancyController extends Controller
         abort_if(Gate::denies('vacancy index'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $vacancies = Vacancy::where('admin_status', 0)->get();
         return view('backend.vacancies.pending', get_defined_vars());
+    }
+
+    public function updated()
+    {
+        check_permission('vacancy index');
+        $updatedVacancies = VacancyUpdate::all();
+        return view('backend.vacancies.updated', get_defined_vars());
     }
 
     public function create()

@@ -99,12 +99,10 @@ class SiteUsersController extends Controller
                     $company->phone = $request->phone;
                     $company->email = $request->email;
                     $company->adress = $request->address;
-                    $company->voen = $request->voen;
+                    $company->about = $request->about;
+//                    $company->voen = $request->voen;
                     if ($request->hasFile('photo')) {
                         $company->photo = upload('user/company', $request->file('photo'));
-                    }
-                    foreach (active_langs() as $lan) {
-                        $company->translate($lan->code)->about = $request->about[$lan->code];
                     }
                     $company->save();
                 });
@@ -123,17 +121,11 @@ class SiteUsersController extends Controller
                 $company->voen = $request->voen;
                 $company->adress = $request->address;
                 $company->name = $request->name;
+                $company->about = $request->about;
                 if ($request->hasFile('photo')) {
                     $company->photo = upload('user/company', $request->file('photo'));
                 }
                 $user->company()->save($company);
-                foreach (active_langs() as $lang) {
-                    $translation = new CompanyTranslation();
-                    $translation->locale = $lang->code;
-                    $translation->company_id = $company->id;
-                    $translation->about = $request->about[$lang->code];
-                    $translation->save();
-                }
                 alert()->success(__('messages.success'));
                 return redirect(route('backend.site-users.index'));
             } catch (Exception $e) {

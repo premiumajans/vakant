@@ -8,16 +8,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Company extends Model implements TranslatableContract
+class Company extends Model
 {
     public function admin()
     {
         return $this->belongsTo(Admin::class);
     }
 
-    use Translatable;
-
     public $timestamps = false;
-    public $translatedAttributes = ['about'];
-    protected $fillable = ['name', 'adress', 'email', 'phone', 'photo'];
+    protected $fillable = ['name', 'adress', 'email', 'phone', 'photo', 'about'];
 }

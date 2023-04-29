@@ -22,7 +22,21 @@ if (!function_exists('upload')) {
         }
     }
 }
-
+if (!function_exists('api_upload')) {
+    function api_upload($path, $file)
+    {
+        try {
+            $img = $file;
+            $extension = $img->getClientOriginalExtension();
+            $filename = uniqid() . '.' . $extension;
+            $img->move('images/' . $path, $filename);
+            $data['photo'] = 'images/' . $path . '/' . $filename;
+            return $data['photo'];
+        } catch (Exception $e) {
+            return redirect()->back();
+        }
+    }
+}
 if (!function_exists('multi_upload')) {
     function multi_upload($path, $files): array|\Illuminate\Http\RedirectResponse
     {

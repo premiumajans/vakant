@@ -1,4 +1,6 @@
-@include('backend.includes.meta')
+<meta charset="utf-8" />
+<title>@lang('backend.login')</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 @section('title',__('backend.login'))
 @include('backend.includes.styles')
 <body class="auth-body-bg">

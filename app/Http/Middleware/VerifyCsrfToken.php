@@ -16,6 +16,7 @@ class VerifyCsrfToken extends Middleware
         'api/vacancies/{id}/update*',
         'api/auth/forgot-password*',
         'api/auth/reset-password*',
+        'api/company-update*',
 //        'api/auth/login*',
 //        'api/auth/login*',
 //        'api/auth/login*',

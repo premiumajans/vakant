@@ -26,99 +26,38 @@
                                         <div class="mb-3">
                                             <label>@lang('backend.name') <span class="text-danger">*</span></label>
                                             <input type="text" name="name" class="form-control" required=""
-                                                  placeholder="Premium Ajans MMC">
-                                            <div class="valid-feedback">
-                                                @lang('backend.name') @lang('messages.is-correct')
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                @lang('backend.name') @lang('messages.not-correct')
-                                            </div>
+                                                   placeholder="Premium Ajans MMC">
+                                           {!! validation_m('backend.name') !!}
                                         </div>
                                         <div class="mb-3">
                                             <label>@lang('backend.email') <span class="text-danger">*</span></label>
                                             <input type="text" name="email" class="form-control" required=""
-                                                  placeholder="taleh@vakant.az">
-                                            <div class="valid-feedback">
-                                                @lang('backend.email') @lang('messages.is-correct')
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                @lang('backend.email') @lang('messages.not-correct')
-                                            </div>
+                                                   placeholder="taleh@vakant.az">
+                                            {!! validation_m('backend.email') !!}
                                         </div>
-
                                         <div class="mb-3">
                                             <label>@lang('backend.phone') <span class="text-danger">*</span></label>
                                             <input type="number" name="phone" class="form-control" required=""
                                                    placeholder="50 000 0510">
-                                            <div class="valid-feedback">
-                                                @lang('backend.phone') @lang('messages.is-correct')
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                @lang('backend.phone') @lang('messages.not-correct')
-                                            </div>
+                                            {!! validation_m('backend.phone') !!}
                                         </div>
-
                                         <div class="mb-3">
                                             <label>@lang('backend.adress') <span class="text-danger">*</span></label>
                                             <input type="text" name="address" class="form-control" required=""
-                                                  placeholder="Bakı, Azərbaycan">
-                                            <div class="valid-feedback">
-                                                @lang('backend.address') @lang('messages.is-correct')
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                @lang('backend.address') @lang('messages.not-correct')
-                                            </div>
+                                                   placeholder="Bakı, Azərbaycan">
+                                            {!! validation_m('backend.address') !!}
                                         </div>
-
-                                        <div class="mb-3">
-                                            <label>@lang('backend.voen') <span class="text-danger">*</span></label>
-                                            <input type="text" name="voen" class="form-control" required=""
-                                                  placeholder="@lang('backend.voen')">
-                                            <div class="valid-feedback">
-                                                @lang('backend.voen') @lang('messages.is-correct')
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                @lang('backend.voen') @lang('messages.not-correct')
-                                            </div>
-                                        </div>
-
-
                                         <div class="mb-3">
                                             <label>@lang('backend.photo')</label>
                                             <input type="file" name="photo" class="form-control">
                                         </div>
-
-
-                                        <ul class="nav nav-pills nav-justified mb-2" role="tablist">
-                                            @foreach(active_langs() as $lan)
-                                                <li class="nav-item waves-effect waves-light">
-                                                    <a class="nav-link @if($loop->first) active @endif"
-                                                       data-bs-toggle="tab"
-                                                       href="#{{ $lan->code }}" role="tab" aria-selected="true">
-                                                    <span class="d-block d-sm-none"><i
-                                                            class="fas fa-flag">&nbsp; {{ $lan->code }}</i></span>
-                                                        <span class="d-none d-sm-block">{{ $lan->name }}</span>
-                                                    </a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                        <div class="tab-content p-3 text-muted">
-                                            @foreach(active_langs() as $key => $lan)
-                                                <div class="tab-pane @if($loop->first) active show @endif"
-                                                     id="{{ $lan->code }}" role="tabpanel">
-                                                    <div class="form-group row">
-                                                        <div class="mb-3">
-                                                            <label>@lang('menus.about')
-                                                                <span
-                                                                    class="text-danger">*</span></label>
-                                                            <textarea id="elm{{$lan->code.$key+1}}" required=""
-                                                                      name="about[{{$lan->code}}]"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
+                                        <div class="mb-3">
+                                            <label>@lang('menus.about')
+                                                <span
+                                                    class="text-danger">*</span></label>
+                                            <textarea id="elmaz1" required=""
+                                                      name="about"></textarea>
                                         </div>
-
                                         <div class="mb-0 text-center">
                                             <div>
                                                 <button type="submit"
@@ -140,97 +79,41 @@
                                         <div class="mb-3">
                                             <label>@lang('backend.name') <span class="text-danger">*</span></label>
                                             <input type="text" name="name" class="form-control" required=""
-                                                  value="{{ $company->name ?? '-' }}">
-                                            <div class="valid-feedback">
-                                                @lang('backend.name') @lang('messages.is-correct')
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                @lang('backend.name') @lang('messages.not-correct')
-                                            </div>
+                                                   value="{{ $company->name ?? '-' }}">
+                                            {!! validation_m('backend.name') !!}
                                         </div>
                                         <div class="mb-3">
                                             <label>@lang('backend.email') <span class="text-danger">*</span></label>
                                             <input type="text" name="email" class="form-control" required=""
-                                                  value="{{ $company->email ?? '-' }}">
-                                            <div class="valid-feedback">
-                                                @lang('backend.email') @lang('messages.is-correct')
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                @lang('backend.email') @lang('messages.not-correct')
-                                            </div>
+                                                   value="{{ $company->email ?? '-' }}">
+                                            {!! validation_m('backend.email') !!}
                                         </div>
 
                                         <div class="mb-3">
                                             <label>@lang('backend.phone') <span class="text-danger">*</span></label>
                                             <input type="text" name="phone" class="form-control" required=""
-                                                  value="{{ $company->phone ?? '-' }}">
-                                            <div class="valid-feedback">
-                                                @lang('backend.phone') @lang('messages.is-correct')
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                @lang('backend.phone') @lang('messages.not-correct')
-                                            </div>
+                                                   value="{{ $company->phone ?? '-' }}">
+                                            {!! validation_m('backend.phone') !!}
                                         </div>
-
                                         <div class="mb-3">
                                             <label>@lang('backend.adress') <span class="text-danger">*</span></label>
                                             <input type="text" name="address" class="form-control" required=""
-                                                  value="{{ $company->adress ?? '-' }}">
-                                            <div class="valid-feedback">
-                                                @lang('backend.address') @lang('messages.is-correct')
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                @lang('backend.address') @lang('messages.not-correct')
-                                            </div>
+                                                   value="{{ $company->adress ?? '-' }}">
+                                            {!! validation_m('backend.address') !!}
                                         </div>
-
-                                        <div class="mb-3">
-                                            <label>@lang('backend.voen') <span class="text-danger">*</span></label>
-                                            <input type="text" name="voen" class="form-control" required=""
-                                                  value="{{ $company->voen ?? '-' }}">
-                                            <div class="valid-feedback">
-                                                @lang('backend.voen') @lang('messages.is-correct')
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                @lang('backend.voen') @lang('messages.not-correct')
-                                            </div>
-                                        </div>
-
                                         <div class="mb-3">
                                             <label>@lang('backend.photo')</label>
-                                            <input type="file" name="photo" class="form-control">
+                                            <input type="file" name="photo" class="form-control mb-2">
+                                            <img class="form-control" src="{{ asset($company->photo) }}"
+                                                 style="width: 100%;max-height: 500px;">
                                         </div>
-
-
-                                        <ul class="nav nav-pills nav-justified mb-2" role="tablist">
-                                            @foreach(active_langs() as $lan)
-                                                <li class="nav-item waves-effect waves-light">
-                                                    <a class="nav-link @if($loop->first) active @endif"
-                                                       data-bs-toggle="tab"
-                                                       href="#{{ $lan->code }}" role="tab" aria-selected="true">
-                                                    <span class="d-block d-sm-none"><i
-                                                            class="fas fa-flag">&nbsp; {{ $lan->code }}</i></span>
-                                                        <span class="d-none d-sm-block">{{ $lan->name }}</span>
-                                                    </a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-
-                                        <div class="tab-content p-3 text-muted">
-                                            @foreach(active_langs() as $key => $lan)
-                                                <div class="tab-pane @if($loop->first) active show @endif"
-                                                     id="{{ $lan->code }}" role="tabpanel">
-                                                    <div class="form-group row">
-                                                        <div class="mb-3">
-                                                            <label>@lang('menus.about')</label>
-                                                            <textarea id="elm{{$lan->code.$key+1}}"
-                                                                      name="about[{{$lan->code}}]">{!! $company->translate($lan->code)->about ?? '-' !!}</textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
+                                        <div class="mb-3">
+                                            <label>@lang('menus.about')
+                                                <span
+                                                    class="text-danger">*</span></label>
+                                            <textarea id="elmaz1" required=""
+                                                      name="about">{!! $company->about !!}</textarea>
                                         </div>
-
                                         <div class="mb-0 text-center">
                                             <div>
                                                 <button type="submit"

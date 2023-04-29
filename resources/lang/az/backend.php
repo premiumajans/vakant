@@ -168,6 +168,8 @@ return array (
   'terms-and-conditions' => 'Şərtlər və Qaydalar',
   'time' => 'Vaxt',
   'title' => 'Başlıq',
+  'translation' => 'Tərcümə',
+  'translation-panel' => 'Tərcümə paneli',
   'try-again' => 'Yenidən cəhd edin',
   'unread' => 'Oxunmayıb',
   'updated' => 'Yeniləndi',

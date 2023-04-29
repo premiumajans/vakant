@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('email');
             $table->longText('voen')->nullable();
             $table->string('adress');
+            $table->longText('about')->nullable();
             $table->longText('photo')->nullable();
             $table->foreign('admin_id')
                 ->references('id')

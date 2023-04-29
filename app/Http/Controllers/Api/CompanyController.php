@@ -40,7 +40,7 @@ class CompanyController extends Controller
             'name' => 'required',
             'email' => 'required',
             'phone' => 'required',
-            'address' => 'required|different:new_password',
+            'address' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -55,6 +55,7 @@ class CompanyController extends Controller
                 'phone' => $request->phone,
                 'email' => $request->email,
                 'adress' => $request->address,
+                'about' => $request->about,
             ]);
             if ($company->translation()->exists()) {
                 foreach (active_langs() as $lang) {
@@ -72,15 +73,9 @@ class CompanyController extends Controller
             $company->name = $request->name;
             $company->phone = $request->phone;
             $company->email = $request->email;
+            $company->about = $request->about;
             $company->adress = $request->address;
             $companyUser->company()->save($company);
-            foreach (active_langs() as $lang) {
-                $companyTranslation = new CompanyTranslation();
-                $companyTranslation->locale = $lang->code;
-                $companyTranslation->company_id = $company->id;
-                $companyTranslation->about = $request->about[$lang->code];
-                $companyTranslation->save();
-            }
             return response()->json([
                 'status' => 'success',
                 'company' => $company,
@@ -102,14 +97,16 @@ class CompanyController extends Controller
             }
             $company = Admin::find($this->user->id)->company()->first();
             $company->update([
-                'photo' => upload('users/companies', $request->photo)
+                'photo' => api_upload('users/companies', $request->file('photo'))
             ]);
             return response()->json([
                 'status' => 'success',
-                ''
-            ], 422);
+                'message' => 'profile-photo-successfully-updated',
+            ], 200);
         } catch (Exception $exception) {
-
+            return response()->json([
+                'status' => 'error',
+            ], 500);
         }
     }
 }

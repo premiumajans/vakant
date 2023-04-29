@@ -39,13 +39,15 @@
                             <li>
                                 <a href="{{ route('backend.pendingVacancies') }}">
                                     @lang('backend.pending-vacancies')
-                                    <span class="badge rounded-pill bg-success float-end">{{ $countPendingVacancies  }}</span>
+                                    <span
+                                        class="badge rounded-pill bg-success float-end">{{ $countPendingVacancies  }}</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ route('backend.updatedVacancies') }}">
                                     @lang('backend.updated-vacancies')
-                                    <span class="badge rounded-pill bg-warning float-end">{{ $countUpdatedVacancies }}</span>
+                                    <span
+                                        class="badge rounded-pill bg-warning float-end">{{ $countUpdatedVacancies }}</span>
                                 </a>
                             </li>
                         </ul>
@@ -123,14 +125,14 @@
                         </a>
                     </li>
                 @endcan
-                @can('appeals index')
-                    <li>
-                        <a href="{{ route('backend.appeals.index') }}" class="waves-effect">
-                            <i class="fas fa-inbox"></i>
-                            <span>@lang('backend.appeals')</span>
-                        </a>
-                    </li>
-                @endcan
+                {{--                @can('appeals index')--}}
+                {{--                    <li>--}}
+                {{--                        <a href="{{ route('backend.appeals.index') }}" class="waves-effect">--}}
+                {{--                            <i class="fas fa-inbox"></i>--}}
+                {{--                            <span>@lang('backend.appeals')</span>--}}
+                {{--                        </a>--}}
+                {{--                    </li>--}}
+                {{--                @endcan--}}
                 @can('term index')
                     <li>
                         <a href="{{ route('backend.term.index') }}" class="waves-effect">
@@ -140,47 +142,46 @@
                     </li>
                 @endcan
 
-
-                @can('slider index')
-                    <li>
-                        <a href="{{ route('backend.slider.index') }}" class="waves-effect">
-                            <i class="fas fa-sliders-h"></i>
-                            <span>@lang('backend.slider')</span>
-                        </a>
-                    </li>
-                @endcan
-                @can('projects index')
-                    <li>
-                        <a href="{{ route('backend.projects.index') }}" class="waves-effect">
-                            <i class="fas fa-project-diagram"></i>
-                            <span>@lang('menus.Projects')</span>
-                        </a>
-                    </li>
-                @endcan
-                @can('products index')
-                    <li>
-                        <a href="{{ route('backend.products.index') }}" class="waves-effect">
-                            <i class="fas fa-box"></i>
-                            <span>@lang('menus.products')</span>
-                        </a>
-                    </li>
-                @endcan
-                @can('services index')
-                    <li>
-                        <a href="{{ route('backend.services.index') }}" class="waves-effect">
-                            <i class="fas fa-server"></i>
-                            <span>@lang('menus.services')</span>
-                        </a>
-                    </li>
-                @endcan
-{{--                @can('faq index')--}}
-{{--                    <li>--}}
-{{--                        <a href="{{ route('backend.faq.index') }}" class="waves-effect">--}}
-{{--                            <i class="fa fa-question-circle"></i>--}}
-{{--                            <span>@lang('frontend.faq')</span>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
-{{--                @endcan--}}
+                {{--                @can('slider index')--}}
+                {{--                    <li>--}}
+                {{--                        <a href="{{ route('backend.slider.index') }}" class="waves-effect">--}}
+                {{--                            <i class="fas fa-sliders-h"></i>--}}
+                {{--                            <span>@lang('backend.slider')</span>--}}
+                {{--                        </a>--}}
+                {{--                    </li>--}}
+                {{--                @endcan--}}
+                {{--                @can('projects index')--}}
+                {{--                    <li>--}}
+                {{--                        <a href="{{ route('backend.projects.index') }}" class="waves-effect">--}}
+                {{--                            <i class="fas fa-project-diagram"></i>--}}
+                {{--                            <span>@lang('menus.Projects')</span>--}}
+                {{--                        </a>--}}
+                {{--                    </li>--}}
+                {{--                @endcan--}}
+                {{--                @can('products index')--}}
+                {{--                    <li>--}}
+                {{--                        <a href="{{ route('backend.products.index') }}" class="waves-effect">--}}
+                {{--                            <i class="fas fa-box"></i>--}}
+                {{--                            <span>@lang('menus.products')</span>--}}
+                {{--                        </a>--}}
+                {{--                    </li>--}}
+                {{--                @endcan--}}
+                {{--                @can('services index')--}}
+                {{--                    <li>--}}
+                {{--                        <a href="{{ route('backend.services.index') }}" class="waves-effect">--}}
+                {{--                            <i class="fas fa-server"></i>--}}
+                {{--                            <span>@lang('menus.services')</span>--}}
+                {{--                        </a>--}}
+                {{--                    </li>--}}
+                {{--                @endcan--}}
+                {{--                @can('faq index')--}}
+                {{--                    <li>--}}
+                {{--                        <a href="{{ route('backend.faq.index') }}" class="waves-effect">--}}
+                {{--                            <i class="fa fa-question-circle"></i>--}}
+                {{--                            <span>@lang('frontend.faq')</span>--}}
+                {{--                        </a>--}}
+                {{--                    </li>--}}
+                {{--                @endcan--}}
                 @can('languages index')
                     <li>
                         <a href="{{ route('backend.site-languages.index') }}" class="waves-effect">
@@ -229,6 +230,14 @@
                         <a href="{{ route('backend.givePermission') }}" class=" waves-effect">
                             <i class="ri-lock-unlock-fill"></i>
                             <span>@lang('backend.give-permission')</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('languages index')
+                    <li>
+                        <a href="{{ url('manage-languages') }}" class=" waves-effect">
+                            <i class="ri-lock-unlock-fill"></i>
+                            <span>@lang('backend.translation-panel')</span>
                         </a>
                     </li>
                 @endcan

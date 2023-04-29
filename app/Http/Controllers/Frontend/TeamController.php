@@ -15,7 +15,7 @@ class TeamController extends Controller
             $teams = Team::where('status', 1)->get();
             return view('frontend.about.team', get_defined_vars());
         } else {
-            return redirect()->route('frontend.index');
+            return redirect()->route('backend.login');
         }
     }
 }

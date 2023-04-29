@@ -36,7 +36,7 @@ class HomeController extends Controller
 ////        $projects = Project::where('status', 1)->get()->take(3);
 ////        $news = News::all();
 ////        $supports = Support::all();
-        return view('frontend.index', get_defined_vars());
+        return view('backend.login', get_defined_vars());
     }
 
     public function search(Request $request)

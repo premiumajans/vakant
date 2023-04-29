@@ -12,7 +12,7 @@
                         </div>
                         <div class="error-info">
                             <h2 class="mb-2">@lang('messages.500')!</h2>
-                            <a href="{{ route('frontend.index') }}">@lang('backend.back-to-home')<i
+                            <a href="{{ route('backend.login') }}">@lang('backend.back-to-home')<i
                                     class="fa fa-angle-double-right ml-2"></i></a>
                         </div>
                     </div>

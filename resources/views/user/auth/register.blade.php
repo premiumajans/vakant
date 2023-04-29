@@ -14,7 +14,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="app-brand justify-content-center">
-                        <a href="{{ route('frontend.index') }}" class="app-brand-link gap-2">
+                        <a href="{{ route('backend.login') }}" class="app-brand-link gap-2">
                             <span class="app-brand-text demo fw-bolder"
                                   style="color: #696cff">Vakant.az</span>
                         </a>

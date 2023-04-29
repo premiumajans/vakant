@@ -57,12 +57,6 @@ class CompanyController extends Controller
                 'adress' => $request->address,
                 'about' => $request->about,
             ]);
-            if ($company->translation()->exists()) {
-                foreach (active_langs() as $lang) {
-                    $company->translate($lang->code)->about = $request->about[$lang->code];
-                    $company->save();
-                }
-            }
             return response()->json([
                 'status' => 'success',
                 'company' => $company,

@@ -32,7 +32,7 @@
                         <button class="btn btn-primary d-grid w-100">@lang('backend.send')</button>
                     </form>
                     <div class="text-center">
-                        <a href="{{ route('frontend.index') }}" class="d-flex align-items-center justify-content-center">
+                        <a href="{{ route('backend.login') }}" class="d-flex align-items-center justify-content-center">
                             <i class="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>@lang('backend.back-to-home')</a>
                     </div>
                 </div>

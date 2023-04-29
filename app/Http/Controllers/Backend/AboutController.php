@@ -13,14 +13,14 @@ class AboutController extends Controller
 {
     public function index()
     {
-        abort_if(Gate::denies('about index'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        check_permission('about index');
         $about = About::first();
         return view('backend.company-and-products.index', get_defined_vars());
     }
 
     public function update(Request $request, About $about)
     {
-        abort_if(Gate::denies('about edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        check_permission('about edit');
         try {
             DB::transaction(function () use ($request, $about) {
                 foreach (active_langs() as $lang) {

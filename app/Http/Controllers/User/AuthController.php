@@ -107,7 +107,7 @@ class AuthController extends Controller
     {
         $this->guard()->logout();
         $request->session()->invalidate();
-//        return redirect()->route('frontend.index');
+//        return redirect()->route('backend.login');
         return 'null';
     }
 }

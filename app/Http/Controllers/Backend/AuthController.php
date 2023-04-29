@@ -23,7 +23,7 @@ class AuthController extends Controller
     protected function login(Request $request)
     {
         if ($this->guard()->attempt($request->only(['email', 'password']))) {
-//            return redirect()->route('frontend.index');
+//            return redirect()->route('backend.login');
         }
     }
 

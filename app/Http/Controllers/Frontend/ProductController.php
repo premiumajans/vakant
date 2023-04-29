@@ -14,7 +14,7 @@ class ProductController extends Controller
         if ($category->status == 1) {
             return view('frontend.products.index', get_defined_vars());
         } else {
-            return redirect()->route('frontend.index');
+            return redirect()->route('backend.login');
         }
     }
 }

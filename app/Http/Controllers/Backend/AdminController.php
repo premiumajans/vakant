@@ -14,32 +14,20 @@ class AdminController extends Controller
 {
     public function index()
     {
-        abort_if(Gate::denies('users index'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        check_permission('users index');
         $users = User::all();
         return view('backend.users.index', get_defined_vars());
     }
 
     public function create()
     {
-        abort_if(Gate::denies('users create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        check_permission('users create');
         return view('backend.users.create');
     }
 
-    public function delAdmin($id)
-    {
-        abort_if(Gate::denies('users delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        try {
-            User::find($id)->delete();
-            alert()->success(__('messages.success'));
-            return redirect()->route('backend.users.index');
-        } catch (\Exception $e) {
-            alert()->error(__('messages.error' . $e));
-            return redirect()->route('backend.users.index');
-        }
-    }
     public function store(CreateRequest $request)
     {
-        abort_if(Gate::denies('users create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        check_permission('users create');
         try {
             $user = User::create([
                 'name' => $request->name,
@@ -50,6 +38,19 @@ class AdminController extends Controller
             return redirect()->route('backend.users.index');
         } catch (\Exception $e) {
             alert()->error(__('messages.error'));
+            return redirect()->route('backend.users.index');
+        }
+    }
+
+    public function delAdmin($id)
+    {
+        check_permission('users delete');
+        try {
+            User::find($id)->delete();
+            alert()->success(__('messages.success'));
+            return redirect()->route('backend.users.index');
+        } catch (\Exception $e) {
+            alert()->error(__('messages.error' . $e));
             return redirect()->route('backend.users.index');
         }
     }

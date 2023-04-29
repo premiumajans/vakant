@@ -9,7 +9,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{{ route('frontend.index') }}"><img
+                <a class="navbar-brand" href="{{ route('backend.login') }}"><img
                         src="{{asset('frontend/images/logo.png')}}"
                         alt="logo"></a>
             </div>

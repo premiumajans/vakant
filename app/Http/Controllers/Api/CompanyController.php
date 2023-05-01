@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Enums\CompanyEnum;
 use App\Models\Admin;
 use App\Models\Company;
 use App\Models\CompanyTranslation;
@@ -21,9 +22,11 @@ class CompanyController extends Controller
     public function index()
     {
         if (Admin::find($this->user->id)->company()->exists()) {
-            $company = Admin::find($this->user->id)->company()->get();
+            $company = Admin::find($this->user->id)->company()->with('premium')->first();
+            $premium = Company::find($company->id)->premium()->exists();
             return response()->json([
                 'status' => 'success',
+                'premium' => $premium,
                 'message' => $company,
             ], 200);
         } else {
@@ -68,12 +71,33 @@ class CompanyController extends Controller
             $company->phone = $request->phone;
             $company->email = $request->email;
             $company->about = $request->about;
+            $company->company_type = CompanyEnum::SIMPLE;
             $company->adress = $request->address;
             $companyUser->company()->save($company);
             return response()->json([
                 'status' => 'success',
                 'company' => $company,
                 'message' => 'company-successfully-stored',
+            ], 200);
+        }
+    }
+
+    public function changeType()
+    {
+        $companyUser = Admin::find($this->user->id);
+        $company = Company::find($companyUser->company()->first()->id);
+        if ($company->company_type != CompanyEnum::PREMIUM) {
+            $company->update([
+                'company_type' => CompanyEnum::PREMIUM,
+            ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'company-successfully-premium',
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'company-already-premium',
             ], 200);
         }
     }
@@ -90,8 +114,16 @@ class CompanyController extends Controller
                 ], 422);
             }
             $company = Admin::find($this->user->id)->company()->first();
+            $path = 'users/companies';
+            $file = $request->file('photo');
+            $img = $file;
+            $extension = $img->getClientOriginalExtension();
+            $filename = uniqid() . '.' . $extension;
+            $img->move('images/' . $path, $filename);
+            $data['photo'] = 'images/' . $path . '/' . $filename;
             $company->update([
-                'photo' => api_upload('users/companies', $request->file('photo'))
+                'photo' => $data['photo'],
+//              'photo' => api_upload('users/companies', $request->file('photo'))
             ]);
             return response()->json([
                 'status' => 'success',

@@ -35,6 +35,8 @@ use App\Http\Controllers\Backend\PackageComponentController as BPackageComponent
 use App\Http\Controllers\Backend\SiteUsersController as BSiteUsers;
 use App\Http\Controllers\Backend\TermController as BTerm;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 Route::get('/auth/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/auth/login', [AuthenticatedSessionController::class, 'store'])->name('loginPost');
@@ -55,12 +57,18 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::post('/packages/components/{id}/update', [BPackageComponent::class, 'update'])->name('updateComponentPackage');
     Route::get('/packages/components/{id}/edit', [BPackageComponent::class, 'edit'])->name('editComponentPackages');
     Route::get('/site-users/{id}/company', [BSiteUsers::class, 'company'])->name('userCompany');
+    Route::get('/site-users/{id}/company/get-premium', [BSiteUsers::class, 'getPremium'])->name('userCompanyPremium');
+    Route::put('/site-users/{id}/company/get-premium-time', [BSiteUsers::class, 'getPremiumTime'])->name('userCompanyPremiumTime');
+    Route::get('/site-users/{id}/company/remove-premium', [BSiteUsers::class, 'getPremiumCancel'])->name('userCompanyPremiumCancel');
+
+
     Route::post('/site-users/{id}/company/create', [BSiteUsers::class, 'companyCreate'])->name('userCompanyCreate');
     Route::post('/package/add-new-component/', [BPackageComponent::class, 'addNewComponent'])->name('addNewComponent');
     Route::get('/vacancies/approved', [BVacancy::class, 'approved'])->name('approvedVacancies');
     Route::get('/vacancies/pending', [BVacancy::class, 'pending'])->name('pendingVacancies');
     Route::get('/vacancies/updated', [BVacancy::class, 'updated'])->name('updatedVacancies');
     Route::get('/vacancy/append/{id}', [BVacancy::class, 'approveVacancy'])->name('approve-vacancy');
+
 
 
 //Resources
@@ -146,6 +154,8 @@ Route::group(['middleware' => 'auth:web'], function () {
         Artisan::call('route:clear');
         Artisan::call('clear-compiled');
         Artisan::call('config:cache');
+        $process = new Process(['composer', 'dump-autoload']);
+        $process->run();
         dd("Cache cleared");
     });
 });

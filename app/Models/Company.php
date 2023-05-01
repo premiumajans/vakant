@@ -1,12 +1,7 @@
 <?php
 
 namespace App\Models;
-
-use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
-use Astrotomic\Translatable\Translatable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class Company extends Model
 {
@@ -14,7 +9,10 @@ class Company extends Model
     {
         return $this->belongsTo(Admin::class);
     }
-
+    public function premium()
+    {
+        return $this->hasOne(PremiumCompany::class);
+    }
     public $timestamps = false;
     protected $fillable = ['name', 'adress', 'email', 'phone', 'photo', 'about'];
 }

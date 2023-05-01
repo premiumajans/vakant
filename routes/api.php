@@ -18,6 +18,7 @@ Route::get('/get-company', [\App\Http\Controllers\Api\CompanyController::class, 
 Route::post('/company-update', [\App\Http\Controllers\Api\CompanyController::class, 'update']);
 Route::post('/company/update/photo', [\App\Http\Controllers\Api\CompanyController::class, 'updatePhoto']);
 
+Route::get('/vacancies', [\App\Http\Controllers\Api\VacancyController::class, 'index']);
 Route::get('/vacancies/{id}', [\App\Http\Controllers\Api\VacancyController::class, 'show']);
 Route::post('/vacancies/{id}/update', [\App\Http\Controllers\Api\VacancyController::class, 'update']);
 Route::post('/vacancies/{id}/delete', [\App\Http\Controllers\Api\VacancyController::class, 'deleteVacancy']);

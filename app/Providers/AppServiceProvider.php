@@ -23,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        premium_companies();
         if (!Cache::get('categories')) {
             $categories = Cache::remember('categories', env('CACHE_TIME'), function () {
                 return Category::where('status', 1)->get();

@@ -235,8 +235,8 @@
                 @endcan
                 @can('languages index')
                     <li>
-                        <a href="{{ url('manage-languages') }}" class=" waves-effect">
-                            <i class="ri-lock-unlock-fill"></i>
+                        <a target="_blank" href="{{ url('manage-languages') }}" class=" waves-effect">
+                            <i class="fas fa-flag"></i>
                             <span>@lang('backend.translation-panel')</span>
                         </a>
                     </li>

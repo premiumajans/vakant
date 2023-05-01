@@ -7,6 +7,8 @@ use App\Http\Controllers\General\VacancyController as GeneralVacancy;
 use App\Http\Enums\CauserEnum;
 use App\Http\Enums\StatusEnum;
 use App\Http\Enums\VacancyAdminEnum;
+use App\Http\Enums\VacancyEnum;
+use App\Models\Company;
 use App\Models\Vacancy;
 use App\Models\VacancyUpdate;
 use Carbon\Carbon;
@@ -17,7 +19,7 @@ class VacancyController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('apiMid', ['except' => ['show', 'index', 'show']]);
+        $this->middleware('apiMid', ['except' => ['show', 'index']]);
     }
 
     public function index()
@@ -29,10 +31,16 @@ class VacancyController extends Controller
     {
         try {
             $user = auth('api')->authenticate();
+            $company = Company::where('admin_id', $user->id)->with('premium')->first();
             $vacancy = new Vacancy();
             $vacancy->causer_type = CauserEnum::COMPANY;
             $vacancy->causer_id = $user->id;
             $vacancy->admin_status = VacancyAdminEnum::Pending;
+            if ($company->premium()->exists()) {
+                $vacancy->vacancy_type = VacancyEnum::PREMIUM;
+            } else {
+                $vacancy->vacancy_type = VacancyEnum::SIMPLE;
+            }
             $vacancy->shared_time = Carbon::now();
             $vacancy->end_time = Carbon::now()->addMonth();
             $vacancy->save();
@@ -114,7 +122,7 @@ class VacancyController extends Controller
                 ], 200);
             } else {
                 return response()->json([
-                    'status' => 'success',
+                    'status' => 'error',
                     'message' => 'vacancy-not-found',
                 ], 404);
             }

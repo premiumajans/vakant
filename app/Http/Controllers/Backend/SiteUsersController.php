@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Enums\CompanyEnum;
+use App\Http\Helpers\CRUDHelper;
 use App\Models\Admin;
 use App\Models\Company;
 use App\Http\Requests\Backend\Create\CompanyRequest as CreateCompany;
-use App\Models\CompanyTranslation;
+use App\Models\PremiumCompany;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -89,7 +92,7 @@ class SiteUsersController extends Controller
 
     public function companyCreate(CreateCompany $request, $id)
     {
-        abort_if(Gate::denies('site-users create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        check_permission('site-users create');
         $user = Admin::find($id);
         if ($user->company()->exists()) {
             try {
@@ -135,16 +138,62 @@ class SiteUsersController extends Controller
         }
     }
 
-    public function delete($id)
+    public function getPremium($id)
     {
-        abort_if(Gate::denies('site-users delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        check_permission('site-users create');
         try {
-            Admin::find($id)->delete();
+            $company = Company::where('id', $id)->with('premium')->first();
+            $premium = new PremiumCompany();
+            $premium->premium = CompanyEnum::PREMIUM;
+            $premium->start_time = Carbon::now();
+            $premium->end_time = Carbon::now()->addMonth();
+            $company->premium()->save($premium);
             alert()->success(__('messages.success'));
-            return redirect(route('backend.site-users.index'));
+            return redirect()->back();
         } catch (Exception $e) {
             alert()->error(__('messages.error'));
-            return redirect(route('backend.site-users.index'));
+            return redirect()->back();
         }
+    }
+
+    public function getPremiumTime(Request $request, $id)
+    {
+        check_permission('site-users create');
+        try {
+            $company = Company::where('id', $id)->with('premium')->first();
+//            dd(Carbon::createFromFormat('Y-m-d H:i:s', $company->premium->end_time)->diffInDays(Carbon::now()));
+
+            $date = Carbon::createFromFormat('Y-m-d H:i:s', $company->premium->end_time);
+//        $diffInDays = $date->diffInDays(Carbon::now());
+            $newDate = $date->addDay($request->time);
+            $company->premium->end_time = $newDate;
+            $company->premium->save();
+            alert()->success(__('messages.success'));
+            return redirect()->back();
+        } catch (Exception $e) {
+            alert()->error(__('messages.error'));
+            return redirect()->back();
+        }
+    }
+
+    public function getPremiumCancel($id)
+    {
+        check_permission('site-users create');
+        try {
+            $company = Company::where('id', $id)->with('premium')->first();
+            $company->premium()->delete();
+            alert()->success(__('messages.cancel-success'));
+            return redirect()->back();
+        } catch (Exception $e) {
+            alert()->error(__('messages.error'));
+            return redirect()->back();
+        }
+    }
+
+
+    public function delete($id)
+    {
+        check_permission('site-users delete');
+        CRUDHelper::remove_item('\App\Models\Admin', $id);
     }
 }

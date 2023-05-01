@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->string('name');
             $table->string('phone');
             $table->string('email');
+            $table->string('company_type');
             $table->longText('voen')->nullable();
             $table->string('adress');
             $table->longText('about')->nullable();

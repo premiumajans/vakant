@@ -196,6 +196,20 @@ if (!function_exists('vacancy_time')) {
     }
 }
 
+//if (!function_exists('premium_companies')) {
+    function premium_companies()
+    {
+        $companies = \App\Models\Company::with('premium')->get();
+        foreach ($companies as $company) {
+            if($company->premium()->exists()){
+                if (Carbon::createFromFormat('Y-m-d H:i:s', $company->premium->end_time)->lt(Carbon::now())) {
+                    $company->premium()->delete();
+                }
+            }
+        }
+    }
+//}
+
 if (!function_exists('convert_number')) {
     function convert_number($value)
     {

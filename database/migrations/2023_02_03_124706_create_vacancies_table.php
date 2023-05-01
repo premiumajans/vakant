@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->integer('causer_type');
             $table->integer('causer_id')->nullable();
+            $table->integer('vacancy_type');
             $table->string('admin_status');
             $table->string('admin_id')->nullable();
             $table->string('shared_time');

@@ -4,6 +4,7 @@ use App\Models\SiteLanguage;
 use App\Models\Setting;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 use Symfony\Component\HttpFoundation\Response;
 
 if (!function_exists('upload')) {
@@ -72,27 +73,26 @@ if (!function_exists('cv_upload')) {
         }
     }
 }
-if (!function_exists('check_permission')) {
-    function check_permission($permission_name)
+if (!function_exists('checkPermission')) {
+    function checkPermission($permission_name)
     {
         return abort_if(Gate::denies($permission_name), Response::HTTP_FORBIDDEN, '403 Forbidden');
     }
 }
 
-if (!function_exists('add_permission')) {
-    function add_permission($permission_name)
-    {
-        try {
-            $permission_extensions = ['index', 'create', 'edit', 'delete'];
-            foreach ($permission_extensions as $extension) {
-                $permission = new \Spatie\Permission\Models\Permission();
-                $permission->name = $permission_name . ' ' . $extension;
-                $permission->guard_name = 'web';
-                $permission->save();
-            }
-        } catch (Exception $exception) {
-            return redirect()->back();
+function addPermission(string $permissionName): void
+{
+    try {
+        $permissionExtensions = ['index', 'create', 'edit', 'delete'];
+        foreach ($permissionExtensions as $extension) {
+            $permission = new \Spatie\Permission\Models\Permission();
+            $permission->name = $permissionName . ' ' . $extension;
+            $permission->group_name = $permissionName;
+            $permission->guard_name = 'web';
+            $permission->save();
         }
+    } catch (Exception $exception) {
+        throw new Exception($exception->getMessage());
     }
 }
 
@@ -124,22 +124,22 @@ if (!function_exists('settings')) {
     }
 }
 
-if (!function_exists('statistic')) {
-    function statistic($name)
-    {
-        return \App\Models\Statistics::where('name', $name)->value('count');
-    }
-}
+//if (!function_exists('statistic')) {
+//    function statistic($name)
+//    {
+//        return \App\Models\Statistics::where('name', $name)->value('count');
+//    }
+//}
 
-if (!function_exists('validation_m')) {
-    function validation_m($name)
+if (!function_exists('validationResponse')) {
+    function validationResponse($name): string
     {
         return '<div class="valid-feedback">' . __($name) . ' ' . __('messages.is-correct') . '</div><div class="invalid-feedback">' . __($name) . ' ' . __('messages.not-correct') . '</div>';
     }
 }
 
 if (!function_exists('vacancy_tags')) {
-    function vacancy_tags($tags)
+    function vacancy_tags($tags): array|\Illuminate\Http\RedirectResponse
     {
         try {
             $tagsArray = [];
@@ -189,37 +189,21 @@ if (!function_exists('salaries')) {
 }
 
 if (!function_exists('vacancy_time')) {
-    function vacancy_time($vacancy)
+    function vacancy_time($vacancy): void
     {
         $vacancy->start_time = Carbon::now();
         $vacancy->end_time = Carbon::now()->addDay(settings('vacancy_day'));
     }
 }
 
-//if (!function_exists('premium_companies')) {
-    function premium_companies()
-    {
-        $companies = \App\Models\Company::with('premium')->get();
-        foreach ($companies as $company) {
-            if($company->premium()->exists()){
-                if (Carbon::createFromFormat('Y-m-d H:i:s', $company->premium->end_time)->lt(Carbon::now())) {
-                    $company->premium()->delete();
-                }
-            }
-        }
+function convertNumber(int $value): string
+{
+    if ($value >= 1000 && $value < 1000000) {
+        return round($value / 1000, 0) . 'k';
     }
-//}
-
-if (!function_exists('convert_number')) {
-    function convert_number($value)
-    {
-        if ($value >= 1000 and $value < 1000000) {
-            return round($value / 1000, 0) . 'k';
-        }
-        if ($value >= 1000000) {
-            return round($value / 1000000, 0) . 'M';
-        } else {
-            return $value;
-        }
+    if ($value >= 1000000) {
+        return round($value / 1000000, 0) . 'M';
+    } else {
+        return (string)$value;
     }
 }

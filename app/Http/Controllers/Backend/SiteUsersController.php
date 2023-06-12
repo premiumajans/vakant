@@ -8,40 +8,44 @@ use App\Http\Helpers\CRUDHelper;
 use App\Models\Admin;
 use App\Models\Company;
 use App\Http\Requests\Backend\Create\CompanyRequest as CreateCompany;
-use App\Models\PremiumCompany;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
-use Symfony\Component\HttpFoundation\Response;
+use App\Services\PremiumCompanyService;
 use App\Http\Requests\Backend\Create\AdminRequest;
 
 class SiteUsersController extends Controller
 {
+    public function __construct(PremiumCompanyService $premiumCompanyService)
+    {
+        $this->premiumCompanyService = $premiumCompanyService;
+    }
+
     public function index()
     {
-        abort_if(Gate::denies('site-users index'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        checkPermission('users index');
         $siteUsers = Admin::all();
-        return view('backend.users.site.index', get_defined_vars());
+        return view('backend.users.site.index', compact('siteUsers'));
     }
 
     public function create()
     {
-        abort_if(Gate::denies('site-users create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        checkPermission('users create');
         return view('backend.users.site.create');
     }
 
     public function store(AdminRequest $request)
     {
-        abort_if(Gate::denies('site-users create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        checkPermission('users create');
         try {
             $admin = new Admin();
-            $admin->name = $request->name;
-            $admin->email = $request->email;
-            $admin->current_ad_count = 1;
-            $admin->password = Hash::make($request->password);
+            $admin->fill([
+                'name' => $request->name,
+                'email' => $request->email,
+                'current_ad_count' => 1,
+                'password' => Hash::make($request->password),
+            ]);
             $admin->save();
             alert()->success(__('messages.success'));
             return redirect(route('backend.site-users.index'));
@@ -53,28 +57,22 @@ class SiteUsersController extends Controller
 
     public function edit($id)
     {
-        abort_if(Gate::denies('site-users edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        checkPermission('users edit');
         $admin = Admin::find($id);
         return view('backend.users.site.edit', get_defined_vars());
     }
 
     public function update(Request $request, $id)
     {
-        abort_if(Gate::denies('site-users edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        checkPermission('users edit');
         try {
             $admin = Admin::find($id);
             $admin->update([
                 'name' => $request->name,
                 'current_ad_count' => $request->current_ad_count,
                 'email' => $request->email,
+                'password' => $request->password ? Hash::make($request->password) : $admin->password,
             ]);
-            if (!(is_null($request->password))) {
-                if ($request->password == $request->password_confirmation) {
-                    $admin->update([
-                        'password' => Hash::make($request->password),
-                    ]);
-                }
-            }
             alert()->success(__('messages.success'));
             return redirect(route('backend.site-users.index'));
         } catch (Exception $e) {
@@ -85,115 +83,47 @@ class SiteUsersController extends Controller
 
     public function company($id)
     {
-        abort_if(Gate::denies('site-users index'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        checkPermission('users index');
         $company = Admin::find($id)->company()->first();
-        return view('backend.users.site.company.index', get_defined_vars());
+        return view('backend.users.site.company.index', compact('company', 'id'));
     }
 
     public function companyCreate(CreateCompany $request, $id)
     {
-        check_permission('site-users create');
+        checkPermission('users create');
         $user = Admin::find($id);
-        if ($user->company()->exists()) {
-            try {
-                $company = $user->company()->first();
-                DB::transaction(function () use ($request, $company) {
-                    $company->name = $request->name;
-                    $company->phone = $request->phone;
-                    $company->email = $request->email;
-                    $company->adress = $request->address;
-                    $company->about = $request->about;
-//                    $company->voen = $request->voen;
-                    if ($request->hasFile('photo')) {
-                        $company->photo = upload('user/company', $request->file('photo'));
-                    }
-                    $company->save();
-                });
-                alert()->success(__('messages.success'));
-                return redirect(route('backend.site-users.index'));
-            } catch (Exception $e) {
-                alert()->error(__('messages.error'));
-                return redirect(route('backend.site-users.index'));
-            }
-
-        } else {
-            try {
-                $company = new Company();
-                $company->phone = $request->phone;
-                $company->email = $request->email;
-                $company->voen = $request->voen;
-                $company->adress = $request->address;
-                $company->name = $request->name;
-                $company->about = $request->about;
-                if ($request->hasFile('photo')) {
-                    $company->photo = upload('user/company', $request->file('photo'));
-                }
-                $user->company()->save($company);
-                alert()->success(__('messages.success'));
-                return redirect(route('backend.site-users.index'));
-            } catch (Exception $e) {
-                alert()->error(__('messages.error'));
-                return redirect(route('backend.site-users.index'));
-            }
-        }
+        $this->premiumCompanyService->updateCompany($user, $request);
+        return redirect()->back();
     }
 
     public function getPremium($id)
     {
-        check_permission('site-users create');
-        try {
-            $company = Company::where('id', $id)->with('premium')->first();
-            $premium = new PremiumCompany();
-            $premium->premium = CompanyEnum::PREMIUM;
-            $premium->start_time = Carbon::now();
-            $premium->end_time = Carbon::now()->addMonth();
-            $company->premium()->save($premium);
-            alert()->success(__('messages.success'));
-            return redirect()->back();
-        } catch (Exception $e) {
-            alert()->error(__('messages.error'));
-            return redirect()->back();
-        }
+        checkPermission('users create');
+        $this->premiumCompanyService->makeCompanyPremium($id, 1);
+        return redirect()->back();
     }
 
     public function getPremiumTime(Request $request, $id)
     {
-        check_permission('site-users create');
-        try {
-            $company = Company::where('id', $id)->with('premium')->first();
-//            dd(Carbon::createFromFormat('Y-m-d H:i:s', $company->premium->end_time)->diffInDays(Carbon::now()));
-
-            $date = Carbon::createFromFormat('Y-m-d H:i:s', $company->premium->end_time);
-//        $diffInDays = $date->diffInDays(Carbon::now());
-            $newDate = $date->addDay($request->time);
-            $company->premium->end_time = $newDate;
-            $company->premium->save();
-            alert()->success(__('messages.success'));
-            return redirect()->back();
-        } catch (Exception $e) {
-            alert()->error(__('messages.error'));
-            return redirect()->back();
-        }
+        checkPermission('users create');
+        $this->premiumCompanyService->extendPremiumTime($id, $request->time);
+        return redirect()->back();
     }
 
     public function getPremiumCancel($id)
     {
-        check_permission('site-users create');
-        try {
-            $company = Company::where('id', $id)->with('premium')->first();
-            $company->premium()->delete();
-            alert()->success(__('messages.cancel-success'));
-            return redirect()->back();
-        } catch (Exception $e) {
-            alert()->error(__('messages.error'));
-            return redirect()->back();
+        checkPermission('users create');
+        $company = Company::find($id);
+        if ($company) {
+            $this->premiumCompanyService->deletePremium($company);
         }
+        alert()->success(__('messages.success'));
+        return redirect()->back();
     }
-
 
     public function delete($id)
     {
-        check_permission('site-users delete');
-        CRUDHelper::remove_item('\App\Models\Admin', $id);
+        checkPermission('users delete');
+        return CRUDHelper::remove_item('\App\Models\Admin', $id);
     }
 }

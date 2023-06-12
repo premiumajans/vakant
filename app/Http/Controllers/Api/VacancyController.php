@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -32,18 +31,7 @@ class VacancyController extends Controller
         try {
             $user = auth('api')->authenticate();
             $company = Company::where('admin_id', $user->id)->with('premium')->first();
-            $vacancy = new Vacancy();
-            $vacancy->causer_type = CauserEnum::COMPANY;
-            $vacancy->causer_id = $user->id;
-            $vacancy->admin_status = VacancyAdminEnum::Pending;
-            if ($company->premium()->exists()) {
-                $vacancy->vacancy_type = VacancyEnum::PREMIUM;
-            } else {
-                $vacancy->vacancy_type = VacancyEnum::SIMPLE;
-            }
-            $vacancy->shared_time = Carbon::now();
-            $vacancy->end_time = Carbon::now()->addMonth();
-            $vacancy->save();
+            $vacancy = $this->createVacancy($user, $company, $request);
             (new GeneralVacancy())->_addNewVacancy($vacancy, $request);
             return response()->json([
                 'status' => 'success',
@@ -64,10 +52,7 @@ class VacancyController extends Controller
     public function myItems()
     {
         $user = auth('api')->authenticate();
-        $myItems = Vacancy::where('causer_id', '=', $user->id)
-            ->where('causer_type', '=', 2)
-            ->with('description')
-            ->get();
+        $myItems = $this->getMyVacancies($user);
         return response()->json([
             'item' => $myItems,
         ], 200);
@@ -77,33 +62,12 @@ class VacancyController extends Controller
     {
         try {
             $oldVacancy = Vacancy::find($id);
-            $newVacancy = new VacancyUpdate();
-            $newVacancy->vacancy_id = $oldVacancy->id;
-            $newVacancy->relevant_people = $request->relevant_people;
-            $newVacancy->candidate_requirement = $request->candidate_requirements;
-            $newVacancy->job_description = $request->about_job;
-            $newVacancy->tags = $request->tags;
-            $newVacancy->company = $request->company;
-            $newVacancy->email = $request->email;
-            $newVacancy->phone = $request->phone;
-            $newVacancy->position = $request->position;
-            $newVacancy->category_id = $request->category;
-            $newVacancy->max_salary = $request->maximum_salary;
-            $newVacancy->min_salary = $request->minimum_salary;
-            $newVacancy->max_age = $request->maximum_age;
-            $newVacancy->min_age = $request->minimum_age;
-            $newVacancy->city_id = $request->city;
-            $newVacancy->mode_id = $request->mode;
-            $newVacancy->education_id = $request->education;
-            $newVacancy->experience_id = $request->experience;
-            $newVacancy->shared_time = Carbon::now();
-            $newVacancy->admin_status = StatusEnum::DEACTIVE;
+            $newVacancy = $this->createVacancyUpdate($oldVacancy, $request);
             $oldVacancy->updates()->save($newVacancy);
             return response()->json([
                 'status' => 'success',
                 'message' => 'vacancy-successfully-updated',
             ], 200);
-
         } catch (Exception $exception) {
             return response()->json([
                 'message' => 'error',
@@ -132,5 +96,60 @@ class VacancyController extends Controller
                 'message' => 'error',
             ], 500);
         }
+    }
+
+    private function createVacancy($user, $company, $request)
+    {
+        $vacancy = new Vacancy();
+        $vacancy->causer_type = CauserEnum::COMPANY;
+        $vacancy->causer_id = $user->id;
+        $vacancy->admin_status = VacancyAdminEnum::Pending;
+
+        if ($company->premium()->exists()) {
+            $vacancy->vacancy_type = VacancyEnum::PREMIUM;
+        } else {
+            $vacancy->vacancy_type = VacancyEnum::SIMPLE;
+        }
+
+        $vacancy->shared_time = Carbon::now();
+        $vacancy->end_time = Carbon::now()->addMonth();
+        $vacancy->save();
+
+        return $vacancy;
+    }
+
+    private function getMyVacancies($user)
+    {
+        return Vacancy::where('causer_id', '=', $user->id)
+            ->where('causer_type', '=', 2)
+            ->with('description')
+            ->get();
+    }
+
+    private function createVacancyUpdate($oldVacancy, $request)
+    {
+        $newVacancy = new VacancyUpdate();
+        $newVacancy->vacancy_id = $oldVacancy->id;
+        $newVacancy->relevant_people = $request->relevant_people;
+        $newVacancy->candidate_requirement = $request->candidate_requirements;
+        $newVacancy->job_description = $request->about_job;
+        $newVacancy->tags = $request->tags;
+        $newVacancy->company = $request->company;
+        $newVacancy->email = $request->email;
+        $newVacancy->phone = $request->phone;
+        $newVacancy->position = $request->position;
+        $newVacancy->category_id = $request->category;
+        $newVacancy->max_salary = $request->maximum_salary;
+        $newVacancy->min_salary = $request->minimum_salary;
+        $newVacancy->max_age = $request->maximum_age;
+        $newVacancy->min_age = $request->minimum_age;
+        $newVacancy->city_id = $request->city;
+        $newVacancy->mode_id = $request->mode;
+        $newVacancy->education_id = $request->education;
+        $newVacancy->experience_id = $request->experience;
+        $newVacancy->shared_time = Carbon::now();
+        $newVacancy->admin_status = StatusEnum::DEACTIVE;
+
+        return $newVacancy;
     }
 }

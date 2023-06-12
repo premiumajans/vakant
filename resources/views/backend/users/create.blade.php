@@ -17,7 +17,7 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label>@lang('backend.name') <span class="text-danger">*</span></label>
-                                    <input type="text" name="name" class="form-control" required="" data-parsley-minlength="6" placeholder="Taleh Maharramov">
+                                    <input type="text" name="name" class="form-control" required=""  placeholder="Taleh Maharramov">
                                     <div class="valid-feedback">
                                         @lang('backend.name') @lang('messages.is-correct')
                                     </div>
@@ -27,7 +27,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label>@lang('backend.email') <span class="text-danger">*</span></label>
-                                    <input type="text" name="email" class="form-control" required="" data-parsley-minlength="6" placeholder="taleh@dirnis.az">
+                                    <input type="text" name="email" class="form-control" required=""  placeholder="taleh@dirnis.az">
                                     <div class="valid-feedback">
                                         @lang('backend.email') @lang('messages.is-correct')
                                     </div>
@@ -37,7 +37,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label>@lang('backend.password') <span class="text-danger">*</span></label>
-                                    <input type="password" name="password" class="form-control" required="" data-parsley-minlength="6" placeholder="@lang('backend.password')">
+                                    <input type="password" name="password" class="form-control" required=""  placeholder="@lang('backend.password')">
                                     <div class="valid-feedback">
                                         @lang('backend.password') @lang('messages.is-correct')
                                     </div>
@@ -47,7 +47,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label>@lang('backend.cnew-password') <span class="text-danger">*</span></label>
-                                    <input type="password" name="password_confirmation" class="form-control" required="" data-parsley-minlength="6" placeholder="@lang('backend.cnew-password')">
+                                    <input type="password" name="password_confirmation" class="form-control" required=""  placeholder="@lang('backend.cnew-password')">
                                     <div class="valid-feedback">
                                         @lang('backend.cnew-password') @lang('messages.is-correct')
                                     </div>

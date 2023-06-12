@@ -65,7 +65,7 @@
                                                 </li>
                                                 <li>
                                                     <a class="dropdown-item text-danger"
-                                                       href="{{ route('backend.delVacancy',$vacancy->id) }}">@lang('backend.delete')</a>
+                                                       href="{{ route('backend.vacanciesDelete',$vacancy->id) }}">@lang('backend.delete')</a>
                                                 </li>
                                             </ul>
                                         </div>

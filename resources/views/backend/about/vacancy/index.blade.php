@@ -59,7 +59,7 @@
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <a class="btn btn-danger"
-                                           href="{{ route('backend.delVacancy',['id'=>$vacancy->id]) }}">
+                                           href="{{ route('backend.vacanciesDelete',['id'=>$vacancy->id]) }}">
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     </td>

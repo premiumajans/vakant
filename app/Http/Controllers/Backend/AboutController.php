@@ -13,14 +13,14 @@ class AboutController extends Controller
 {
     public function index()
     {
-        check_permission('about index');
+        checkPermission('about index');
         $about = About::first();
         return view('backend.company-and-products.index', get_defined_vars());
     }
 
     public function update(Request $request, About $about)
     {
-        check_permission('about edit');
+        checkPermission('about edit');
         try {
             DB::transaction(function () use ($request, $about) {
                 foreach (active_langs() as $lang) {

@@ -17,7 +17,7 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label>@lang('backend.name') <span class="text-danger">*</span></label>
-                                    <input type="text" name="name" class="form-control" required="" data-parsley-minlength="6" placeholder="Azərbaycan,English,Русский">
+                                    <input type="text" name="name" class="form-control" required=""  placeholder="Azərbaycan,English,Русский">
                                     <div class="valid-feedback">
                                         @lang('backend.name') @lang('messages.is-correct')
                                     </div>
@@ -27,7 +27,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label>@lang('backend.code') <span class="text-danger">*</span></label>
-                                    <input type="text" name="code" class="form-control" required="" data-parsley-minlength="6" placeholder="az,en,ru">
+                                    <input type="text" name="code" class="form-control" required=""  placeholder="az,en,ru">
                                     <div class="valid-feedback">
                                         @lang('backend.code') @lang('messages.is-correct')
                                     </div>

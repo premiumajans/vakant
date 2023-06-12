@@ -5,7 +5,7 @@
         <div class="page-content">
             <div class="container-fluid">
                 <div class="row justify-content-center">
-                    <div class="col-xl-8">
+                    <div class="col-xl-12">
                         <div class="card">
                             <div class="card-body">
                                 <div class="col-12">

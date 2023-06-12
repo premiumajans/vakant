@@ -15,27 +15,27 @@ class SiteLanguageController extends Controller
 {
     public function index()
     {
-        check_permission('languages index');
+        checkPermission('languages index');
         $siteLanguages = SiteLanguage::all();
         return view('backend.site-languages.index', get_defined_vars());
     }
 
     public function create()
     {
-        check_permission('languages create');
+        checkPermission('languages create');
         return view('backend.site-languages.create');
     }
 
     public function edit($id)
     {
-        check_permission('languages edit');
+        checkPermission('languages edit');
         $language = SiteLanguage::find($id);
         return view('backend.site-languages.edit', get_defined_vars());
     }
 
     public function store(SiteLanguageRequest $request)
     {
-        check_permission('languages create');
+        checkPermission('languages create');
         try {
             $icon = upload('flags', $request->file('icon'));
             $siteLanguage = new SiteLanguage();
@@ -54,7 +54,7 @@ class SiteLanguageController extends Controller
 
     public function update(updateRequest $request, $id)
     {
-        check_permission('languages edit');
+        checkPermission('languages edit');
         try {
             if ($request->hasFile('icon')) {
                 unlink(SiteLanguage::find($id)->icon);
@@ -75,13 +75,13 @@ class SiteLanguageController extends Controller
 
     public function siteLanStatus($id)
     {
-        check_permission('languages edit');
+        checkPermission('languages edit');
         item_status('\App\Models\SiteLanguage',$id);
     }
 
     public function delSiteLang($id)
     {
-        check_permission('languages delete');
+        checkPermission('languages delete');
         CRUDHelper::remove_item('\App\Models\SiteLanguage', $id);
     }
 }

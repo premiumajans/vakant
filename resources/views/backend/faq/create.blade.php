@@ -31,7 +31,7 @@
                                         <div class="form-group row">
                                             <div class="mb-3">
                                                 <label>@lang('backend.title') <span class="text-danger">*</span></label>
-                                                <input type="text" name="title[{{ $lan->code }}]" class="form-control" id="validationCustom" data-parsley-minlength="6" required="" placeholder="@lang('backend.title')">
+                                                <input type="text" name="title[{{ $lan->code }}]" class="form-control" id="validationCustom"  required="" placeholder="@lang('backend.title')">
                                                 <div class="valid-feedback">
                                                     @lang('backend.title') @lang('messages.is-correct')
                                                 </div>

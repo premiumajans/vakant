@@ -14,20 +14,20 @@ class AdminController extends Controller
 {
     public function index()
     {
-        check_permission('users index');
+        checkPermission('users index');
         $users = User::all();
         return view('backend.users.index', get_defined_vars());
     }
 
     public function create()
     {
-        check_permission('users create');
+        checkPermission('users create');
         return view('backend.users.create');
     }
 
     public function store(CreateRequest $request)
     {
-        check_permission('users create');
+        checkPermission('users create');
         try {
             $user = User::create([
                 'name' => $request->name,
@@ -44,7 +44,7 @@ class AdminController extends Controller
 
     public function delAdmin($id)
     {
-        check_permission('users delete');
+        checkPermission('users delete');
         try {
             User::find($id)->delete();
             alert()->success(__('messages.success'));

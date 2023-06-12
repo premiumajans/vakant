@@ -27,25 +27,25 @@
                                             <label>@lang('backend.name') <span class="text-danger">*</span></label>
                                             <input type="text" name="name" class="form-control" required=""
                                                    placeholder="Premium Ajans MMC">
-                                            {!! validation_m('backend.name') !!}
+                                            {!! validationResponse('backend.name') !!}
                                         </div>
                                         <div class="mb-3">
                                             <label>@lang('backend.email') <span class="text-danger">*</span></label>
                                             <input type="text" name="email" class="form-control" required=""
                                                    placeholder="taleh@vakant.az">
-                                            {!! validation_m('backend.email') !!}
+                                            {!! validationResponse('backend.email') !!}
                                         </div>
                                         <div class="mb-3">
                                             <label>@lang('backend.phone') <span class="text-danger">*</span></label>
                                             <input type="number" name="phone" class="form-control" required=""
                                                    placeholder="50 000 0510">
-                                            {!! validation_m('backend.phone') !!}
+                                            {!! validationResponse('backend.phone') !!}
                                         </div>
                                         <div class="mb-3">
                                             <label>@lang('backend.adress') <span class="text-danger">*</span></label>
                                             <input type="text" name="address" class="form-control" required=""
                                                    placeholder="Bakı, Azərbaycan">
-                                            {!! validation_m('backend.address') !!}
+                                            {!! validationResponse('backend.address') !!}
                                         </div>
                                         <div class="mb-3">
                                             <label>@lang('backend.photo')</label>
@@ -80,26 +80,26 @@
                                             <label>@lang('backend.name') <span class="text-danger">*</span></label>
                                             <input type="text" name="name" class="form-control" required=""
                                                    value="{{ $company->name ?? '-' }}">
-                                            {!! validation_m('backend.name') !!}
+                                            {!! validationResponse('backend.name') !!}
                                         </div>
                                         <div class="mb-3">
                                             <label>@lang('backend.email') <span class="text-danger">*</span></label>
                                             <input type="text" name="email" class="form-control" required=""
                                                    value="{{ $company->email ?? '-' }}">
-                                            {!! validation_m('backend.email') !!}
+                                            {!! validationResponse('backend.email') !!}
                                         </div>
 
                                         <div class="mb-3">
                                             <label>@lang('backend.phone') <span class="text-danger">*</span></label>
                                             <input type="text" name="phone" class="form-control" required=""
                                                    value="{{ $company->phone ?? '-' }}">
-                                            {!! validation_m('backend.phone') !!}
+                                            {!! validationResponse('backend.phone') !!}
                                         </div>
                                         <div class="mb-3">
                                             <label>@lang('backend.adress') <span class="text-danger">*</span></label>
                                             <input type="text" name="address" class="form-control" required=""
                                                    value="{{ $company->adress ?? '-' }}">
-                                            {!! validation_m('backend.address') !!}
+                                            {!! validationResponse('backend.address') !!}
                                         </div>
                                         <div class="mb-3">
                                             <label>@lang('backend.photo')</label>

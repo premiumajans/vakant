@@ -18,7 +18,7 @@
                                                    class="btn btn-success waves-effect mt-4"><i
                                                         class="fas fa-check"></i>
                                                     @lang('backend.approve')</a>
-                                                <a href="{{ route('backend.delVacancy',$vacancy->id) }}"
+                                                <a href="{{ route('backend.vacanciesDelete',$vacancy->id) }}"
                                                    class="btn btn-danger waves-effect mt-4"><i class="fas fa-times"></i>
                                                     @lang('backend.cancel')</a>
                                             </div>

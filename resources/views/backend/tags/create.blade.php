@@ -18,19 +18,19 @@
                                 <div class="mb-3">
                                     <label>@lang('backend.att') <span class="text-danger">*</span></label>
                                     <div>
-                                        <input type="text" name="attribute" class="form-control" required="" data-parsley-minlength="6" placeholder="<meta NAME=">
+                                        <input type="text" name="attribute" class="form-control" required=""  placeholder="<meta NAME=">
                                      </div>
                                 </div>
                                 <div class="mb-3">
                                     <label>@lang('backend.att-name') <span class="text-danger">*</span></label>
                                     <div>
-                                        <input type="text" name="attribute_name" class="form-control" required="" data-parsley-minlength="6" placeholder="<meta name=KEYWORDS">
+                                        <input type="text" name="attribute_name" class="form-control" required=""  placeholder="<meta name=KEYWORDS">
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <label>@lang('backend.content') <span class="text-danger">*</span></label>
                                     <div>
-                                        <textarea type="text" name="content1" class="form-control" required="" data-parsley-minlength="6" placeholder="<meta name=keywords content=DXC Example"></textarea>
+                                        <textarea type="text" name="content1" class="form-control" required=""  placeholder="<meta name=keywords content=DXC Example"></textarea>
                                     </div>
                                 </div>
                                 <div class="mb-0 text-center">

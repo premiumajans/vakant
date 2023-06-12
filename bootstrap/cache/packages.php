@@ -6,15 +6,15 @@
       0 => 'Astrotomic\\Translatable\\TranslatableServiceProvider',
     ),
   ),
-  'barryvdh/laravel-debugbar' => 
+  'brotzka/laravel-dotenv-editor' => 
   array (
     'providers' => 
     array (
-      0 => 'Barryvdh\\Debugbar\\ServiceProvider',
+      0 => 'Brotzka\\DotenvEditor\\DotenvEditorServiceProvider',
     ),
     'aliases' => 
     array (
-      'Debugbar' => 'Barryvdh\\Debugbar\\Facades\\Debugbar',
+      'DotenvEditor' => 'Brotzka\\DotenvEditor\\DotenvEditorFacade',
     ),
   ),
   'darkaonline/l5-swagger' => 
@@ -93,17 +93,6 @@
       0 => 'Laravel\\Sanctum\\SanctumServiceProvider',
     ),
   ),
-  'laravel/socialite' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Laravel\\Socialite\\SocialiteServiceProvider',
-    ),
-    'aliases' => 
-    array (
-      'Socialite' => 'Laravel\\Socialite\\Facades\\Socialite',
-    ),
-  ),
   'laravel/tinker' => 
   array (
     'providers' => 
@@ -180,7 +169,7 @@
     ),
     'aliases' => 
     array (
-      'Analytics' => 'Spatie\\Analytics\\AnalyticsFacade',
+      'Analytics' => 'Spatie\\Analytics\\Facades\\Analytics',
     ),
   ),
   'spatie/laravel-ignition' => 

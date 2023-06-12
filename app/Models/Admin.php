@@ -32,15 +32,20 @@ class Admin extends Authenticatable implements JWTSubject
         return $this->hasMany(Company::class, 'admin_id');
     }
 
+    public function hasCompany()
+    {
+        return $this->company()->exists();
+    }
+
     public function package()
     {
-        return $this->belongsToMany(Package::class, 'admin_packages', 'admin_id', 'package_id')->withPivot('current_ads_count', 'status','created_at','updated_at');
+        return $this->belongsToMany(Package::class, 'admin_packages', 'admin_id', 'package_id')->withPivot('current_ads_count', 'status', 'created_at', 'updated_at');
     }
 
     public function scopeActive($query)
     {
         return $query->package()
-            ->wherePivot('status',StatusEnum::ACTIVE);
+            ->wherePivot('status', StatusEnum::ACTIVE);
     }
 
     protected $fillable = [
@@ -63,6 +68,7 @@ class Admin extends Authenticatable implements JWTSubject
     protected $appends = [
         'profile_photo_url',
     ];
+
     public function getJWTIdentifier()
     {
         return $this->getKey();

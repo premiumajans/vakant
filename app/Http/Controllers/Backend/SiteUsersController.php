@@ -92,7 +92,7 @@ class SiteUsersController extends Controller
     {
         checkPermission('users create');
         $user = Admin::find($id);
-        $this->premiumCompanyService->updateCompany($user, $request);
+        $this->premiumCompanyService->createNewCompany($user, $request);
         return redirect()->back();
     }
 

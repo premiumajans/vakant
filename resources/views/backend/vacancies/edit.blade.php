@@ -65,7 +65,7 @@
                                             <label>@lang('backend.work-mode') <span class="text-danger">*</span></label>
                                             <select class="form-control" name="mode">
                                                 @foreach($modes as $mode)
-                                                    <option @if($city->id == $vacancy->description->mode_id) selected
+                                                    <option @if($mode->id == $vacancy->description->mode_id) selected
                                                             @endif
                                                             value="{{ $mode->id }}">{{ $mode->translate(app()->getLocale())->name ?? '-' }}</option>
                                                 @endforeach

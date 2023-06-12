@@ -25,7 +25,7 @@ class PermissionsSeeder extends Seeder
             'faq',
             'city',
             'salary',
-            'education ',
+            'education',
             'experience',
             'mode',
             'packages',

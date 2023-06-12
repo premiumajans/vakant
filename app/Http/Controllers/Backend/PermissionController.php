@@ -48,14 +48,14 @@ class PermissionController extends Controller
 
     public function givePermission()
     {
-        abort_if(Gate::denies('new-permission index'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('permissions index'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $users = User::all();
         return view('backend.permissions.give', get_defined_vars());
     }
 
     public function giveUserPermission(User $user)
     {
-        abort_if(Gate::denies('new-permission create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('permissions create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $permissions = Permission::all();
         return view('backend.permissions.give-user', get_defined_vars());
     }
@@ -73,7 +73,7 @@ class PermissionController extends Controller
     }
     public function giveUserPermissionUpdate(Request $request)
     {
-        abort_if(Gate::denies('new-permission create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('permissions create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $user = User::find($request->id);
         try {
             DB::transaction(function () use ($request, $user) {

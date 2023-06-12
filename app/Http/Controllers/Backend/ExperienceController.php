@@ -59,7 +59,7 @@ class ExperienceController extends Controller
 
     public function update(Request $request, Experience $experience)
     {
-        abort_if(Gate::denies('education edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        checkPermission('experience edit');
         try {
             DB::transaction(function () use ($request, $experience) {
                 foreach (active_langs() as $lang) {

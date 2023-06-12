@@ -106,12 +106,12 @@ class PremiumCompanyService
         }
     }
 
-    private function createNewCompany($user, CompanyRequest $request)
+    public function createNewCompany($user, CompanyRequest $request)
     {
         try {
             $company = new Company();
             $this->updateCompanyData($company, $request);
-            $user->setCompany($company);
+            $user->company()->save($company);
             alert()->success(__('messages.success'));
             return redirect(route('backend.site-users.index'));
         } catch (Exception $e) {
@@ -120,14 +120,14 @@ class PremiumCompanyService
         }
     }
 
-    private function updateCompanyData(Company $company, CompanyRequest $request)
+    private function updateCompanyData(Company $company, CompanyRequest $request): void
     {
         $company->fill([
             'phone' => $request->phone,
             'email' => $request->email,
             'voen' => $request->voen,
             'company_type' => CompanyEnum::SIMPLE,
-            'address' => $request->address,
+            'adress' => $request->address,
             'name' => $request->name,
             'about' => $request->about,
         ]);

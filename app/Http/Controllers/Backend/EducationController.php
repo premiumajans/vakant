@@ -16,7 +16,7 @@ class EducationController extends Controller
 
     public function index()
     {
-        abort_if(Gate::denies('education index'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        checkPermission('education');
         $educations = Education::all();
         return view('backend.education.index', get_defined_vars());
     }

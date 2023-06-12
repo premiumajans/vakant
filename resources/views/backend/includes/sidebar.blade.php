@@ -203,7 +203,7 @@
                         </a>
                     </li>
                 @endcan
-                @can('new-permission index')
+                @can('permissions index')
                     <li>
                         <a href="{{ route('backend.givePermission') }}" class=" waves-effect">
                             <i class="ri-lock-unlock-fill"></i>

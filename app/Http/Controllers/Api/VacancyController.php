@@ -30,7 +30,7 @@ class VacancyController extends Controller
     public function all()
     {
         return response()->json([
-            'on-going' => Vacancy::where('end_time', '>', Carbon::now())->with('description')->get(),
+            'on_going' => Vacancy::where('end_time', '>', Carbon::now())->with('description')->get(),
             'finished' => Vacancy::where('end_time', '<', Carbon::now())->with('description')->get(),
         ]);
     }

@@ -9,7 +9,7 @@ use ReflectionMethod;
 
 trait RelationshipsTrait
 {
-    public function relationships()
+    public function relationships(): array
     {
         $model = new static;
         $relationships = [];
@@ -27,8 +27,7 @@ trait RelationshipsTrait
                         'model' => (new ReflectionClass($return->getRelated()))->getName()
                     ];
                 }
-            } catch (ErrorException $e) {
-            }
+            } catch (ErrorException|\ReflectionException $e) {}
         }
         return $relationships;
     }

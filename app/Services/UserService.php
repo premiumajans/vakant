@@ -11,31 +11,24 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserService
 {
-    public function login(array $credentials): array
+    public function login(array $credentials)
     {
         $token = Auth::guard('admin')->attempt($credentials);
-
         if (!$token) {
-            return [
-                'status' => 'error',
-                'message' => 'Unauthorized',
-                'statusCode' => 401,
-            ];
+            return response()->json([
+                'message' => 'unauthorized',
+            ], 401);
         }
-
         $user = Auth::guard('admin')->user();
         $hasCompany = Admin::find($user->id)->company()->exists();
-
-        return [
-            'status' => 'success',
+        return response()->json([
             'user' => $user,
             'company' => $hasCompany,
             'authorisation' => [
                 'token' => JWTAuth::fromUser($user),
                 'type' => 'bearer',
             ],
-            'statusCode' => 200,
-        ];
+        ], 200);
     }
 
     public function register(array $data): array

@@ -4,4 +4,4 @@
 <link href="{{asset('backend/css/bootstrap.min.css')}}" id="bootstrap-style" rel="stylesheet" type="text/css" />
 <link href="{{asset('backend/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{asset('backend/css/app.min.css')}}" id="app-style" rel="stylesheet" type="text/css" />
-<link rel="icon" href="{{ asset('frontend/images/favicon.png') }}" type="image/x-icon">
+<link rel="icon" href="{{ asset('backend/images/favicon.png') }}" type="image/x-icon">

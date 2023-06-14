@@ -11,24 +11,36 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserService
 {
-    public function login(array $credentials)
+    public function login(array $credentials): array
     {
         $token = Auth::guard('admin')->attempt($credentials);
         if (!$token) {
-            return response()->json([
-                'message' => 'unauthorized',
-            ], 401);
+            return [
+                'status' => 'error',
+                'message' => 'Unauthorized',
+                'statusCode' => 401,
+            ];
         }
         $user = Auth::guard('admin')->user();
         $hasCompany = Admin::find($user->id)->company()->exists();
-        return response()->json([
+
+        return [
+            'status' => 'success',
             'user' => $user,
             'company' => $hasCompany,
             'authorisation' => [
                 'token' => JWTAuth::fromUser($user),
                 'type' => 'bearer',
             ],
-        ], 200);
+            'statusCode' => 200,
+        ];
+    }
+    public function logout(): array
+    {
+        Auth::guard('admin')->logout();
+        return [
+            'message' => 'logged-out-successfully',
+        ];
     }
 
     public function register(array $data): array
@@ -108,12 +120,10 @@ class UserService
                 'statusCode' => 500,
             ];
         }
-
         $validator = Validator::make($data, [
             'new_password' => 'required|string',
             'confirm_password' => 'required|string|same:new_password',
         ]);
-
         if ($validator->fails()) {
             return [
                 'status' => 'error',
@@ -122,11 +132,9 @@ class UserService
                 'statusCode' => 422,
             ];
         }
-
         $user->password = Hash::make($data['new_password']);
         $user->reset_token = null;
         $user->save();
-
         return [
             'status' => 'success',
             'message' => 'password-updated-successfully',

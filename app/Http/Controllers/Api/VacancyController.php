@@ -10,6 +10,7 @@ use App\Http\Enums\VacancyEnum;
 use App\Http\Enums\CauserEnum;
 use App\Http\Enums\StatusEnum;
 use App\Models\VacancyUpdate;
+use Exception;
 use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\Vacancy;
@@ -55,7 +56,16 @@ class VacancyController extends Controller
 
     public function show($id)
     {
-        return Vacancy::find($id)->with('description')->get();
+        if (Vacancy::where('id', $id)->exists()) {
+            $vacancy = Vacancy::with(['description', 'premium'])->find($id);
+            return response()->json([
+                'vacancy' => $vacancy,
+            ], 200);
+        } else {
+            return response()->json([
+                'vacancy' => 'vacancy-not-found',
+            ], 404);
+        }
     }
 
     public function myItems()

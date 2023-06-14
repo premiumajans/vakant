@@ -31,6 +31,11 @@ class Vacancy extends Model
         return $this->hasOne(PremiumVacancy::class);
     }
 
+    public function history()
+    {
+        return $this->hasMany(PremiumVacancyHistory::class);
+    }
+
     public function scopeActive($query)
     {
         return $query->where('end_time', '>=', Carbon::now()->toDateString())->get();

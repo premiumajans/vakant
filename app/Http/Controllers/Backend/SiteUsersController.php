@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Enums\CompanyEnum;
+use App\Http\Enums\PremiumEnum;
 use App\Http\Helpers\CRUDHelper;
 use App\Models\Admin;
 use App\Models\Company;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Services\PremiumCompanyService;
 use App\Http\Requests\Backend\Create\AdminRequest;
+use Illuminate\Support\Facades\Auth;
 
 class SiteUsersController extends Controller
 {
@@ -99,7 +101,7 @@ class SiteUsersController extends Controller
     public function getPremium($id)
     {
         checkPermission('users create');
-        $this->premiumCompanyService->makeCompanyPremium($id, 1);
+        $this->premiumCompanyService->makeCompanyPremium($id, 1, PremiumEnum::ADMIN, Auth::guard('web')->id());
         return redirect()->back();
     }
 

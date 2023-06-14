@@ -27,13 +27,16 @@ class UserController extends Controller
             'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
+
         if ($validator->fails()) {
             return response()->json([
                 'errors' => $validator->errors(),
             ], 422);
         }
+
         $result = $this->userService->login($request->only('email', 'password'));
-        return $result;
+
+        return response()->json($result);
     }
 
     public function register(Request $request)
@@ -60,6 +63,7 @@ class UserController extends Controller
     public function forgotPassword(Request $request)
     {
         $result = $this->userService->forgotPassword($request->email);
+
         return response()->json($result, $result['status'] == 'success' ? 200 : 404);
     }
 
@@ -88,7 +92,7 @@ class UserController extends Controller
     {
         $result = $this->userService->logout();
 
-        return response()->json($result);
+        return response()->json($result,200);
     }
 
     public function term()

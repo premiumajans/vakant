@@ -33,8 +33,7 @@ class UserController extends Controller
                 'errors' => $validator->errors(),
             ], 422);
         }
-        $result = $this->userService->login($request->only('email', 'password'));
-        return response()->json($result);
+        return $this->userService->login($request->only('email', 'password'));
     }
 
     public function register(Request $request)
@@ -46,7 +45,6 @@ class UserController extends Controller
             'password_confirmation' => 'same:password',
             'term' => 'required',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'errors' => $validator->errors(),
@@ -54,7 +52,7 @@ class UserController extends Controller
         }
 
         $result = $this->userService->register($request->all());
-        return response()->json($result, $result['status'] == 'success' ? 201 : 500);
+        return $result;
     }
 
     public function forgotPassword(Request $request)
@@ -86,7 +84,7 @@ class UserController extends Controller
     {
         $result = $this->userService->logout();
 
-        return response()->json($result,200);
+        return response()->json($result, 200);
     }
 
     public function term()

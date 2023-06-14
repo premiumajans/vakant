@@ -25,7 +25,8 @@ class Admin extends Authenticatable implements JWTSubject
         Notifiable,
         TwoFactorAuthenticatable;
 
-    protected $guard = 'admin';
+    public mixed $password,$current_ad_count,$name,$email;
+    protected string $guard = 'admin';
 
     public function company()
     {

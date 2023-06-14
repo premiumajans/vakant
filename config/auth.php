@@ -9,8 +9,18 @@ return [
     ],
     'guards' => [
         'api' => [
-            'driver' => 'jwt',
+//            'driver' => 'jwt',
+//            'provider' => 'admins',
+            'driver' => 'jwt', // or 'sanctum' depending on your setup
             'provider' => 'admins',
+            'hash' => false,
+            'redirect' => null,
+            'login_path' => 'auth/login',
+            'paths' => [
+                'api/*',
+            ],
+            'allowed_methods' => ['*'],
+            'except' => [],
         ],
         'web' => [
             'driver' => 'session',

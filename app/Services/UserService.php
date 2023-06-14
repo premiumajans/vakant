@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Admin;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -12,29 +13,26 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserService
 {
-    public function login(array $credentials): array
+    /**
+     * @throws AuthenticationException
+     */
+    public function login(array $credentials): \Illuminate\Http\JsonResponse
     {
         $token = Auth::guard('admin')->attempt($credentials);
         if (!$token) {
-            return [
-                'status' => 'error',
-                'message' => 'Unauthorized',
-                'statusCode' => 401,
-            ];
+            return response()->json([
+                'message' => 'unauthorized',
+            ], 401);
         }
         $user = auth('api')->authenticate();
         $hasCompany = Admin::find($user->id)->company()->exists();
-
-        return [
-            'status' => 'success',
+        return response()->json([
             'user' => $user,
             'company' => $hasCompany,
             'authorisation' => [
                 'token' => JWTAuth::fromUser($user),
                 'type' => 'bearer',
-            ],
-            'statusCode' => 200,
-        ];
+            ]], 200);
     }
 
     public function logout(): array
@@ -45,7 +43,7 @@ class UserService
         ];
     }
 
-    public function register(array $data): array
+    public function register(array $data): \Illuminate\Http\JsonResponse
     {
         $user = new Admin();
         $user->name = $data['name'];
@@ -53,19 +51,15 @@ class UserService
         $user->current_ad_count = 1;
         $user->password = Hash::make($data['password']);
         $user->save();
-
         $token = JWTAuth::fromUser($user);
-
-        return [
-            'status' => 'success',
+        return response()->json([
             'user' => $user,
             'company' => false,
             'authorisation' => [
                 'token' => $token,
                 'type' => 'bearer',
             ],
-            'statusCode' => 200,
-        ];
+        ], 200);
     }
 
     public function forgotPassword(string $email): array
@@ -178,7 +172,7 @@ class UserService
             $user->save();
             return response()->json([
                 'message' => 'password-changed-successfully',
-            ],200);
+            ], 200);
         }
     }
 }

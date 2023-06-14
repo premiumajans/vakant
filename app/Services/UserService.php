@@ -75,7 +75,6 @@ class UserService
                 'statusCode' => 404,
             ];
         }
-
         $user = Admin::where('email', $email)->first();
         $user->reset_token = md5($email);
         $user->save();
@@ -85,12 +84,10 @@ class UserService
             'email' => $email,
             'reset_token' => $user->reset_token,
         ];
-
         Mail::send('backend.mail.forget-password', $data, function ($message) use ($email) {
             $message->to($email);
             $message->subject(__('backend.confirm-your-password'));
         });
-
         return [
             'status' => 'success',
             'data' => [
@@ -138,6 +135,40 @@ class UserService
         return [
             'status' => 'success',
             'message' => 'password-updated-successfully',
+            'statusCode' => 200,
+        ];
+    }
+    public function changePassword(array $data): array
+    {
+        $user = Auth::guard('admin')->user();
+
+        $validator = Validator::make($data, [
+            'current_password' => 'required|string',
+            'new_password' => 'required|string',
+            'confirm_password' => 'required|string|same:new_password',
+        ]);
+
+        if ($validator->fails()) {
+            return [
+                'status' => 'error',
+                'message' => 'password-validation-failed',
+                'errors' => $validator->errors(),
+                'statusCode' => 422,
+            ];
+        }
+
+        if (!Hash::check($data['current_password'], $user->password)) {
+            return [
+                'status' => 'error',
+                'message' => 'current-password-mismatch',
+                'statusCode' => 401,
+            ];
+        }
+        $user->password = Hash::make($data['new_password']);
+        $user->save();
+        return [
+            'status' => 'success',
+            'message' => 'password-changed-successfully',
             'statusCode' => 200,
         ];
     }

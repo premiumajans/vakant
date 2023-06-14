@@ -6,15 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Term;
 use App\Services\UserService;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use JetBrains\PhpStorm\NoReturn;
 use Laravel\Socialite\Facades\Socialite;
 
 class UserController extends Controller
 {
-    private $userService;
+    private UserService $userService;
 
     public function __construct(UserService $userService)
     {
@@ -22,6 +24,9 @@ class UserController extends Controller
         $this->middleware('apiMid', ['except' => ['login', 'register', 'forgotPassword', 'term', 'resetPassword']]);
     }
 
+    /**
+     * @throws AuthenticationException
+     */
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -50,9 +55,7 @@ class UserController extends Controller
                 'errors' => $validator->errors(),
             ], 422);
         }
-
-        $result = $this->userService->register($request->all());
-        return $result;
+        return $this->userService->register($request->all());
     }
 
     public function forgotPassword(Request $request)
@@ -74,7 +77,7 @@ class UserController extends Controller
         return response()->json($result);
     }
 
-    public function changePassword(Request $request)
+    #[NoReturn] public function changePassword(Request $request)
     {
         $result = $this->userService->changePassword($request->all());
         return $result;

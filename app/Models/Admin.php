@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Http\Enums\StatusEnum;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
@@ -13,50 +12,42 @@ use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class Admin extends Authenticatable implements JWTSubject
 {
     use HasRoles,
         HasPermissions,
         HasApiTokens,
-        HasFactory,
         HasProfilePhoto,
         Notifiable,
         TwoFactorAuthenticatable;
 
-    public mixed $password,$current_ad_count,$name,$email;
+    protected $guarded = [];
     protected string $guard = 'admin';
-
-    public function company()
+    public function company(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Company::class, 'admin_id');
     }
-
-    public function hasCompany()
+    public function hasCompany(): bool
     {
         return $this->company()->exists();
     }
-
-    public function package()
+    public function package(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Package::class, 'admin_packages', 'admin_id', 'package_id')->withPivot('current_ads_count', 'status', 'created_at', 'updated_at');
     }
-
     public function scopeActive($query)
     {
         return $query->package()
             ->wherePivot('status', StatusEnum::ACTIVE);
     }
-
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'provider_id',
-        'current_ad_count',
-    ];
-
+//    protected $fillable = [
+//        'name',
+//        'email',
+//        'password',
+//        'provider_id',
+//        'current_ad_count',
+//    ];
     protected $hidden = [
         'password',
         'remember_token',
@@ -69,13 +60,11 @@ class Admin extends Authenticatable implements JWTSubject
     protected $appends = [
         'profile_photo_url',
     ];
-
     public function getJWTIdentifier()
     {
         return $this->getKey();
     }
-
-    public function getJWTCustomClaims()
+    public function getJWTCustomClaims(): array
     {
         return [];
     }

@@ -28,15 +28,12 @@ class UserController extends Controller
             'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'errors' => $validator->errors(),
             ], 422);
         }
-
         $result = $this->userService->login($request->only('email', 'password'));
-
         return response()->json($result);
     }
 
@@ -57,21 +54,18 @@ class UserController extends Controller
         }
 
         $result = $this->userService->register($request->all());
-
         return response()->json($result, $result['status'] == 'success' ? 201 : 500);
     }
 
     public function forgotPassword(Request $request)
     {
         $result = $this->userService->forgotPassword($request->email);
-
         return response()->json($result, $result['status'] == 'success' ? 200 : 404);
     }
 
     public function resetPassword(Request $request)
     {
         $result = $this->userService->resetPassword($request->all());
-
         return response()->json($result, $result['status'] == 'success' ? 200 : 500);
     }
 
@@ -85,8 +79,7 @@ class UserController extends Controller
     public function changePassword(Request $request)
     {
         $result = $this->userService->changePassword($request->all());
-
-        return response()->json($result, $result['status'] == 'success' ? 200 : 500);
+        return $result;
     }
 
     public function logout()

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use JetBrains\PhpStorm\NoReturn;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserService
@@ -21,7 +22,7 @@ class UserService
                 'statusCode' => 401,
             ];
         }
-        $user = Auth::guard('admin')->user();
+        $user = auth('api')->authenticate();
         $hasCompany = Admin::find($user->id)->company()->exists();
 
         return [
@@ -35,6 +36,7 @@ class UserService
             'statusCode' => 200,
         ];
     }
+
     public function logout(): array
     {
         Auth::guard('admin')->logout();
@@ -138,32 +140,24 @@ class UserService
             'statusCode' => 200,
         ];
     }
-    public function changePassword(array $data): array
-    {
-        $user = Auth::guard('admin')->user();
 
+    #[NoReturn] public function changePassword(array $data): \Illuminate\Http\JsonResponse
+    {
+        $user = auth('api')->authenticate();
         if (empty($data['password'])) {
             $validator = Validator::make($data, [
                 'name' => 'required|string',
             ]);
-
             if ($validator->fails()) {
-                return [
-                    'status' => 'error',
-                    'message' => 'name-validation-failed',
-                    'errors' => $validator->errors(),
-                    'statusCode' => 422,
-                ];
+                return response()->json([
+                    'message' => $validator->errors(),
+                ], 422);
             }
-
             $user->name = $data['name'];
             $user->save();
-
-            return [
-                'status' => 'success',
+            return response()->json([
                 'message' => 'name-changed-successfully',
-                'statusCode' => 200,
-            ];
+            ], 200);
         } else {
             $validator = Validator::make($data, [
                 'current_password' => 'required|string',
@@ -171,28 +165,20 @@ class UserService
                 'confirm_password' => 'required|string|same:new_password',
             ]);
             if ($validator->fails()) {
-                return [
-                    'status' => 'error',
-                    'message' => 'password-validation-failed',
-                    'errors' => $validator->errors(),
-                    'statusCode' => 422,
-                ];
+                return response()->json([
+                    'message' => $validator->errors(),
+                ], 422);
             }
             if (!Hash::check($data['current_password'], $user->password)) {
-                return [
-                    'status' => 'error',
+                return response()->json([
                     'message' => 'current-password-mismatch',
-                    'statusCode' => 401,
-                ];
+                ], 401);
             }
             $user->password = Hash::make($data['new_password']);
             $user->save();
-            return [
-                'status' => 'success',
+            return response()->json([
                 'message' => 'password-changed-successfully',
-                'statusCode' => 200,
-            ];
+            ],200);
         }
     }
-
 }

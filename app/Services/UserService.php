@@ -142,34 +142,57 @@ class UserService
     {
         $user = Auth::guard('admin')->user();
 
-        $validator = Validator::make($data, [
-            'current_password' => 'required|string',
-            'new_password' => 'required|string',
-            'confirm_password' => 'required|string|same:new_password',
-        ]);
+        if (empty($data['password'])) {
+            $validator = Validator::make($data, [
+                'name' => 'required|string',
+            ]);
 
-        if ($validator->fails()) {
+            if ($validator->fails()) {
+                return [
+                    'status' => 'error',
+                    'message' => 'name-validation-failed',
+                    'errors' => $validator->errors(),
+                    'statusCode' => 422,
+                ];
+            }
+
+            $user->name = $data['name'];
+            $user->save();
+
             return [
-                'status' => 'error',
-                'message' => 'password-validation-failed',
-                'errors' => $validator->errors(),
-                'statusCode' => 422,
+                'status' => 'success',
+                'message' => 'name-changed-successfully',
+                'statusCode' => 200,
+            ];
+        } else {
+            $validator = Validator::make($data, [
+                'current_password' => 'required|string',
+                'new_password' => 'required|string',
+                'confirm_password' => 'required|string|same:new_password',
+            ]);
+            if ($validator->fails()) {
+                return [
+                    'status' => 'error',
+                    'message' => 'password-validation-failed',
+                    'errors' => $validator->errors(),
+                    'statusCode' => 422,
+                ];
+            }
+            if (!Hash::check($data['current_password'], $user->password)) {
+                return [
+                    'status' => 'error',
+                    'message' => 'current-password-mismatch',
+                    'statusCode' => 401,
+                ];
+            }
+            $user->password = Hash::make($data['new_password']);
+            $user->save();
+            return [
+                'status' => 'success',
+                'message' => 'password-changed-successfully',
+                'statusCode' => 200,
             ];
         }
-
-        if (!Hash::check($data['current_password'], $user->password)) {
-            return [
-                'status' => 'error',
-                'message' => 'current-password-mismatch',
-                'statusCode' => 401,
-            ];
-        }
-        $user->password = Hash::make($data['new_password']);
-        $user->save();
-        return [
-            'status' => 'success',
-            'message' => 'password-changed-successfully',
-            'statusCode' => 200,
-        ];
     }
+
 }

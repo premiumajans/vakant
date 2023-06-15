@@ -166,7 +166,6 @@ class VacancyController extends Controller
         $newVacancy->experience_id = $request->experience;
         $newVacancy->shared_time = Carbon::now();
         $newVacancy->admin_status = StatusEnum::DEACTIVE;
-
         return $newVacancy;
     }
 }

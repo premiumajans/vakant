@@ -73,6 +73,7 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::get('/vacancies/pending', [BVacancy::class, 'pending'])->name('pendingVacancies');
     Route::get('/vacancies/updated', [BVacancy::class, 'updated'])->name('updatedVacancies');
     Route::get('/vacancy/append/{id}', [BVacancy::class, 'approveVacancy'])->name('approve-vacancy');
+    Route::get('/vacancy/append/{id}/update', [BVacancy::class, 'approveUpdatedVacancy'])->name('approve-updated-vacancy');
 
 
 

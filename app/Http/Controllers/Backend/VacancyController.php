@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Enums\CauserEnum;
+use App\Http\Enums\StatusEnum;
 use App\Http\Enums\VacancyAdminEnum;
 use App\Http\Enums\VacancyEnum;
 use App\Http\Helpers\CRUDHelper;
@@ -97,6 +98,7 @@ class VacancyController extends Controller
             return redirect()->back();
         }
     }
+
     public function show($id)
     {
         checkPermission('vacancy index');
@@ -166,9 +168,48 @@ class VacancyController extends Controller
         }
     }
 
+    public function approveUpdatedVacancy($id)
+    {
+        checkPermission('vacancy edit');
+        try {
+            $updatedVacancy = VacancyUpdate::find($id);
+            $originalVacancy = Vacancy::find($updatedVacancy->vacancy_id);
+            $this->mergeVacancy($originalVacancy, $updatedVacancy);
+            $updatedVacancy->delete();
+            alert()->success(__('messages.success'));
+            return redirect()->back();
+        } catch (Exception $exception) {
+            alert()->error(__('messages.error'));
+            return redirect()->back();
+        }
+    }
+
+    private function mergeVacancy($vacancy, $updatedVacancy): void
+    {
+        $vacancy->description()->update(
+            ['position' => $updatedVacancy->position],
+            ['category_id' => $updatedVacancy->category_id],
+            ['min_salary' => $updatedVacancy->min_salary],
+            ['max_salary' => $updatedVacancy->max_salary],
+            ['education_id' => $updatedVacancy->education_id],
+            ['experience_id' => $updatedVacancy->experience_id],
+            ['city_id' => $updatedVacancy->city_id],
+            ['mode_id' => $updatedVacancy->mode_id],
+            ['company' => $updatedVacancy->company],
+            ['relevant_people' => $updatedVacancy->max_age],
+            ['candidate_requirement' => $updatedVacancy->candidate_requirement],
+            ['job_description' => $updatedVacancy->job_description],
+            ['email' => $updatedVacancy->email],
+            ['phone' => $updatedVacancy->phone],
+            ['tags' => $updatedVacancy->tags],
+        );
+        $vacancy->admin_status = StatusEnum::ACTIVE;
+        $vacancy->save();
+    }
+
     public function delete($id)
     {
         checkPermission('vacancy index');
-        return CRUDHelper::remove_item('\App\Models\Vacancy',$id);
+        return CRUDHelper::remove_item('\App\Models\Vacancy', $id);
     }
 }

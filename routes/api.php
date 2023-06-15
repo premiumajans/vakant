@@ -39,17 +39,19 @@ Route::resource('modes', Mode::class)->only(['index', 'show']);
 Route::resource('vacancies', Vacancy::class)->only(['index', 'show']);
 Route::resource('city', City::class)->only(['index', 'show']);
 Route::get('static-token',function (){
-    $expirationTime = now()->addDays(7); // Set the expiration time to 7 days from now
+    $expirationTime = now()->addDays(7);
     $payload = [
-        'exp' => $expirationTime->timestamp, // Set the expiration claim
+        'exp' => $expirationTime->timestamp,
     ];
     $token = JWTAuth::encode($payload);
     return response()->json([
         'token' => $token,
         'type' => 'bearer',
-        'expires_in' => $expirationTime->diffInSeconds(now()), // Lifetime in seconds
+        'expires_in' => $expirationTime->diffInSeconds(now()),
     ]);
 });
+
+
 Route::group(['prefix' => '/vacancies'], function () {
     Route::post('/store', [Vacancy::class, 'store']);
 });

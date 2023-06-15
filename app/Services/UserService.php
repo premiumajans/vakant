@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Validator;
 use JetBrains\PhpStorm\NoReturn;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
-use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserService
@@ -47,18 +46,18 @@ class UserService
     /**
      * @throws AuthenticationException
      */
-    public function refresh(): \Illuminate\Http\JsonResponse
+    public function refresh()
     {
         try {
             $token = JWTAuth::parseToken()->refresh();
         } catch (TokenExpiredException $e) {
             return response()->json(['error' => 'token_expired'], 401);
-        } catch (TokenInvalidException $e) {
-            return response()->json(['error' => 'token_invalid'], 401);
         } catch (JWTException $e) {
-            return response()->json(['error' => 'token_absent'], 401);
+            return response()->json(['error' => 'token_invalid'], 401);
         }
-        $user = JWTAuth::user();
+
+        $user = JWTAuth::parseToken()->authenticate();
+
         return response()->json([
             'user' => $user,
             'authorisation' => [
@@ -66,13 +65,6 @@ class UserService
                 'type' => 'bearer',
             ]
         ], 200);
-    }
-    public function logout(): array
-    {
-        Auth::guard('admin')->logout();
-        return [
-            'message' => 'logged-out-successfully',
-        ];
     }
 
     public function register(array $data): \Illuminate\Http\JsonResponse
@@ -106,7 +98,6 @@ class UserService
         $user = Admin::where('email', $email)->first();
         $user->reset_token = md5($email);
         $user->save();
-
         $data = [
             'name' => $user->name,
             'email' => $email,
@@ -206,5 +197,12 @@ class UserService
                 'message' => 'password-changed-successfully',
             ], 200);
         }
+    }
+    public function logout(): array
+    {
+        Auth::guard('admin')->logout();
+        return [
+            'message' => 'logged-out-successfully',
+        ];
     }
 }

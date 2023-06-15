@@ -114,14 +114,14 @@ class CompanyController extends Controller
             $company = Admin::find($this->user->id)->company()->first();
             $company->update([
 //                'photo' => $data['photo'],
-              'photo' => api_upload('users/companies', $request->file('photo'))
+                'photo' => api_upload('users/companies', $request->file('photo'))
             ]);
             return response()->json([
                 'message' => 'profile-photo-successfully-updated',
             ], 200);
         } catch (Exception $exception) {
             return response()->json([
-                'status' => 'error',
+                'error' => $exception->getMessage(),
             ], 500);
         }
     }

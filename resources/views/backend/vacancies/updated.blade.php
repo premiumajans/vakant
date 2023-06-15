@@ -48,7 +48,9 @@
                                     <td>
                                         <a href="tel:{{ $vacancy->phone ?? '-' }}">{{ $vacancy->phone ?? '-'}}</a>
                                     </td>
-                                    <td class="text-center">
+                                    <td class="text-center d-flex">
+                                        <a class="btn btn-success" style="margin-right: 10px;"
+                                           href="{{ route('backend.approve-updated-vacancy',$vacancy->id) }}"><i class="fas fa-clipboard-check"></i></a>
                                         <div class="dropdown">
                                             <button class="btn btn-primary dropdown-toggle" type="button"
                                                     id="dropdownMenuButton2" data-bs-toggle="dropdown"

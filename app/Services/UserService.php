@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use JetBrains\PhpStorm\NoReturn;
+use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserService
@@ -18,39 +19,52 @@ class UserService
      */
     public function login(array $credentials): \Illuminate\Http\JsonResponse
     {
-        $token = Auth::guard('admin')->attempt($credentials);
-        if (!$token) {
+        if (!Auth::guard('admin')->attempt($credentials)) {
             return response()->json([
-                'message' => 'unauthorized',
+                'message' => 'Unauthorized',
             ], 401);
         }
-        $user = auth('api')->authenticate();
-        $hasCompany = Admin::find($user->id)->company()->exists();
+        $user = Auth::guard('admin')->user();
+        if (!$user) {
+            return response()->json([
+                'message' => 'User not found',
+            ], 404);
+        }
+        $hasCompany = $user->company()->exists();
+        $token = JWTAuth::fromUser($user);
         return response()->json([
             'user' => $user,
             'company' => $hasCompany,
             'authorisation' => [
-                'token' => JWTAuth::fromUser($user),
+                'token' => $token,
                 'type' => 'bearer',
-            ]
+            ],
         ], 200);
     }
 
+    /**
+     * @throws AuthenticationException
+     */
     public function refresh(): \Illuminate\Http\JsonResponse
     {
-        $token = JWTAuth::getToken();
-        $newToken = JWTAuth::refresh($token);
-        $user = auth('api')->authenticate();
-
+        try {
+            $token = JWTAuth::parseToken()->refresh();
+        } catch (TokenExpiredException $e) {
+            return response()->json(['error' => 'token_expired'], 401);
+        } catch (TokenInvalidException $e) {
+            return response()->json(['error' => 'token_invalid'], 401);
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'token_absent'], 401);
+        }
+        $user = JWTAuth::user();
         return response()->json([
             'user' => $user,
             'authorisation' => [
-                'token' => $newToken,
+                'token' => $token,
                 'type' => 'bearer',
             ]
         ], 200);
     }
-
     public function logout(): array
     {
         Auth::guard('admin')->logout();

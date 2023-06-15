@@ -92,7 +92,6 @@ class UserService
         ], 200);
     }
 
-
     public function forgotPassword(string $email): array
     {
         if (!Admin::where('email', $email)->exists()) {

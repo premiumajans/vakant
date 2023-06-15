@@ -123,13 +123,11 @@ class VacancyController extends Controller
         $vacancy->causer_type = CauserEnum::COMPANY;
         $vacancy->causer_id = $user->id;
         $vacancy->admin_status = VacancyAdminEnum::Pending;
-
         if ($company->premium()->exists()) {
             $vacancy->vacancy_type = VacancyEnum::PREMIUM;
         } else {
             $vacancy->vacancy_type = VacancyEnum::SIMPLE;
         }
-
         $vacancy->shared_time = Carbon::now();
         $vacancy->end_time = Carbon::now()->addMonth();
         $vacancy->save();

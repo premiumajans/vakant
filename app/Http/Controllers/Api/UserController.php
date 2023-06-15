@@ -6,14 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Term;
 use App\Services\UserService;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use JetBrains\PhpStorm\NoReturn;
 use Laravel\Socialite\Facades\Socialite;
 
 class UserController extends Controller
 {
-    private $userService;
+    private UserService $userService;
 
     public function __construct(UserService $userService)
     {
@@ -21,22 +24,21 @@ class UserController extends Controller
         $this->middleware('apiMid', ['except' => ['login', 'register', 'forgotPassword', 'term', 'resetPassword']]);
     }
 
+    /**
+     * @throws AuthenticationException
+     */
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'errors' => $validator->errors(),
             ], 422);
         }
-
-        $result = $this->userService->login($request->only('email', 'password'));
-
-        return response()->json($result);
+        return $this->userService->login($request->only('email', 'password'));
     }
 
     public function register(Request $request)
@@ -48,51 +50,41 @@ class UserController extends Controller
             'password_confirmation' => 'same:password',
             'term' => 'required',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'errors' => $validator->errors(),
             ], 422);
         }
-
-        $result = $this->userService->register($request->all());
-
-        return response()->json($result, $result['status'] == 'success' ? 201 : 500);
+        return $this->userService->register($request->all());
     }
 
     public function forgotPassword(Request $request)
     {
         $result = $this->userService->forgotPassword($request->email);
-
         return response()->json($result, $result['status'] == 'success' ? 200 : 404);
     }
 
     public function resetPassword(Request $request)
     {
         $result = $this->userService->resetPassword($request->all());
-
         return response()->json($result, $result['status'] == 'success' ? 200 : 500);
     }
 
     public function refresh()
     {
-        $result = $this->userService->refresh();
-
-        return response()->json($result);
+        return $this->userService->refresh();
     }
 
-    public function changePassword(Request $request)
+    #[NoReturn] public function changePassword(Request $request)
     {
-        $result = $this->userService->changePassword($request->all());
-
-        return response()->json($result, $result['status'] == 'success' ? 200 : 500);
+        return $this->userService->changePassword($request->all());
     }
 
     public function logout()
     {
         $result = $this->userService->logout();
 
-        return response()->json($result);
+        return response()->json($result, 200);
     }
 
     public function term()

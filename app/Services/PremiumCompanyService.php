@@ -7,6 +7,8 @@ use App\Http\Requests\Backend\Create\CompanyRequest;
 use App\Models\Admin;
 use App\Models\Company;
 use App\Models\PremiumCompany;
+use App\Models\PremiumCompanyHistory;
+use App\Models\PremiumVacancyHistory;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -17,7 +19,6 @@ class PremiumCompanyService
     public function cleanUpExpiredPremiumCompanies(): void
     {
         $companies = $this->getCompaniesWithPremium();
-
         foreach ($companies as $company) {
             $this->handleExpiredPremium($company);
         }
@@ -46,7 +47,7 @@ class PremiumCompanyService
         $company->premium()->delete();
     }
 
-    public function makeCompanyPremium($id, int $durationInMonths): void
+    public function makeCompanyPremium($id, int $durationInMonths, $type, $admin_id): void
     {
         try {
             $company = Company::find($id);
@@ -55,6 +56,12 @@ class PremiumCompanyService
             $premium->start_time = Carbon::now();
             $premium->end_time = Carbon::now()->addMonths($durationInMonths);
             $company->premium()->save($premium);
+            $history = new PremiumCompanyHistory();
+            $history->start_time = $premium->start_time;
+            $history->end_time = $premium->end_time;
+            $history->type = $type;
+            $history->admin_id = $admin_id;
+            $company->history()->save($history);
             alert()->success(__('messages.success'));
         } catch (Exception $e) {
             alert()->error(__('messages.error'));
@@ -71,7 +78,6 @@ class PremiumCompanyService
                 $newEndTime = $endTime->copy()->addDays($durationInDays);
                 $premium->end_time = $newEndTime;
                 $premium->save();
-
                 alert()->success(__('messages.success'));
             } else {
                 alert()->error(__('messages.error'));
@@ -90,7 +96,7 @@ class PremiumCompanyService
         }
     }
 
-    private function updateExistingCompany($user, CompanyRequest $request)
+    private function updateExistingCompany($user, CompanyRequest $request): \Illuminate\Foundation\Application|\Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
     {
         try {
             $company = $user->company()->first();
@@ -106,7 +112,7 @@ class PremiumCompanyService
         }
     }
 
-    public function createNewCompany($user, CompanyRequest $request)
+    public function createNewCompany($user, CompanyRequest $request): \Illuminate\Foundation\Application|\Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
     {
         try {
             $company = new Company();

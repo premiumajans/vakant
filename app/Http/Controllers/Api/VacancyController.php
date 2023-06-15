@@ -1,18 +1,20 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+
 use App\Http\Controllers\General\VacancyController as GeneralVacancy;
+use App\Http\Enums\VacancyAdminEnum;
+use App\Http\Controllers\Controller;
+use App\Http\Enums\VacancyEnum;
 use App\Http\Enums\CauserEnum;
 use App\Http\Enums\StatusEnum;
-use App\Http\Enums\VacancyAdminEnum;
-use App\Http\Enums\VacancyEnum;
+use App\Models\VacancyUpdate;
+use Exception;
+use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\Vacancy;
-use App\Models\VacancyUpdate;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
-use PharIo\Version\Exception;
 
 class VacancyController extends Controller
 {
@@ -24,6 +26,14 @@ class VacancyController extends Controller
     public function index()
     {
         return Vacancy::with('description')->get();
+    }
+
+    public function all()
+    {
+        return response()->json([
+            'on_going' => Vacancy::where('end_time', '>', Carbon::now())->with('description')->get(),
+            'finished' => Vacancy::where('end_time', '<', Carbon::now())->with('description')->get(),
+        ]);
     }
 
     public function store(Request $request)
@@ -46,7 +56,16 @@ class VacancyController extends Controller
 
     public function show($id)
     {
-        return Vacancy::find($id)->with('description')->get();
+        if (Vacancy::where('id', $id)->exists()) {
+            $vacancy = Vacancy::with(['description', 'premium'])->find($id);
+            return response()->json([
+                'vacancy' => $vacancy,
+            ], 200);
+        } else {
+            return response()->json([
+                'vacancy' => 'vacancy-not-found',
+            ], 404);
+        }
     }
 
     public function myItems()
@@ -104,13 +123,11 @@ class VacancyController extends Controller
         $vacancy->causer_type = CauserEnum::COMPANY;
         $vacancy->causer_id = $user->id;
         $vacancy->admin_status = VacancyAdminEnum::Pending;
-
         if ($company->premium()->exists()) {
             $vacancy->vacancy_type = VacancyEnum::PREMIUM;
         } else {
             $vacancy->vacancy_type = VacancyEnum::SIMPLE;
         }
-
         $vacancy->shared_time = Carbon::now();
         $vacancy->end_time = Carbon::now()->addMonth();
         $vacancy->save();

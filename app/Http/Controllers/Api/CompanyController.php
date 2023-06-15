@@ -91,12 +91,10 @@ class CompanyController extends Controller
                 'company_type' => CompanyEnum::PREMIUM,
             ]);
             return response()->json([
-                'status' => 'success',
                 'message' => 'company-successfully-premium',
             ], 200);
         } else {
             return response()->json([
-                'status' => 'success',
                 'message' => 'company-already-premium',
             ], 200);
         }
@@ -114,19 +112,11 @@ class CompanyController extends Controller
                 ], 422);
             }
             $company = Admin::find($this->user->id)->company()->first();
-            $path = 'users/companies';
-            $file = $request->file('photo');
-            $img = $file;
-            $extension = $img->getClientOriginalExtension();
-            $filename = uniqid() . '.' . $extension;
-            $img->move('images/' . $path, $filename);
-            $data['photo'] = 'images/' . $path . '/' . $filename;
             $company->update([
-                'photo' => $data['photo'],
-//              'photo' => api_upload('users/companies', $request->file('photo'))
+//                'photo' => $data['photo'],
+              'photo' => api_upload('users/companies', $request->file('photo'))
             ]);
             return response()->json([
-                'status' => 'success',
                 'message' => 'profile-photo-successfully-updated',
             ], 200);
         } catch (Exception $exception) {

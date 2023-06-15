@@ -19,6 +19,7 @@ Route::post('/company-update', [\App\Http\Controllers\Api\CompanyController::cla
 Route::post('/company/update/photo', [\App\Http\Controllers\Api\CompanyController::class, 'updatePhoto']);
 
 Route::get('/vacancies', [\App\Http\Controllers\Api\VacancyController::class, 'index']);
+Route::get('/vacancies/all', [\App\Http\Controllers\Api\VacancyController::class, 'all']);
 Route::get('/vacancies/{id}', [\App\Http\Controllers\Api\VacancyController::class, 'show']);
 Route::post('/vacancies/{id}/update', [\App\Http\Controllers\Api\VacancyController::class, 'update']);
 Route::post('/vacancies/{id}/delete', [\App\Http\Controllers\Api\VacancyController::class, 'deleteVacancy']);
@@ -36,7 +37,6 @@ Route::resource('categories', Category::class)->only(['index', 'show']);
 Route::resource('modes', Mode::class)->only(['index', 'show']);
 Route::resource('vacancies', Vacancy::class)->only(['index', 'show']);
 Route::resource('city', City::class)->only(['index', 'show']);
-
 
 Route::group(['prefix' => '/vacancies'], function () {
     Route::post('/store', [Vacancy::class, 'store']);

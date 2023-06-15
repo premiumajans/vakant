@@ -19,7 +19,6 @@ class PremiumCompanyService
     public function cleanUpExpiredPremiumCompanies(): void
     {
         $companies = $this->getCompaniesWithPremium();
-
         foreach ($companies as $company) {
             $this->handleExpiredPremium($company);
         }
@@ -97,7 +96,7 @@ class PremiumCompanyService
         }
     }
 
-    private function updateExistingCompany($user, CompanyRequest $request)
+    private function updateExistingCompany($user, CompanyRequest $request): \Illuminate\Foundation\Application|\Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
     {
         try {
             $company = $user->company()->first();
@@ -113,7 +112,7 @@ class PremiumCompanyService
         }
     }
 
-    public function createNewCompany($user, CompanyRequest $request)
+    public function createNewCompany($user, CompanyRequest $request): \Illuminate\Foundation\Application|\Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
     {
         try {
             $company = new Company();

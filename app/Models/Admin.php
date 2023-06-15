@@ -41,13 +41,6 @@ class Admin extends Authenticatable implements JWTSubject
         return $query->package()
             ->wherePivot('status', StatusEnum::ACTIVE);
     }
-//    protected $fillable = [
-//        'name',
-//        'email',
-//        'password',
-//        'provider_id',
-//        'current_ad_count',
-//    ];
     protected $hidden = [
         'password',
         'remember_token',

@@ -72,15 +72,12 @@ class UserController extends Controller
 
     public function refresh()
     {
-        $result = $this->userService->refresh();
-
-        return response()->json($result);
+        return $this->userService->refresh();
     }
 
     #[NoReturn] public function changePassword(Request $request)
     {
-        $result = $this->userService->changePassword($request->all());
-        return $result;
+        return $this->userService->changePassword($request->all());
     }
 
     public function logout()

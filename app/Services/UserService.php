@@ -32,7 +32,23 @@ class UserService
             'authorisation' => [
                 'token' => JWTAuth::fromUser($user),
                 'type' => 'bearer',
-            ]], 200);
+            ]
+        ], 200);
+    }
+
+    public function refresh(): \Illuminate\Http\JsonResponse
+    {
+        $token = JWTAuth::getToken();
+        $newToken = JWTAuth::refresh($token);
+        $user = auth('api')->authenticate();
+
+        return response()->json([
+            'user' => $user,
+            'authorisation' => [
+                'token' => $newToken,
+                'type' => 'bearer',
+            ]
+        ], 200);
     }
 
     public function logout(): array

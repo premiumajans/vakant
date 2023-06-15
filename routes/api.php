@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\CategoryController as Category;
 use App\Http\Controllers\Api\SettingController as Setting;
 use App\Http\Controllers\Api\ModeController as Mode;
 use App\Http\Controllers\Api\VacancyController as Vacancy;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 Route::get('term', [\App\Http\Controllers\Api\UserController::class, 'term']);
 Route::post('/', [\App\Http\Controllers\Api\DocumentationController::class, 'index'])->name('index');
@@ -37,7 +38,18 @@ Route::resource('categories', Category::class)->only(['index', 'show']);
 Route::resource('modes', Mode::class)->only(['index', 'show']);
 Route::resource('vacancies', Vacancy::class)->only(['index', 'show']);
 Route::resource('city', City::class)->only(['index', 'show']);
-
+Route::get('static-token',function (){
+    $expirationTime = now()->addDays(7); // Set the expiration time to 7 days from now
+    $payload = [
+        'exp' => $expirationTime->timestamp, // Set the expiration claim
+    ];
+    $token = JWTAuth::encode($payload);
+    return response()->json([
+        'token' => $token,
+        'type' => 'bearer',
+        'expires_in' => $expirationTime->diffInSeconds(now()), // Lifetime in seconds
+    ]);
+});
 Route::group(['prefix' => '/vacancies'], function () {
     Route::post('/store', [Vacancy::class, 'store']);
 });

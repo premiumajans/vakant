@@ -30,9 +30,10 @@ class VacancyController extends Controller
 
     public function all()
     {
+        $user = auth('api')->authenticate();
         return response()->json([
-            'on_going' => Vacancy::where('end_time', '>', Carbon::now())->with('description')->get(),
-            'finished' => Vacancy::where('end_time', '<', Carbon::now())->with('description')->get(),
+            'on_going' => Vacancy::where('end_time', '>', Carbon::now())->where('causer_id', $user->id)->where('causer_type', 2)->with('description')->get(),
+            'finished' => Vacancy::where('end_time', '<', Carbon::now())->where('causer_id', $user->id)->where('causer_type', 2)->with('description')->get(),
         ]);
     }
 

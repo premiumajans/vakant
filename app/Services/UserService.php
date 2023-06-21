@@ -3,15 +3,16 @@
 namespace App\Services;
 
 use App\Models\Admin;
+use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-use JetBrains\PhpStorm\NoReturn;
+use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserService
 {
@@ -46,25 +47,34 @@ class UserService
     /**
      * @throws AuthenticationException
      */
-    public function refresh()
+    public function refresh(): \Illuminate\Http\JsonResponse
     {
+//        try {
+//            $token = JWTAuth::parseToken()->refresh();
+//        } catch (TokenExpiredException $e) {
+//            return response()->json(['error' => 'token_expired'], 401);
+//        } catch (TokenBlacklistedException $e) {
+//            // Remove the blacklisted token from the blacklist
+//            JWTAuth::invalidate(JWTAuth::getToken());
+//
+//            // Generate a new token
+//            $token = JWTAuth::refresh();
+//        } catch (JWTException $e) {
+//            return response()->json(['error' => 'token_invalid'], 401);
+//        }
         try {
             $token = JWTAuth::parseToken()->refresh();
         } catch (TokenExpiredException $e) {
             return response()->json(['error' => 'token_expired'], 401);
+        } catch (TokenBlacklistedException $e) {
+            // Remove the blacklisted token from the blacklist
+            JWTAuth::invalidate(JWTAuth::getToken());
+
+            // Generate a new token
+            $token = JWTAuth::refresh();
         } catch (JWTException $e) {
             return response()->json(['error' => 'token_invalid'], 401);
         }
-
-        $user = JWTAuth::parseToken()->authenticate();
-
-        return response()->json([
-            'user' => $user,
-            'authorisation' => [
-                'token' => $token,
-                'type' => 'bearer',
-            ]
-        ], 200);
     }
 
     public function register(array $data): \Illuminate\Http\JsonResponse
@@ -117,52 +127,42 @@ class UserService
         ];
     }
 
-    public function resetPassword(array $data): array
+    public function resetPassword(array $data): \Illuminate\Http\JsonResponse
     {
         if (!Admin::where('email', $data['email'])->exists()) {
-            return [
-                'status' => 'error',
+            return response()->json([
                 'message' => 'email-not-found',
-                'statusCode' => 500,
-            ];
+            ], 500);
         }
-
         $user = Admin::where('email', $data['email'])->first();
-
         if ($data['token'] !== $user->reset_token) {
-            return [
-                'status' => 'error',
+            return response()->json([
                 'message' => 'token-is-not-match-email',
-                'statusCode' => 500,
-            ];
+            ], 500);
         }
         $validator = Validator::make($data, [
             'new_password' => 'required|string',
             'confirm_password' => 'required|string|same:new_password',
         ]);
         if ($validator->fails()) {
-            return [
-                'status' => 'error',
+            return response()->json([
                 'message' => 'password-validation-failed',
                 'errors' => $validator->errors(),
-                'statusCode' => 422,
-            ];
+            ], 422);
         }
         $user->password = Hash::make($data['new_password']);
         $user->reset_token = null;
         $user->save();
-        return [
-            'status' => 'success',
+        return response()->json([
             'message' => 'password-updated-successfully',
-            'statusCode' => 200,
-        ];
+        ], 200);
     }
 
-    #[NoReturn] public function changePassword(array $data): \Illuminate\Http\JsonResponse
+    public function changePassword($request): \Illuminate\Http\JsonResponse
     {
-        $user = auth('api')->authenticate();
-        if (empty($data['password'])) {
-            $validator = Validator::make($data, [
+        $user = auth('api')->user();
+        if (!$request->has('current_password')) {
+            $validator = Validator::make($request->all(), [
                 'name' => 'required|string',
             ]);
             if ($validator->fails()) {
@@ -170,15 +170,15 @@ class UserService
                     'message' => $validator->errors(),
                 ], 422);
             }
-            $user->name = $data['name'];
+            $user->name = $request->input('name');
             $user->save();
             return response()->json([
                 'message' => 'name-changed-successfully',
             ], 200);
         } else {
-            $validator = Validator::make($data, [
+            $validator = Validator::make($request->all(), [
                 'current_password' => 'required|string',
-                'new_password' => 'required|string',
+                'new_password' => 'required|string|min:6|different:current_password',
                 'confirm_password' => 'required|string|same:new_password',
             ]);
             if ($validator->fails()) {
@@ -186,23 +186,53 @@ class UserService
                     'message' => $validator->errors(),
                 ], 422);
             }
-            if (!Hash::check($data['current_password'], $user->password)) {
+            if (!Hash::check($request->input('current_password'), $user->password)) {
                 return response()->json([
                     'message' => 'current-password-mismatch',
                 ], 401);
             }
-            $user->password = Hash::make($data['new_password']);
+            $user->password = Hash::make($request->input('new_password'));
             $user->save();
             return response()->json([
                 'message' => 'password-changed-successfully',
             ], 200);
         }
     }
-    public function logout(): array
+
+    /**
+     * Check the user based on the provided JWT token.
+     *
+     * @param string $token
+     * @return mixed|null
+     */
+    public function checkUser($token)
+    {
+        try {
+            // Set the token on the JWTAuth facade
+            JWTAuth::setToken($token);
+
+            // Get the authenticated user using the admin guard
+            if (!$user = Auth::guard('admin')->user()) {
+                // User not found or not authenticated
+                return null;
+            }
+
+            // User exists and is authenticated
+            return $user;
+        } catch (TokenExpiredException $e) {
+            // Token has expired
+            return null;
+        } catch (JWTException $e) {
+            // JWT validation failed
+            return null;
+        }
+    }
+
+    public function logout(): \Illuminate\Http\JsonResponse
     {
         Auth::guard('admin')->logout();
-        return [
+        return response()->json([
             'message' => 'logged-out-successfully',
-        ];
+        ], 200);
     }
 }

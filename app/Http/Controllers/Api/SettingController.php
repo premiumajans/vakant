@@ -11,11 +11,11 @@ class SettingController extends Controller
 {
     public function index()
     {
-        return Setting::all();
+        return response()->json(['settings' => Setting::all()]);
     }
 
     public function show($id)
     {
-        return Setting::find($id);
+        return response()->json(['setting' => Setting::find($id)]);
     }
 }

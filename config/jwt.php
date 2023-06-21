@@ -32,5 +32,4 @@ return [
         'auth' => Tymon\JWTAuth\Providers\Auth\Illuminate::class,
         'storage' => Tymon\JWTAuth\Providers\Storage\Illuminate::class,
     ],
-
 ];

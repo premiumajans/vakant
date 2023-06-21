@@ -4,19 +4,25 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Enums\CompanyEnum;
+use App\Http\Enums\PremiumEnum;
 use App\Models\Admin;
 use App\Models\Company;
 use App\Models\CompanyTranslation;
+use App\Services\PremiumCompanyService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use PharIo\Version\Exception;
 
 class CompanyController extends Controller
 {
-    public function __construct()
+    private PremiumCompanyService $companyService;
+
+    public function __construct(PremiumCompanyService $companyService)
     {
         $this->middleware('apiMid');
         $this->user = auth('api')->authenticate();
+        $this->companyService = $companyService;
     }
 
     public function index()
@@ -123,6 +129,29 @@ class CompanyController extends Controller
             return response()->json([
                 'error' => $exception->getMessage(),
             ], 500);
+        }
+    }
+
+    public function premium($id)
+    {
+        $this->companyService->makeCompanyPremium($id, 1, PremiumEnum::DASHBOARD, Auth::guard('web')->id());
+        return response()->json(['company' => Company::where('id', $id)->with('premium')->first()]);
+    }
+
+    public function cancelPremium($id)
+    {
+        $company = Company::find($id);
+        $this->companyService->deletePremium($company);
+        return response()->json(['message' => 'your-premium-cancelled']);
+    }
+
+    public function extendPremium($id)
+    {
+        if (Company::find($id)->premium()->exists()) {
+            $this->companyService->extendPremiumTime($id, 30);
+            return response()->json(['message' => 'you-extend-time-1-m']);
+        } else {
+            return response()->json(['message' => 'your-company-not-premium']);
         }
     }
 }

@@ -3,16 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin;
 use App\Models\Term;
 use App\Services\UserService;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use JetBrains\PhpStorm\NoReturn;
 use Laravel\Socialite\Facades\Socialite;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
@@ -21,7 +21,7 @@ class UserController extends Controller
     public function __construct(UserService $userService)
     {
         $this->userService = $userService;
-        $this->middleware('apiMid', ['except' => ['login', 'register', 'forgotPassword', 'term', 'resetPassword']]);
+        $this->middleware('apiMid', ['except' => ['login', 'register', 'forgotPassword', 'term', 'resetPassword','checkUser']]);
     }
 
     /**
@@ -66,32 +66,51 @@ class UserController extends Controller
 
     public function resetPassword(Request $request)
     {
-        $result = $this->userService->resetPassword($request->all());
-        return response()->json($result, $result['status'] == 'success' ? 200 : 500);
+        return $this->userService->resetPassword($request->all());
     }
 
+    /**
+     * @throws AuthenticationException
+     */
     public function refresh()
     {
-        return $this->userService->refresh();
+        $newToken = JWTAuth::refresh(JWTAuth::getToken());
+        $user = JWTAuth::setToken($newToken)->toUser();
+
+        return $this->respondWithToken($newToken, $user);
     }
 
+    /**
+     * Get the token and user details in the response.
+     *
+     * @param string $token
+     * @param \App\Models\User $user
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function respondWithToken(string $token, \App\Models\User $user)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => JWTAuth::factory()->getTTL() * 60,
+            'user' => $user,
+        ]);
+    }
     #[NoReturn] public function changePassword(Request $request)
     {
-        return $this->userService->changePassword($request->all());
+        return $this->userService->changePassword($request);
     }
 
     public function logout()
     {
         $result = $this->userService->logout();
-
         return response()->json($result, 200);
     }
 
     public function term()
     {
-        $term = Term::first();
-
-        return response()->json(['term' => $term]);
+        return response()->json(['term' => Term::first()]);
     }
 
     public function redirectToGoogle()
@@ -117,10 +136,17 @@ class UserController extends Controller
         return Socialite::driver('facebook')->redirect();
     }
 
+    public function check(Request $request)
+    {
+//        $token = $request->header('Authorization');
+//        $authorizationHeader = $request->header('Authorization');
+//        $token = str_replace('Bearer ', '', $authorizationHeader);
+        $token = $request->bearerToken();
+        return $this->userService->checkUser($token);
+    }
+
     public function handleFacebookCallback()
     {
         $result = $this->userService->handleSocialiteCallback('facebook');
-
-        // Handle the result accordingly
     }
 }

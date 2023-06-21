@@ -25,7 +25,7 @@ class VacancyController extends Controller
 
     public function index()
     {
-        return Vacancy::with('description')->get();
+        return Vacancy::where('end_time', '>', Carbon::now())->with('description')->get();
     }
 
     public function all()
@@ -56,7 +56,7 @@ class VacancyController extends Controller
 
     public function show($id)
     {
-        if (Vacancy::where('id', $id)->exists()) {
+        if (Vacancy::where('id', $id)->where('end_time', '>', Carbon::now()) and Vacancy::where('id', $id)->exists()) {
             $vacancy = Vacancy::with(['description', 'premium'])->find($id);
             return response()->json([
                 'vacancy' => $vacancy,

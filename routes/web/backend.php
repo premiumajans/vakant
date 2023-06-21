@@ -56,17 +56,14 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::post('/packages/components/store', [BPackageComponent::class, 'store'])->name('storeComponentPackage');
     Route::post('/packages/components/{id}/update', [BPackageComponent::class, 'update'])->name('updateComponentPackage');
     Route::get('/packages/components/{id}/edit', [BPackageComponent::class, 'edit'])->name('editComponentPackages');
-    Route::get('/site-users/{id}/company', [BSiteUsers::class, 'company'])->name('userCompany');
 
+    Route::get('/site-users/{id}/company', [BSiteUsers::class, 'company'])->name('userCompany');
     Route::get('/site-users/{id}/company/get-premium', [BSiteUsers::class, 'getPremium'])->name('userCompanyPremium');
     Route::put('/site-users/{id}/company/get-premium-time', [BSiteUsers::class, 'getPremiumTime'])->name('userCompanyPremiumTime');
     Route::get('/site-users/{id}/company/remove-premium', [BSiteUsers::class, 'getPremiumCancel'])->name('userCompanyPremiumCancel');
-
-    Route::get('/vacancies/{id}/get-premium', [\App\Http\Controllers\Backend\VacancyController::class, 'getPremium'])->name('VacancyPremium');
-    Route::put('/vacancies/{id}/get-premium-time', [\App\Http\Controllers\Backend\VacancyController::class, 'getPremiumTime'])->name('VacancyPremiumTime');
-    Route::get('/vacancies/{id}/remove-premium', [\App\Http\Controllers\Backend\VacancyController::class, 'getPremiumCancel'])->name('VacancyPremiumCancel');
-
-
+    Route::get('/vacancies/{id}/get-premium', [App\Http\Controllers\Backend\VacancyController::class, 'getPremium'])->name('VacancyPremium');
+    Route::put('/vacancies/{id}/get-premium-time', [App\Http\Controllers\Backend\VacancyController::class, 'getPremiumTime'])->name('VacancyPremiumTime');
+    Route::get('/vacancies/{id}/remove-premium', [App\Http\Controllers\Backend\VacancyController::class, 'getPremiumCancel'])->name('VacancyPremiumCancel');
     Route::post('/site-users/{id}/company/create', [BSiteUsers::class, 'companyCreate'])->name('userCompanyCreate');
     Route::post('/package/add-new-component/', [BPackageComponent::class, 'addNewComponent'])->name('addNewComponent');
     Route::get('/vacancies/approved', [BVacancy::class, 'approved'])->name('approvedVacancies');
@@ -74,8 +71,6 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::get('/vacancies/updated', [BVacancy::class, 'updated'])->name('updatedVacancies');
     Route::get('/vacancy/append/{id}', [BVacancy::class, 'approveVacancy'])->name('approve-vacancy');
     Route::get('/vacancy/append/{id}/update', [BVacancy::class, 'approveUpdatedVacancy'])->name('approve-updated-vacancy');
-
-
 
 //Resources
     Route::resource('/categories', BCategory::class);

@@ -106,31 +106,6 @@ class VacancyController extends Controller
         return view('backend.vacancies.show', get_defined_vars());
     }
 
-    public function getPremium($id)
-    {
-        checkPermission('vacancy edit');
-        $this->premiumVacancyService->makeVacancyPremium($id, 1);
-        return redirect()->back();
-    }
-
-    public function getPremiumTime(Request $request, $id)
-    {
-        checkPermission('users create');
-        $this->premiumVacancyService->extendPremiumTime($id, $request->time);
-        return redirect()->back();
-    }
-
-    public function getPremiumCancel($id)
-    {
-        checkPermission('users create');
-        $vacancy = Vacancy::find($id);
-        if ($vacancy) {
-            $this->premiumVacancyService->deletePremium($vacancy);
-        }
-        alert()->success(__('messages.success'));
-        return redirect()->back();
-    }
-
     public function approved()
     {
         checkPermission('vacancy index');
@@ -150,6 +125,45 @@ class VacancyController extends Controller
         checkPermission('vacancy index');
         $updatedVacancies = VacancyUpdate::all();
         return view('backend.vacancies.updated', get_defined_vars());
+    }
+
+    public function singleUpdated($id)
+    {
+        checkPermission('vacancy index');
+        $vacancy = VacancyUpdate::find($id);
+        return view('backend.vacancies.merge', get_defined_vars());
+    }
+
+    public function updateMergedVacancy(Request $request, $id)
+    {
+        checkPermission('vacancy edit');
+        try {
+            $newVacany = VacancyUpdate::find($id);
+            $newVacany->update([
+                'position' => $request->position,
+                'category_id' => $request->category,
+                'company' => $request->company,
+                'min_salary' => $request->minimum_salary,
+                'max_salary' => $request->maximum_salary,
+                'min_age' => $request->minimum_age,
+                'max_age' => $request->maximum_age,
+                'education_id' => $request->education,
+                'experience_id' => $request->experience,
+                'city_id' => $request->city,
+                'mode_id' => $request->mode,
+                'relevant_people' => $request->relevant_people,
+                'candidate_requirement' => $request->candidate_requirements,
+                'job_description' => $request->about_job,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'tags' => $request->tags,
+            ]);
+            alert()->success(__('messages.success'));
+            return redirect()->back();
+        } catch (Exception $e) {
+            alert()->error(__('messages.error'));
+            return redirect()->back();
+        }
     }
 
     public function approveVacancy($id)
@@ -189,14 +203,16 @@ class VacancyController extends Controller
         $vacancy->description()->update(
             ['position' => $updatedVacancy->position],
             ['category_id' => $updatedVacancy->category_id],
+            ['company' => $updatedVacancy->company],
             ['min_salary' => $updatedVacancy->min_salary],
             ['max_salary' => $updatedVacancy->max_salary],
+            ['min_age' => $updatedVacancy->min_age],
+            ['max_age' => $updatedVacancy->max_age],
             ['education_id' => $updatedVacancy->education_id],
             ['experience_id' => $updatedVacancy->experience_id],
             ['city_id' => $updatedVacancy->city_id],
             ['mode_id' => $updatedVacancy->mode_id],
-            ['company' => $updatedVacancy->company],
-            ['relevant_people' => $updatedVacancy->max_age],
+            ['relevant_people' => $updatedVacancy->relevant_people],
             ['candidate_requirement' => $updatedVacancy->candidate_requirements],
             ['job_description' => $updatedVacancy->about_job],
             ['email' => $updatedVacancy->email],
@@ -205,6 +221,31 @@ class VacancyController extends Controller
         );
         $vacancy->admin_status = StatusEnum::ACTIVE;
         $vacancy->save();
+    }
+
+    public function getPremium($id)
+    {
+        checkPermission('vacancy edit');
+        $this->premiumVacancyService->makeVacancyPremium($id, 1);
+        return redirect()->back();
+    }
+
+    public function getPremiumTime(Request $request, $id)
+    {
+        checkPermission('users create');
+        $this->premiumVacancyService->extendPremiumTime($id, $request->time);
+        return redirect()->back();
+    }
+
+    public function getPremiumCancel($id)
+    {
+        checkPermission('users create');
+        $vacancy = Vacancy::find($id);
+        if ($vacancy) {
+            $this->premiumVacancyService->deletePremium($vacancy);
+        }
+        alert()->success(__('messages.success'));
+        return redirect()->back();
     }
 
     public function delete($id)

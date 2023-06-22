@@ -132,7 +132,6 @@ class VacancyController extends Controller
         $vacancy->shared_time = Carbon::now();
         $vacancy->end_time = Carbon::now()->addMonth();
         $vacancy->save();
-
         return $vacancy;
     }
 
@@ -146,6 +145,9 @@ class VacancyController extends Controller
 
     private function createVacancyUpdate($oldVacancy, $request)
     {
+        if ($oldVacancy->updates()->exists()) {
+            $oldVacancy->updates()->delete();
+        }
         $newVacancy = new VacancyUpdate();
         $newVacancy->vacancy_id = $oldVacancy->id;
         $newVacancy->relevant_people = $request->relevant_people;

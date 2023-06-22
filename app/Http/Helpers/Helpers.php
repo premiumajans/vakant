@@ -145,7 +145,7 @@ if (!function_exists('vacancy_tags')) {
             $tagsArray = [];
             $array = json_decode($tags);
             foreach ($array as $t) {
-                array_push($tagsArray, $t->value);
+                $tagsArray[] = $t->value;
             }
             return $tagsArray;
         } catch (Exception $e) {

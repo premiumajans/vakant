@@ -66,9 +66,13 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::get('/vacancies/{id}/remove-premium', [App\Http\Controllers\Backend\VacancyController::class, 'getPremiumCancel'])->name('VacancyPremiumCancel');
     Route::post('/site-users/{id}/company/create', [BSiteUsers::class, 'companyCreate'])->name('userCompanyCreate');
     Route::post('/package/add-new-component/', [BPackageComponent::class, 'addNewComponent'])->name('addNewComponent');
+
     Route::get('/vacancies/approved', [BVacancy::class, 'approved'])->name('approvedVacancies');
     Route::get('/vacancies/pending', [BVacancy::class, 'pending'])->name('pendingVacancies');
     Route::get('/vacancies/updated', [BVacancy::class, 'updated'])->name('updatedVacancies');
+    Route::get('/vacancies/{id}/updated', [BVacancy::class, 'singleUpdated'])->name('updatedVacancy');
+    Route::post('vacancies/{id}/update', [BVacancy::class, 'updateMergedVacancy'])->name('updateMergedVacancy');
+
     Route::get('/vacancy/append/{id}', [BVacancy::class, 'approveVacancy'])->name('approve-vacancy');
     Route::get('/vacancy/append/{id}/update', [BVacancy::class, 'approveUpdatedVacancy'])->name('approve-updated-vacancy');
 

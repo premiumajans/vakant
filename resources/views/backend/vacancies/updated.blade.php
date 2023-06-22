@@ -60,7 +60,7 @@
                                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
                                                 <li>
                                                     <a class="dropdown-item active"
-                                                       href="{{ route('backend.vacancies.edit',$vacancy->id) }}">@lang('backend.edit')</a>
+                                                       href="{{ route('backend.updatedVacancy',$vacancy->id) }}">@lang('backend.edit')</a>
                                                 </li>
                                                 <li>
                                                     <hr class="dropdown-divider">

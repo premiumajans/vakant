@@ -40,7 +40,6 @@ class UserController extends Controller
         }
         return $this->userService->login($request->only('email', 'password'));
     }
-
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -76,7 +75,6 @@ class UserController extends Controller
     {
         $newToken = JWTAuth::refresh(JWTAuth::getToken());
         $user = JWTAuth::setToken($newToken)->toUser();
-
         return $this->respondWithToken($newToken, $user);
     }
 

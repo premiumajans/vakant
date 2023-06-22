@@ -7,10 +7,12 @@ use App\Http\Enums\CompanyEnum;
 use App\Http\Enums\PremiumEnum;
 use App\Models\Admin;
 use App\Models\Company;
-use App\Models\CompanyTranslation;
+use App\Models\PremiumCompany;
+use App\Models\PremiumCompanyHistory;
 use App\Services\PremiumCompanyService;
+use Carbon\Carbon;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use PharIo\Version\Exception;
 
@@ -18,6 +20,9 @@ class CompanyController extends Controller
 {
     private PremiumCompanyService $companyService;
 
+    /**
+     * @throws AuthenticationException
+     */
     public function __construct(PremiumCompanyService $companyService)
     {
         $this->middleware('apiMid');
@@ -29,7 +34,7 @@ class CompanyController extends Controller
     {
         if (Admin::find($this->user->id)->company()->exists()) {
             $company = Admin::find($this->user->id)->company()->with('premium')->first();
-            $premium = Company::find($company->id)->premium()->exists();
+            $premium = $company->premium()->exists();
             return response()->json([
                 'status' => 'success',
                 'premium' => $premium,
@@ -134,8 +139,26 @@ class CompanyController extends Controller
 
     public function premium($id)
     {
-        $this->companyService->makeCompanyPremium($id, 1, PremiumEnum::DASHBOARD, Auth::guard('web')->id());
-        return response()->json(['company' => Company::where('id', $id)->with('premium')->first()]);
+//        $this->companyService->makeCompanyPremium($id, 1, PremiumEnum::DASHBOARD, $this->user->id);
+//        return response()->json(['company' => Company::where('id', $id)->with('premium')->first()]);
+        try {
+            $company = Company::find($id);
+            $premium = new PremiumCompany();
+            $premium->premium = CompanyEnum::PREMIUM;
+            $premium->start_time = Carbon::now();
+            $premium->end_time = Carbon::now()->addMonths(1);
+            $company->premium()->save($premium);
+            $history = new PremiumCompanyHistory();
+            $history->start_time = $premium->start_time;
+            $history->end_time = $premium->end_time;
+            $history->type = PremiumEnum::DASHBOARD;
+            $history->admin_id = $this->user->id;
+            $company->history()->save($history);
+            return response()->json(['company' => $company]);
+            alert()->success(__('messages.success'));
+        } catch (Exception $e) {
+            alert()->error(__('messages.error'));
+        }
     }
 
     public function cancelPremium($id)

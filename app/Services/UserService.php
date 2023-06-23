@@ -5,14 +5,18 @@ namespace App\Services;
 use App\Models\Admin;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Validator;
-use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
+use Illuminate\Support\Facades\{
+    Auth,
+    Hash,
+    Mail,
+    Validator,
+};
+use Tymon\JWTAuth\Exceptions\{
+    TokenBlacklistedException,
+    JWTException,
+    TokenExpiredException,
+};
 use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 
 class UserService
 {

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use JetBrains\PhpStorm\NoReturn;
 use Laravel\Socialite\Facades\Socialite;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
@@ -73,9 +74,18 @@ class UserController extends Controller
      */
     public function refresh()
     {
-        $newToken = JWTAuth::refresh(JWTAuth::getToken());
-        $user = JWTAuth::setToken($newToken)->toUser();
-        return $this->respondWithToken($newToken, $user);
+        try {
+            $refreshedToken = JWTAuth::parseToken()->refresh();
+            $user = JWTAuth::parseToken()->authenticate();
+            return response()->json([
+                'token' => $refreshedToken,
+                'user' => $user
+            ]);
+        } catch (TokenExpiredException $e) {
+            return response()->json(['error' => 'Token expired'], 401);
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'Token refresh failed'], 401);
+        }
     }
 
     /**

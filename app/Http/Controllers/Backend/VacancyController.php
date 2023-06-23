@@ -187,8 +187,30 @@ class VacancyController extends Controller
         checkPermission('vacancy edit');
         try {
             $updatedVacancy = VacancyUpdate::find($id);
-            $originalVacancy = Vacancy::find($updatedVacancy->vacancy_id);
-            $this->mergeVacancy($originalVacancy, $updatedVacancy);
+            $vacancy = Vacancy::find($updatedVacancy->vacancy_id);
+            $vacancy->description()->each(function ($description) use ($updatedVacancy) {
+                $description->update([
+                    'position' => $updatedVacancy->position,
+                    'category_id' => $updatedVacancy->category_id,
+                    'company' => $updatedVacancy->company,
+                    'min_salary' => $updatedVacancy->min_salary,
+                    'max_salary' => $updatedVacancy->max_salary,
+                    'min_age' => $updatedVacancy->min_age,
+                    'max_age' => $updatedVacancy->max_age,
+                    'education_id' => $updatedVacancy->education_id,
+                    'experience_id' => $updatedVacancy->experience_id,
+                    'city_id' => $updatedVacancy->city_id,
+                    'mode_id' => $updatedVacancy->mode_id,
+                    'relevant_people' => $updatedVacancy->relevant_people,
+                    'candidate_requirement' => $updatedVacancy->candidate_requirement,
+                    'job_description' => $updatedVacancy->job_description,
+                    'email' => $updatedVacancy->email,
+                    'phone' => $updatedVacancy->phone,
+                    'tags' => $updatedVacancy->tags,
+                ]);
+            });
+            $vacancy->admin_status = StatusEnum::ACTIVE;
+            $vacancy->save();
             $updatedVacancy->delete();
             alert()->success(__('messages.success'));
             return redirect()->back();
@@ -202,16 +224,16 @@ class VacancyController extends Controller
     {
         $vacancy->description()->update(
             ['position' => $updatedVacancy->position],
-            ['category_id' => $updatedVacancy->category_id],
+            ['category_id' => $updatedVacancy->category],
             ['company' => $updatedVacancy->company],
-            ['min_salary' => $updatedVacancy->min_salary],
-            ['max_salary' => $updatedVacancy->max_salary],
-            ['min_age' => $updatedVacancy->min_age],
-            ['max_age' => $updatedVacancy->max_age],
-            ['education_id' => $updatedVacancy->education_id],
-            ['experience_id' => $updatedVacancy->experience_id],
-            ['city_id' => $updatedVacancy->city_id],
-            ['mode_id' => $updatedVacancy->mode_id],
+            ['min_salary' => $updatedVacancy->minimum_salary],
+            ['max_salary' => $updatedVacancy->maximum_salary],
+            ['min_age' => $updatedVacancy->minimum_age],
+            ['max_age' => $updatedVacancy->maximum_age],
+            ['education_id' => $updatedVacancy->education],
+            ['experience_id' => $updatedVacancy->experience],
+            ['city_id' => $updatedVacancy->city],
+            ['mode_id' => $updatedVacancy->mode],
             ['relevant_people' => $updatedVacancy->relevant_people],
             ['candidate_requirement' => $updatedVacancy->candidate_requirements],
             ['job_description' => $updatedVacancy->about_job],

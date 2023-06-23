@@ -124,7 +124,6 @@ class CompanyController extends Controller
             }
             $company = Admin::find($this->user->id)->company()->first();
             $company->update([
-//                'photo' => $data['photo'],
                 'photo' => api_upload('users/companies', $request->file('photo'))
             ]);
             return response()->json([

@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->integer('vacancy_type');
             $table->string('admin_status');
             $table->string('admin_id')->nullable();
+            $table->integer('view_count')->default(0);
             $table->string('shared_time');
             $table->string('approved_time')->nullable();
             $table->string('updated_at')->nullable();

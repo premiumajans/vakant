@@ -2,25 +2,21 @@
 
 namespace App\Http\Controllers\Api;
 
-
 use App\Http\Controllers\General\VacancyController as GeneralVacancy;
-use App\Http\Enums\VacancyAdminEnum;
+use App\Http\Enums\{VacancyEnum, CauserEnum, StatusEnum, VacancyAdminEnum};
+use App\Models\{VacancyUpdate, Company, Vacancy};
 use App\Http\Controllers\Controller;
-use App\Http\Enums\VacancyEnum;
-use App\Http\Enums\CauserEnum;
-use App\Http\Enums\StatusEnum;
-use App\Models\VacancyUpdate;
-use Exception;
 use Illuminate\Http\Request;
-use App\Models\Company;
-use App\Models\Vacancy;
-use Carbon\Carbon;
+use Exception;
+
+use Illuminate\Support\Collection;
+use Illuminate\Support\Carbon;
 
 class VacancyController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('apiMid', ['except' => ['show', 'index']]);
+        $this->middleware('apiMid', ['except' => ['show', 'index', 'count']]);
     }
 
     public function index()
@@ -55,10 +51,23 @@ class VacancyController extends Controller
         }
     }
 
+    public function count()
+    {
+        $vacancies = Vacancy::where('end_time', '>', Carbon::now())->with('description')->get();
+        $categoryCounts = $vacancies->flatMap(function ($vacancy) {
+            return $vacancy->description->groupBy('category_id')->reduce(function ($carry, $items) {
+                $carry[$items->first()->category_id] = count($items);
+                return $carry;
+            }, []);
+        });
+        return response()->json($categoryCounts);
+    }
+
     public function show($id)
     {
         if (Vacancy::where('id', $id)->where('end_time', '>', Carbon::now()) and Vacancy::where('id', $id)->exists()) {
             $vacancy = Vacancy::with(['description', 'premium'])->find($id);
+            $vacancy->increment('view_count');
             return response()->json([
                 'vacancy' => $vacancy,
             ], 200);

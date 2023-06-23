@@ -27,6 +27,7 @@ Route::get('/vacancies/all', [\App\Http\Controllers\Api\VacancyController::class
 Route::get('/vacancies/{id}', [\App\Http\Controllers\Api\VacancyController::class, 'show']);
 Route::post('/vacancies/{id}/update', [\App\Http\Controllers\Api\VacancyController::class, 'update']);
 Route::post('/vacancies/{id}/delete', [\App\Http\Controllers\Api\VacancyController::class, 'deleteVacancy']);
+Route::get('/vacancy/count', [\App\Http\Controllers\Api\VacancyController::class, 'count']);
 
 Route::get('/my-items/', [\App\Http\Controllers\Api\VacancyController::class, 'myItems']);
 

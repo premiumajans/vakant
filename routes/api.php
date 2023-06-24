@@ -31,7 +31,7 @@ Route::get('/vacancy/count', [\App\Http\Controllers\Api\VacancyController::class
 
 Route::get('/my-items/', [\App\Http\Controllers\Api\VacancyController::class, 'myItems']);
 
-Route::group(['prefix' => '/', 'as' => 'api.', 'middleware' => 'apiMid'], function () {
+Route::group(['prefix' => '/', 'as' => 'api.'], function () {
     Route::resource('settings', Setting::class)->only(['index', 'show']);
 });
 
@@ -42,18 +42,6 @@ Route::resource('categories', Category::class)->only(['index', 'show']);
 Route::resource('modes', Mode::class)->only(['index', 'show']);
 Route::resource('vacancies', Vacancy::class)->only(['index', 'show']);
 Route::resource('city', City::class)->only(['index', 'show']);
-Route::get('static-token', function () {
-    $expirationTime = now()->addDays(7);
-    $payload = [
-        'exp' => $expirationTime->timestamp,
-    ];
-    $token = JWTAuth::encode($payload);
-    return response()->json([
-        'token' => $token,
-        'type' => 'bearer',
-        'expires_in' => $expirationTime->diffInSeconds(now()),
-    ]);
-});
 
 Route::group(['prefix' => '/vacancies'], function () {
     Route::post('/store', [Vacancy::class, 'store']);

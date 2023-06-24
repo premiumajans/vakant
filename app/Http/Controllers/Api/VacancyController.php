@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\General\VacancyController as GeneralVacancy;
 use App\Http\Enums\{VacancyEnum, CauserEnum, StatusEnum, VacancyAdminEnum};
-use App\Models\{VacancyUpdate, Company, Vacancy};
+use App\Models\{AltCategory, VacancyUpdate, Company, Vacancy};
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Exception;
@@ -53,13 +53,19 @@ class VacancyController extends Controller
 
     public function count()
     {
-        $vacancies = Vacancy::where('end_time', '>', Carbon::now())->with('description')->get();
-        $categoryCounts = $vacancies->flatMap(function ($vacancy) {
-            return $vacancy->description->groupBy('category_id')->reduce(function ($carry, $items) {
-                $carry[$items->first()->category_id] = count($items);
-                return $carry;
-            }, []);
-        });
+        $vacancies = Vacancy::with('description')->get();
+        $categoryCounts = [];
+        foreach ($vacancies as $vacancy) {
+            if ($vacancy->description) {
+                $categoryId = $vacancy->description->category_id;
+                $main = AltCategory::find($categoryId)->category()->first()->id;
+                if (!isset($categoryCounts[$main])) {
+                    $categoryCounts[$main] = 1;
+                } else {
+                    $categoryCounts[$main]++;
+                }
+            }
+        }
         return response()->json($categoryCounts);
     }
 
@@ -121,8 +127,7 @@ class VacancyController extends Controller
             }
         } catch (Exception $exception) {
             return response()->json([
-                'status' => 'error',
-                'message' => 'error',
+                'message' => $exception->getMessage(),
             ], 500);
         }
     }

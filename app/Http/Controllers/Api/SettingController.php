@@ -9,6 +9,7 @@ use function GuzzleHttp\Promise\all;
 
 class SettingController extends Controller
 {
+
     public function index()
     {
         return response()->json(['settings' => Setting::all()]);

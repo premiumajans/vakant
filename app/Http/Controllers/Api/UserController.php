@@ -2,17 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Models\Term;
-use App\Services\UserService;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use JetBrains\PhpStorm\NoReturn;
-use Laravel\Socialite\Facades\Socialite;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use App\{Http\Controllers\Controller,Models\Term,Services\UserService};
+use Illuminate\{Auth\AuthenticationException,Http\Request,Support\Facades\Validator};
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
@@ -24,7 +15,6 @@ class UserController extends Controller
         $this->userService = $userService;
         $this->middleware('apiMid', ['except' => ['login', 'register', 'forgotPassword', 'term', 'resetPassword','checkUser']]);
     }
-
     /**
      * @throws AuthenticationException
      */
@@ -57,75 +47,37 @@ class UserController extends Controller
         }
         return $this->userService->register($request->all());
     }
-
     public function forgotPassword(Request $request)
     {
         $result = $this->userService->forgotPassword($request->email);
         return response()->json($result, $result['status'] == 'success' ? 200 : 404);
     }
-
     public function resetPassword(Request $request)
     {
         return $this->userService->resetPassword($request->all());
     }
 
-    /**
-     * @throws AuthenticationException
-     */
-    public function refresh()
+    public function refresh(Request $request)
     {
-        try {
-            $refreshedToken = JWTAuth::parseToken()->refresh();
-            $user = JWTAuth::parseToken()->authenticate();
-            return response()->json([
-                'token' => $refreshedToken,
-                'user' => $user
-            ]);
-        } catch (TokenExpiredException $e) {
-            return response()->json(['error' => 'Token expired'], 401);
-        } catch (JWTException $e) {
-            return response()->json(['error' => 'Token refresh failed'], 401);
-        }
-    }
-
-    /**
-     * Get the token and user details in the response.
-     *
-     * @param string $token
-     * @param \App\Models\User $user
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function respondWithToken(string $token, \App\Models\User $user)
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => JWTAuth::factory()->getTTL() * 60,
-            'user' => $user,
-        ]);
+        return $this->userService->refresh();
     }
     #[NoReturn] public function changePassword(Request $request)
     {
         return $this->userService->changePassword($request);
     }
-
     public function logout()
     {
         $result = $this->userService->logout();
         return response()->json($result, 200);
     }
-
     public function term()
     {
         return response()->json(['term' => Term::first()]);
     }
-
     public function redirectToGoogle()
     {
         return Socialite::driver('google')->redirect();
     }
-
     public function handleGoogleCallback()
     {
         $result = $this->userService->handleSocialiteCallback('google');
@@ -138,12 +90,10 @@ class UserController extends Controller
             return redirect()->back();
         }
     }
-
     public function redirectToFacebook()
     {
         return Socialite::driver('facebook')->redirect();
     }
-
     public function check(Request $request)
     {
 //        $token = $request->header('Authorization');

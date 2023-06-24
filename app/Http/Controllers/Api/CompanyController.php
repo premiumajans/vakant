@@ -141,10 +141,7 @@ class CompanyController extends Controller
 //        $this->companyService->makeCompanyPremium($id, 1, PremiumEnum::DASHBOARD, $this->user->id);
 //        return response()->json(['company' => Company::where('id', $id)->with('premium')->first()]);
         try {
-            $company = Company::find($id);
-            if ($company->premium()->exists()) {
-                return response()->json(['company' => 'company-not-found']);
-            } else {
+                $company = Company::find($id);
                 $premium = new PremiumCompany();
                 $premium->premium = CompanyEnum::PREMIUM;
                 $premium->start_time = Carbon::now();
@@ -158,7 +155,6 @@ class CompanyController extends Controller
                 $company->history()->save($history);
                 return response()->json(['company' => $company]);
                 alert()->success(__('messages.success'));
-            }
         } catch (Exception $e) {
             alert()->error(__('messages.error'));
         }

@@ -48,39 +48,26 @@ class UserService
         ], 200);
     }
 
-    /**
-     * @throws AuthenticationException
-     */
     public function refresh(): \Illuminate\Http\JsonResponse
     {
-//        try {
-//            $token = JWTAuth::parseToken()->refresh();
-//        } catch (TokenExpiredException $e) {
-//            return response()->json(['error' => 'token_expired'], 401);
-//        } catch (TokenBlacklistedException $e) {
-//            // Remove the blacklisted token from the blacklist
-//            JWTAuth::invalidate(JWTAuth::getToken());
-//
-//            // Generate a new token
-//            $token = JWTAuth::refresh();
-//        } catch (JWTException $e) {
-//            return response()->json(['error' => 'token_invalid'], 401);
-//        }
         try {
             $token = JWTAuth::parseToken()->refresh();
         } catch (TokenExpiredException $e) {
             return response()->json(['error' => 'token_expired'], 401);
-        } catch (TokenBlacklistedException $e) {
-            // Remove the blacklisted token from the blacklist
-            JWTAuth::invalidate(JWTAuth::getToken());
-
-            // Generate a new token
-            $token = JWTAuth::refresh();
-        } catch (JWTException $e) {
+        } catch (TokenInvalidException $e) {
             return response()->json(['error' => 'token_invalid'], 401);
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'token_absent'], 401);
         }
+        $user = JWTAuth::user();
+        return response()->json([
+            'user' => $user,
+            'authorisation' => [
+                'token' => $token,
+                'type' => 'bearer',
+            ]
+        ], 200);
     }
-
     public function register(array $data): \Illuminate\Http\JsonResponse
     {
         $user = new Admin();

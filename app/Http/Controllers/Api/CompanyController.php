@@ -142,19 +142,23 @@ class CompanyController extends Controller
 //        return response()->json(['company' => Company::where('id', $id)->with('premium')->first()]);
         try {
             $company = Company::find($id);
-            $premium = new PremiumCompany();
-            $premium->premium = CompanyEnum::PREMIUM;
-            $premium->start_time = Carbon::now();
-            $premium->end_time = Carbon::now()->addMonths(1);
-            $company->premium()->save($premium);
-            $history = new PremiumCompanyHistory();
-            $history->start_time = $premium->start_time;
-            $history->end_time = $premium->end_time;
-            $history->type = PremiumEnum::DASHBOARD;
-            $history->admin_id = $this->user->id;
-            $company->history()->save($history);
-            return response()->json(['company' => $company]);
-            alert()->success(__('messages.success'));
+            if ($company->premium()->exists()) {
+                return response()->json(['company' => 'company-not-found']);
+            } else {
+                $premium = new PremiumCompany();
+                $premium->premium = CompanyEnum::PREMIUM;
+                $premium->start_time = Carbon::now();
+                $premium->end_time = Carbon::now()->addMonths(1);
+                $company->premium()->save($premium);
+                $history = new PremiumCompanyHistory();
+                $history->start_time = $premium->start_time;
+                $history->end_time = $premium->end_time;
+                $history->type = PremiumEnum::DASHBOARD;
+                $history->admin_id = $this->user->id;
+                $company->history()->save($history);
+                return response()->json(['company' => $company]);
+                alert()->success(__('messages.success'));
+            }
         } catch (Exception $e) {
             alert()->error(__('messages.error'));
         }

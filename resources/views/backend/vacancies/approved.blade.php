@@ -51,6 +51,14 @@
                                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
                                                 <li>
                                                     <a class="dropdown-item active"
+                                                       href="{{ route('backend.VacancyPremium',$vacancy->id) }}">@lang('backend.get-premium')</a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item active"
+                                                       href="{{ route('backend.VacancyPremiumCancel',$vacancy->id) }}">@lang('backend.premium')&nbsp;@lang('backend.cancel')</a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item active"
                                                        href="{{ route('backend.vacancies.edit',$vacancy->id) }}">@lang('backend.edit')</a>
                                                 </li>
                                                 <li>

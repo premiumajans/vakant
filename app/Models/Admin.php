@@ -21,7 +21,6 @@ class Admin extends Authenticatable implements JWTSubject
         HasProfilePhoto,
         Notifiable,
         TwoFactorAuthenticatable;
-
     protected $guarded = [];
     protected string $guard = 'admin';
     public function company(): \Illuminate\Database\Eloquent\Relations\HasMany

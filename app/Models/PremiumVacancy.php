@@ -9,8 +9,7 @@ class PremiumVacancy extends Model
 {
     protected $fillable = ['premium', 'start_time', 'end_time'];
     public $timestamps = false;
-
-    public function vacancy()
+    public function vacancy(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Vacancy::class);
     }

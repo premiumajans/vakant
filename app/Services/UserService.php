@@ -5,17 +5,8 @@ namespace App\Services;
 use App\Models\Admin;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Support\Facades\{
-    Auth,
-    Hash,
-    Mail,
-    Validator,
-};
-use Tymon\JWTAuth\Exceptions\{
-    TokenBlacklistedException,
-    JWTException,
-    TokenExpiredException,
-};
+use Illuminate\Support\Facades\{Auth, Hash, Mail, Validator,};
+use Tymon\JWTAuth\Exceptions\{TokenBlacklistedException, JWTException, TokenExpiredException, TokenInvalidException};
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserService
@@ -50,24 +41,37 @@ class UserService
 
     public function refresh(): \Illuminate\Http\JsonResponse
     {
+//        try {
+//            $token = JWTAuth::parseToken()->refresh();
+//        } catch (TokenExpiredException $e) {
+//            return response()->json(['error' => 'token_expired'], 401);
+//        } catch (TokenInvalidException $e) {
+//            return response()->json(['error' => 'token_invalid'], 401);
+//        } catch (JWTException $e) {
+//            return response()->json(['error' => 'token_absent'], 401);
+//        }
+//        $user = JWTAuth::user();
+//        return response()->json([
+//            'user' => $user,
+//            'authorisation' => [
+//                'token' => $token,
+//                'type' => 'bearer',
+//            ]
+//        ], 200);
         try {
-            $token = JWTAuth::parseToken()->refresh();
-        } catch (TokenExpiredException $e) {
-            return response()->json(['error' => 'token_expired'], 401);
-        } catch (TokenInvalidException $e) {
-            return response()->json(['error' => 'token_invalid'], 401);
-        } catch (JWTException $e) {
-            return response()->json(['error' => 'token_absent'], 401);
+            $token = JWTAuth::getToken();
+            $newToken = JWTAuth::refresh($token);
+            $user = Auth::guard('api');
+            $token = Auth::guard();
+            return response()->json([
+                'token' => $newToken,
+                'user' => $user
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Unable to refresh token'], 500);
         }
-        $user = JWTAuth::user();
-        return response()->json([
-            'user' => $user,
-            'authorisation' => [
-                'token' => $token,
-                'type' => 'bearer',
-            ]
-        ], 200);
     }
+
     public function register(array $data): \Illuminate\Http\JsonResponse
     {
         $user = new Admin();

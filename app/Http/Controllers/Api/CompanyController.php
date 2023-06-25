@@ -19,7 +19,6 @@ use PharIo\Version\Exception;
 class CompanyController extends Controller
 {
     private PremiumCompanyService $companyService;
-
     /**
      * @throws AuthenticationException
      */

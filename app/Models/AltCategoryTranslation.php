@@ -11,7 +11,6 @@ class AltCategoryTranslation extends Model
     use LogsActivity;
     public $timestamps = false;
     protected $fillable = ['name'];
-
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->logOnly(['name']);

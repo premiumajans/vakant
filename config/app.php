@@ -3,34 +3,21 @@
 use Illuminate\Support\Facades\Facade;
 
 return [
-
     'name' => env('APP_NAME', 'Dirnis.az'),
-
     'env' => env('APP_ENV', 'production'),
-
     'debug' => (bool) env('APP_DEBUG', false),
-
     'url' => env('APP_URL', 'https://vakant.az'),
-
     'asset_url' => env('ASSET_URL'),
-
     'timezone' => 'Asia/Baku',
-
     'locale' => 'az',
-
     'fallback_locale' => 'az',
-
     'faker_locale' => 'en_US',
-
     'key' => env('APP_KEY'),
-
     'cipher' => 'AES-256-CBC',
-
     'maintenance' => [
         'driver' => 'file',
         // 'store'  => 'redis',
     ],
-
     'providers' => [
         Illuminate\Auth\AuthServiceProvider::class,
         Illuminate\Broadcasting\BroadcastServiceProvider::class,
@@ -69,8 +56,6 @@ return [
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         L5Swagger\L5SwaggerServiceProvider::class,
     ],
-
-
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,

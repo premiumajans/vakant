@@ -11,7 +11,6 @@ class AboutTranslation extends Model
     use LogsActivity;
     public $timestamps = false;
     protected $fillable = ['content'];
-
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->logOnly(['content']);

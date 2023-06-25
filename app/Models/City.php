@@ -11,9 +11,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class City extends Model implements TranslatableContract
 {
     use Translatable, LogsActivity;
-
-    public $translatedAttributes = ['name'];
-
+    public array $translatedAttributes = ['name'];
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->logAll();

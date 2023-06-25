@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    public function boot(DataCacheService $dataCacheService)
+    public function boot(DataCacheService $dataCacheService): void
     {
         $premiumCompanyService = new \App\Services\PremiumCompanyService();
         $premiumCompanyService->cleanUpExpiredPremiumCompanies();

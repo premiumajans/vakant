@@ -1,8 +1,9 @@
 <?php
 
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Enums\CompanyEnum;
 use App\Http\Enums\PremiumEnum;
 use App\Models\Admin;
@@ -26,7 +27,8 @@ class CompanyController extends Controller
      */
     public function __construct(PremiumCompanyService $companyService)
     {
-        $this->middleware('auth');
+        $this->middleware('apiMid');
+        $this->user = auth('api')->authenticate();
         $this->companyService = $companyService;
     }
 
@@ -56,7 +58,7 @@ class CompanyController extends Controller
             'name' => 'required',
             'email' => 'required',
             'phone' => 'required',
-            'address' => 'required',
+            'adress' => 'required',
         ]);
         if ($validator->fails()) {
             return back()->withErrors($validator->errors());
@@ -68,10 +70,13 @@ class CompanyController extends Controller
                 'name' => $request->name,
                 'phone' => $request->phone,
                 'email' => $request->email,
-                'adress' => $request->address,
+                'adress' => $request->adress,
                 'about' => $request->about,
             ]);
-            return redirect()->back()->with('success', 'Company successfully updated.');
+            return response()->json([
+                'message' => 'company-successfully-updated',
+                'company' => $company
+            ],200);
         } else {
             $company = new Company();
             $company->name = $request->name;
@@ -79,10 +84,12 @@ class CompanyController extends Controller
             $company->email = $request->email;
             $company->about = $request->about;
             $company->company_type = CompanyEnum::SIMPLE;
-            $company->adress = $request->address;
+            $company->adress = $request->adress;
             $companyUser->company()->save($company);
-
-            return redirect()->back()->with('success', 'Company successfully stored.');
+            return response()->json([
+                'message' => 'company-successfully-stored',
+                'company' => $company
+            ],200);
         }
     }
 

@@ -22,10 +22,9 @@ class User extends Authenticatable implements JWTSubject
         Notifiable,
         TwoFactorAuthenticatable;
     protected $guarded = [];
-    protected string $guard = 'admin';
     public function company(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Company::class, 'admin_id');
+        return $this->hasMany(Company::class);
     }
     public function hasCompany(): bool
     {

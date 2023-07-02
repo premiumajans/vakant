@@ -56,7 +56,7 @@ class Kernel extends HttpKernel
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'abilities' => \Laravel\Sanctum\Http\Middleware\CheckAbilities::class,
         'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
-        'adminPanel' => \App\Http\Middleware\User\Admin::class,
         'apiMid' =>  \App\Http\Middleware\TokenMiddleware::class,
+        'admin' => \App\Http\Middleware\Admin::class,
     ];
 }

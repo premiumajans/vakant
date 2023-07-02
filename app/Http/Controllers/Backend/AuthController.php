@@ -24,10 +24,8 @@ class AuthController extends Controller
     {
         //dd($request->all());
         if (auth()->attempt($request->only(['email', 'password']), $request->remember_me)) {
-            dd('he');
             return redirect()->route('backend.dashboard');
         } else {
-            dd('yox');
             return back();
         }
     }

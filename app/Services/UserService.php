@@ -1,7 +1,7 @@
 <?php
 namespace App\Services;
 
-use App\Models\Admin;
+use App\Models\User;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\{Auth, Hash, Mail, Validator};
@@ -44,9 +44,14 @@ class UserService
             $token = JWTAuth::getToken();
             $newToken = JWTAuth::refresh($token);
             $user = Auth::user();
+            $hasCompany = $user->company()->exists();
             return response()->json([
-                'token' => $newToken,
-                'user' => $user
+                'user' => $user,
+                'company' => $hasCompany,
+                'authorisation' => [
+                    'token' => $newToken,
+                    'type' => 'bearer',
+                ],
             ]);
         } catch (\Exception $e) {
             return response()->json(['error' => 'unable-to-refresh-token'], 500);
@@ -55,10 +60,9 @@ class UserService
 
     public function register(array $data): \Illuminate\Http\JsonResponse
     {
-        $user = new Admin();
+        $user = new User();
         $user->name = $data['name'];
         $user->email = $data['email'];
-        $user->current_ad_count = 1;
         $user->password = Hash::make($data['password']);
         $user->save();
         $token = JWTAuth::attempt($data);
@@ -153,6 +157,7 @@ class UserService
             ], 200);
         } else {
             $validator = Validator::make($request->all(), [
+                'name' => 'required',
                 'current_password' => 'required|string',
                 'new_password' => 'required|string|min:6|different:current_password',
                 'confirm_password' => 'required|string|same:new_password',
@@ -167,6 +172,7 @@ class UserService
                     'message' => 'current-password-mismatch',
                 ], 401);
             }
+            $user->name = $request->name;
             $user->password = Hash::make($request->input('new_password'));
             $user->save();
             return response()->json([
@@ -174,7 +180,6 @@ class UserService
             ], 200);
         }
     }
-
     /**
      * Check the user based on the provided JWT token.
      *

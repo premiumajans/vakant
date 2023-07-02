@@ -39,7 +39,7 @@ use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 Route::get('/auth/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/auth/login', [AuthenticatedSessionController::class, 'store'])->name('loginPost');
+Route::post('/auth/login', [AuthController::class, 'login'])->name('loginPost');
 
 Route::group(['middleware' => 'auth:web'], function () {
     Route::get('/', [BHome::class, 'index']);

@@ -12,7 +12,7 @@ class AuthController extends Controller
 
     protected function guard()
     {
-        return auth()->guard('admin');
+        return auth()->guard('web');
     }
 
     public function showLoginForm()
@@ -20,10 +20,15 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    protected function login(Request $request)
+    public function login(Request $request)
     {
-        if ($this->guard()->attempt($request->only(['email', 'password']))) {
-//            return redirect()->route('backend.login');
+        //dd($request->all());
+        if (auth()->attempt($request->only(['email', 'password']), $request->remember_me)) {
+            dd('he');
+            return redirect()->route('backend.dashboard');
+        } else {
+            dd('yox');
+            return back();
         }
     }
 

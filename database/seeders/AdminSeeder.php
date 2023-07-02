@@ -15,9 +15,14 @@ class AdminSeeder extends Seeder
         $admin = Admin::create([
             'name' => 'Admin Vakant',
             'email' => 'admin@vakant.az',
-            'current_ad_count' => 1,
             'password' => '$2y$10$hcn0QuYc5NOiKrjaNMGNIeITHW3bzJ6UeTVWWg/1ZaFQ8eXX1Incm' //Password
         ]);
+        $developer = Admin::create([
+            'name' => 'Developer Vakant',
+            'email' => 'developer@vakant.az',
+            'password' => '$2y$10$hcn0QuYc5NOiKrjaNMGNIeITHW3bzJ6UeTVWWg/1ZaFQ8eXX1Incm', //Password
+        ]);
         $admin->givePermissionTo(Permission::all());
+        $developer->givePermissionTo(Permission::all());
     }
 }

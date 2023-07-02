@@ -3,19 +3,17 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use App\Models\User;
-use Illuminate\Http\Request;
 use App\Http\Requests\Backend\Create\AdminRequest as CreateRequest;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
-use Symfony\Component\HttpFoundation\Response;
 
 class AdminController extends Controller
 {
     public function index()
     {
         checkPermission('users index');
-        $users = User::all();
+        $users = Admin::all();
         return view('backend.users.index', get_defined_vars());
     }
 
@@ -29,7 +27,7 @@ class AdminController extends Controller
     {
         checkPermission('users create');
         try {
-            $user = User::create([
+            $user = Admin::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
@@ -46,7 +44,7 @@ class AdminController extends Controller
     {
         checkPermission('users delete');
         try {
-            User::find($id)->delete();
+            Admin::find($id)->delete();
             alert()->success(__('messages.success'));
             return redirect()->route('backend.users.index');
         } catch (\Exception $e) {

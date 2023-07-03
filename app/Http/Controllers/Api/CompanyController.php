@@ -35,17 +35,16 @@ class CompanyController extends Controller
     public function index()
     {
         $user = auth()->user();
-
         if (User::find($user->id)->company()->exists()) {
             $company = User::find($user->id)->company()->with('premium')->first();
             $premium = $company->premium()->exists();
-            return view('company.index', [
+            return response()->json([
                 'status' => 'success',
                 'premium' => $premium,
                 'message' => $company,
             ]);
         } else {
-            return view('company.index', [
+            return response()->json([
                 'status' => 'error',
                 'message' => 'company-not-found',
             ]);
@@ -76,7 +75,7 @@ class CompanyController extends Controller
             return response()->json([
                 'message' => 'company-successfully-updated',
                 'company' => $company
-            ],200);
+            ], 200);
         } else {
             $company = new Company();
             $company->name = $request->name;
@@ -89,7 +88,7 @@ class CompanyController extends Controller
             return response()->json([
                 'message' => 'company-successfully-stored',
                 'company' => $company
-            ],200);
+            ], 200);
         }
     }
 
@@ -101,9 +100,14 @@ class CompanyController extends Controller
             $company->update([
                 'company_type' => CompanyEnum::PREMIUM,
             ]);
-            return redirect()->back()->with('success', 'company-successfully-set-as-premium.');
+            return response()->json([
+                'message' => 'company-successfully-set-as-premium',
+                'company' => $company,
+            ], 200);
         } else {
-            return redirect()->back()->with('success', 'company-is-already-premium.');
+            return response()->json([
+                'message' => 'company-is-already-premium',
+            ], 500);
         }
     }
 
@@ -120,10 +124,13 @@ class CompanyController extends Controller
             $company->update([
                 'photo' => api_upload('users/companies', $request->file('photo'))
             ]);
-
-            return redirect()->back()->with('success', 'Profile photo successfully updated.');
+            return response()->json([
+                'message' => 'profile-photo-successfully-updated',
+            ], 200);
         } catch (Exception $exception) {
-            return redirect()->back()->with('error', $exception->getMessage());
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], 500);
         }
     }
 
@@ -142,10 +149,14 @@ class CompanyController extends Controller
             $history->type = PremiumEnum::DASHBOARD;
             $history->admin_id = auth()->user()->id;
             $company->history()->save($history);
-
-            return redirect()->back()->with('success', 'Company successfully set as premium.');
+            return response()->json([
+                'message' => 'company-successfully-premium',
+                'company' => $company
+            ], 200);
         } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Failed to set company as premium.');
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 200);
         }
     }
 
@@ -153,18 +164,22 @@ class CompanyController extends Controller
     {
         $company = Company::find($id);
         $this->companyService->deletePremium($company);
-
-        return redirect()->back()->with('success', 'Your premium subscription has been cancelled.');
+        return response()->json([
+            'message' => 'your-premium-subscription-has-been-cancelled',
+        ], 200);
     }
 
     public function extendPremium($id)
     {
         if (Company::find($id)->premium()->exists()) {
             $this->companyService->extendPremiumTime($id, 30);
-
-            return redirect()->back()->with('success', 'Your premium subscription has been extended by 30 days.');
+            return response()->json([
+                'message' => 'your-premium-subscription-has-been-extended',
+            ], 200);
         } else {
-            return redirect()->back()->with('error', 'Your company is not a premium company.');
+            return response()->json([
+                'message' => 'your-company-is-not-a-premium-company',
+            ], 500);
         }
     }
 }

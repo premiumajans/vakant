@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\{Http\Controllers\Controller,Models\Term,Services\UserService};
-use Illuminate\{Auth\AuthenticationException,Http\Request,Support\Facades\Validator};
+use App\{Http\Controllers\Controller, Models\Term, Models\User, Services\UserService};
+use Illuminate\{Auth\AuthenticationException, Http\Request, Support\Facades\Hash, Support\Facades\Validator};
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
@@ -45,7 +45,22 @@ class UserController extends Controller
                 'errors' => $validator->errors(),
             ], 422);
         }
-        return $this->userService->register($request->all());
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->save();
+        $credentials = $request->only('email', 'password');
+        $token = JWTAuth::attempt($credentials);
+        return response()->json([
+            'user' => $user,
+            'company' => false,
+            'authorisation' => [
+                'token' => $token,
+                'type' => 'bearer',
+            ],
+        ], 200);
+        //return $this->userService->register($request->all());
     }
     public function forgotPassword(Request $request)
     {

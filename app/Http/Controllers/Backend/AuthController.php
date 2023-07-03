@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -12,7 +13,7 @@ class AuthController extends Controller
 
     protected function guard()
     {
-        return auth()->guard('web');
+        return auth()->guard('admin');
     }
 
     public function showLoginForm()
@@ -22,11 +23,12 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        //dd($request->all());
-        if (auth()->attempt($request->only(['email', 'password']), $request->remember_me)) {
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::guard('admin')->attempt($credentials)) {
             return redirect()->route('backend.dashboard');
         } else {
-            return back();
+            return back()->withErrors(['email' => 'Invalid credentials']);
         }
     }
 

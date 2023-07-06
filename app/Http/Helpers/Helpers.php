@@ -88,7 +88,7 @@ function addPermission(string $permissionName): void
             $permission = new \Spatie\Permission\Models\Permission();
             $permission->name = $permissionName . ' ' . $extension;
             $permission->group_name = $permissionName;
-            $permission->guard_name = 'web';
+            $permission->guard_name = 'admin';
             $permission->save();
         }
     } catch (Exception $exception) {

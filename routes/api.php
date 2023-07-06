@@ -29,6 +29,9 @@ Route::post('/vacancies/{id}/update', [\App\Http\Controllers\Api\VacancyControll
 Route::post('/vacancies/{id}/delete', [\App\Http\Controllers\Api\VacancyController::class, 'deleteVacancy']);
 Route::get('/vacancy/count', [\App\Http\Controllers\Api\VacancyController::class, 'count']);
 
+
+Route::get('/scarping', [\App\Http\Controllers\Api\ScarpingController::class, 'scrape']);
+
 Route::get('/my-items/', [\App\Http\Controllers\Api\VacancyController::class, 'myItems']);
 
 Route::group(['prefix' => '/', 'as' => 'api.'], function () {

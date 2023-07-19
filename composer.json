@@ -9,7 +9,8 @@
         "astrotomic/laravel-translatable": "*",
         "brotzka/laravel-dotenv-editor": "*",
         "darkaonline/l5-swagger": "*",
-        "guzzlehttp/guzzle": "^7.2",
+        "fabpot/goutte": "^4.0",
+        "guzzlehttp/guzzle": "^7.7",
         "joedixon/laravel-translation": "*",
         "laravel/framework": "^10.0",
         "laravel/helpers": "^1.6",
@@ -22,6 +23,8 @@
         "spatie/laravel-activitylog": "^4.7",
         "spatie/laravel-analytics": "*",
         "spatie/laravel-permission": "*",
+        "sunra/php-simple-html-dom-parser": "^1.5",
+        "symfony/dom-crawler": "^6.3",
         "tymon/jwt-auth": "^2.0"
     },
     "require-dev": {
@@ -46,6 +49,7 @@
         },
         "files": [
             "app/Http/Helpers/Helpers.php",
+            "app/Http/Helpers/EmailDecodeHelper.php",
             "app/Http/Helpers/CRUDHelper.php"
         ]
     },

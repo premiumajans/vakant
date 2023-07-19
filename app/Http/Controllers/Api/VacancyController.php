@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\General\VacancyController as GeneralVacancy;
+use Illuminate\Auth\AuthenticationException;
 use App\Http\Enums\{VacancyEnum, CauserEnum, StatusEnum, VacancyAdminEnum};
 use App\Models\{AltCategory, VacancyUpdate, Company, Vacancy};
 use App\Http\Controllers\Controller;
@@ -16,7 +17,7 @@ class VacancyController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('apiMid', ['except' => ['show', 'index', 'count']]);
+        $this->middleware('apiMid', ['except' => ['show', 'index', 'count', 'category']]);
     }
 
     public function index()
@@ -24,6 +25,21 @@ class VacancyController extends Controller
         return Vacancy::where('end_time', '>', Carbon::now())->with('description')->get();
     }
 
+    public function category($id)
+    {
+        return response()->json([
+            'vacancies' => Vacancy::where('end_time', '>', Carbon::now())
+                ->whereHas('description', function ($query) use ($id) {
+                    $query->where('category_id', $id);
+                })
+                ->with('description')
+                ->get()
+        ], 200);
+    }
+
+    /**
+     * @throws AuthenticationException
+     */
     public function all()
     {
         $user = auth('api')->authenticate();

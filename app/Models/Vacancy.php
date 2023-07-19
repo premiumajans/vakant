@@ -16,22 +16,25 @@ class Vacancy extends Model
     use LogsActivity;
 
     public $timestamps = false;
+    /**
+     * @var int|mixed
+     */
 
-    public function description()
+    public function description(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(VacancyDescription::class);
     }
-    public function updates()
+    public function updates(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(VacancyUpdate::class);
     }
 
-    public function premium()
+    public function premium(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(PremiumVacancy::class);
     }
 
-    public function history()
+    public function history(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(PremiumVacancyHistory::class);
     }

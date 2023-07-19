@@ -25,7 +25,8 @@ Route::post('/company/{id}/premium/cancel', [\App\Http\Controllers\Api\CompanyCo
 Route::get('/vacancies', [\App\Http\Controllers\Api\VacancyController::class, 'index']);
 Route::get('/vacancies/all', [\App\Http\Controllers\Api\VacancyController::class, 'all']);
 Route::get('/vacancies/{id}', [\App\Http\Controllers\Api\VacancyController::class, 'show']);
-Route::post('/vacancies/{id}/update', [\App\Http\Controllers\Api\VacancyController::class, 'update']);
+Route::get('/vacancies/{id}', [\App\Http\Controllers\Api\VacancyController::class, 'show']);
+Route::get('/category/{id}/vacancy', [\App\Http\Controllers\Api\VacancyController::class, 'category']);
 Route::post('/vacancies/{id}/delete', [\App\Http\Controllers\Api\VacancyController::class, 'deleteVacancy']);
 Route::get('/vacancy/count', [\App\Http\Controllers\Api\VacancyController::class, 'count']);
 

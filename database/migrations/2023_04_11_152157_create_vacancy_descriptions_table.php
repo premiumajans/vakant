@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up()
     {
         Schema::create('vacancy_descriptions', function (Blueprint $table) {
@@ -20,7 +19,7 @@ return new class extends Migration
             $table->integer('education_id');
             $table->integer('experience_id');
             $table->integer('city_id');
-            $table->integer('mode_id');
+            $table->integer('mode_id')->default(0);
             $table->string('company')->nullable();
             $table->string('relevant_people');
             $table->longText('candidate_requirement');
@@ -32,6 +31,7 @@ return new class extends Migration
                 ->on('vacancies')->onDelete('cascade');
         });
     }
+
     public function down()
     {
         Schema::dropIfExists('vacancy_descriptions');

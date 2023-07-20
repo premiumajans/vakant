@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\General\VacancyController as GeneralVacancy;
 use Illuminate\Auth\AuthenticationException;
 use App\Http\Enums\{VacancyEnum, CauserEnum, StatusEnum, VacancyAdminEnum};
-use App\Models\{AltCategory, VacancyUpdate, Company, Vacancy};
+use App\Models\{AltCategory, Category, VacancyUpdate, Company, Vacancy};
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Exception;
@@ -27,10 +27,16 @@ class VacancyController extends Controller
 
     public function category($id)
     {
+        $altCategories = Category::where('id', $id)->with('alt')->first();
+
+// Get an array of category IDs from $altCategories->alt()
+        $altCategoryIds = $altCategories->alt->pluck('id')->toArray();
+
         return response()->json([
             'vacancies' => Vacancy::where('end_time', '>', Carbon::now())
-                ->whereHas('description', function ($query) use ($id) {
-                    $query->where('category_id', $id);
+                ->whereHas('description', function ($query) use ($altCategoryIds) {
+                    // Use 'whereIn' instead of 'where' to check if the category_id is in the array
+                    $query->whereIn('category_id', $altCategoryIds);
                 })
                 ->with('description')
                 ->get()

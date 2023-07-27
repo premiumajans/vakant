@@ -28,8 +28,6 @@ class VacancyController extends Controller
     public function category($id)
     {
         $altCategories = Category::where('id', $id)->with('alt')->first();
-
-// Get an array of category IDs from $altCategories->alt()
         $altCategoryIds = $altCategories->alt->pluck('id')->toArray();
 
         return response()->json([
@@ -80,11 +78,14 @@ class VacancyController extends Controller
         foreach ($vacancies as $vacancy) {
             if ($vacancy->description) {
                 $categoryId = $vacancy->description->category_id;
-                $main = AltCategory::find($categoryId)->category()->first()->id;
-                if (!isset($categoryCounts[$main])) {
-                    $categoryCounts[$main] = 1;
-                } else {
-                    $categoryCounts[$main]++;
+                $altCategory = AltCategory::find($categoryId);
+                if ($altCategory) {
+                    $main = $altCategory->category()->first()->id;
+                    if (!isset($categoryCounts[$main])) {
+                        $categoryCounts[$main] = 1;
+                    } else {
+                        $categoryCounts[$main]++;
+                    }
                 }
             }
         }

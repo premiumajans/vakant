@@ -43,9 +43,7 @@ class Vacancy extends Model
     {
         return $query->where('end_time', '>=', Carbon::now()->toDateString())->get();
     }
-
     protected $guarded = [];
-
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->logOnly(['age', 'email', 'phone', 'salary']);

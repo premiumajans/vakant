@@ -17,7 +17,7 @@ class ScrapeVacancies extends Command
         parent::__construct();
     }
 
-    public function handle()
+    public function handle(): \Illuminate\Http\JsonResponse
     {
         $url = 'https://boss.az/vacancies';
         $client = new Client();

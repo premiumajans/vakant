@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up()
+    public function up(): void
     {
         Schema::create('vacancies', function (Blueprint $table) {
             $table->id();
@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->integer('causer_id')->nullable();
             $table->integer('vacancy_type');
             $table->string('admin_status');
+            $table->string('scrap_id')->nullable();
             $table->string('admin_id')->nullable();
             $table->integer('view_count')->default(0);
             $table->string('shared_time');
@@ -22,7 +23,7 @@ return new class extends Migration {
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('vacancies');
     }

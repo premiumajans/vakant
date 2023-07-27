@@ -29,7 +29,6 @@ class ScarpingController extends Controller
 
     public function scrape()
     {
-
         $baseURL = 'https://boss.az/vacancies?action=index&controller=vacancies&only_path=true&page=%d&type=vacancies';
         $vacancies = [];
         for ($page = 1; $page <= 35; $page++) {
@@ -103,46 +102,36 @@ class ScarpingController extends Controller
             $vacanciesWithUrls[] = $scrapedVacancy;
             $newVacancy = new Vacancy();
             $newVacancy->causer_type = CauserEnum::SCRAPING;
-            $vacancy->causer_id = 0;
-            $vacancy->admin_status = VacancyAdminEnum::Approved;
-            $vacancy->vacancy_type = (contains('-p', $vacancy['advert_id'])) ? VacancyEnum::PREMIUM : VacancyEnum::SIMPLE;
-            $vacancy->shared_time = $scrapedVacancy['start_time'];
-            $vacancy->end_time = $scrapedVacancy['end_time'];
-
-
+            $newVacancy->causer_id = 0;
+            $newVacancy->scrap_id = $vacancy['advert_id'];
+            $newVacancy->admin_status = VacancyAdminEnum::Approved;
+            $newVacancy->vacancy_type = (strpos($vacancy['advert_id'], '-p') !== false) ? VacancyEnum::PREMIUM : VacancyEnum::SIMPLE;
+            $newVacancy->shared_time = $scrapedVacancy['start_time'];
+            $newVacancy->admin_status = 1;
+            $newVacancy->approved_time = $scrapedVacancy['start_time'];
+            $newVacancy->end_time = $scrapedVacancy['end_time'];
+            $newVacancy->save();
             $vacancyDescription = new VacancyDescription();
             $vacancyDescription->vacancy_id =$newVacancy->id;
-            $vacancyDescription->email = $newVacancy['email'];
-            $vacancyDescription->phone = $newVacancy['phone'];
-            $vacancyDescription->job_description = $newVacancy['about_job'];
-            $vacancyDescription->candidate_requirement = $newVacancy['candidate_requirements'];
-            $vacancyDescription->relevant_people = $newVacancy['relevant_people'];
-            $vacancyDescription->company = $newVacancy['company'];
-            $vacancyDescription->city_id = $newVacancy['city'];
-            $vacancyDescription->education_id = $newVacancy['education'];
-            $vacancyDescription->experience_id = $newVacancy['experience'];
-            $vacancyDescription->mode_id = $newVacancy['mode'] ?? 0;
-
-
-
-            $vacancyDescription->tags = $newVacancy['tags'];
-
-
-
-            $vacancyDescription->position = $newVacancy['position'];
-            $vacancyDescription->category_id = $newVacancy['category'];
-            $vacancyDescription->max_salary = $newVacancy['maximum_salary'];
-            $vacancyDescription->min_salary = $newVacancy['minimum_salary'];
-            $vacancyDescription->max_age = $newVacancy['maximum_age'];
-            $vacancyDescription->min_age = $newVacancy['minimum_age'];
-
-
-
-            $vacancy->description()->save($vacancyDescription);
-
-
-            $vacancy->save();
+//          $vacancyDescription->email = $newVacancy['email'];
+            $vacancyDescription->email = '$newVacancy';
+            $vacancyDescription->category_id = $scrapedVacancy['category_id'] ?? 1;
+            $vacancyDescription->phone = $scrapedVacancy['phone'];
+            $vacancyDescription->job_description = $scrapedVacancy['about_job'];
+            $vacancyDescription->candidate_requirement = $scrapedVacancy['candidate_requirements'];
+            $vacancyDescription->relevant_people = $scrapedVacancy['relevant_people'];
+            $vacancyDescription->company = $scrapedVacancy['company'];
+            $vacancyDescription->city_id = $scrapedVacancy['city'] ?? 1;
+            $vacancyDescription->education_id = $scrapedVacancy['education'] ?? 1;
+            $vacancyDescription->experience_id = $scrapedVacancy['experience'] ?? 1;
+            $vacancyDescription->mode_id = $scrapedVacancy['mode'] ?? 1;
+            $vacancyDescription->position = $scrapedVacancy['position'];
+            $vacancyDescription->max_salary = $scrapedVacancy['maximum_salary'];
+            $vacancyDescription->min_salary = $scrapedVacancy['minimum_salary'];
+            $vacancyDescription->max_age = $scrapedVacancy['maximum_age'];
+            $vacancyDescription->min_age = $scrapedVacancy['minimum_age'];
+            $newVacancy->description()->save($vacancyDescription);
         }
-        return $vacanciesWithUrls[0];
+        return $vacanciesWithUrls;
     }
 }

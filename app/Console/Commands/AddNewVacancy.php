@@ -2,11 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Enums\CauserEnum;
-use App\Http\Enums\VacancyAdminEnum;
-use App\Http\Enums\VacancyEnum;
-use App\Models\Vacancy;
-use App\Models\VacancyDescription;
+use App\Http\Enums\{CauserEnum,VacancyAdminEnum,VacancyEnum};
+use App\Models\{Vacancy,VacancyDescription};
 use App\Services\ScarpingService;
 use Illuminate\Console\Command;
 
@@ -14,10 +11,9 @@ class AddNewVacancy extends Command
 {
     protected $signature = 'app:add-new-vacancy';
     private $scrapingService;
-
     public function __construct(ScarpingService $scrapingService)
     {
-        parent::__construct(); // Make sure to call the parent constructor
+        parent::__construct();
         $this->scrapingService = $scrapingService;
     }
 

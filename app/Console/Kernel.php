@@ -12,9 +12,9 @@ class Kernel extends ConsoleKernel
     ];
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('adcounts:update')->daily();
+        $schedule->command('adcounts:update')->everyMinute();
         //$schedule->command('app:add-new-vacancy')->hourly();
-        $schedule->command('app:add-new-vacancy')->everyFiveMinutes();
+        $schedule->command('app:add-new-vacancy')->everyMinute();
     }
     protected function commands(): void
     {

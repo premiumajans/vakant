@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Scraping;
+namespace App\Console\Commands;
 
 use App\Http\Enums\CauserEnum;
 use App\Http\Enums\VacancyAdminEnum;

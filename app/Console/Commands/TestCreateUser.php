@@ -1,14 +1,15 @@
 <?php
 
-namespace Database\Seeders;
+namespace App\Console\Commands;
 
 use App\Models\User;
-use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Permission;
+use Illuminate\Console\Command;
 
-class UserSeeder extends Seeder
+class TestCreateUser extends Command
 {
-    public function run()
+    protected $signature = 'app:test-create-user';
+    protected $description = 'Command description';
+    public function handle(): void
     {
         User::create([
             'name' => 'User Vakant',

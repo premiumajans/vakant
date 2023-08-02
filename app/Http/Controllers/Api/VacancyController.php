@@ -57,13 +57,20 @@ class VacancyController extends Controller
     {
         try {
             $user = auth('api')->authenticate();
-            $company = Company::where('user_id', $user->id)->with('premium')->first();
-            $vacancy = $this->createVacancy($user, $company, $request);
-            (new GeneralVacancy())->_addNewVacancy($vacancy, $request);
-            return response()->json([
-                'status' => 'success',
-                'message' => 'vacancy-successfully-added',
-            ], 200);
+            if ($user->current_ad_count != 0) {
+                $company = Company::where('user_id', $user->id)->with('premium')->first();
+                $vacancy = $this->createVacancy($user, $company, $request);
+                (new GeneralVacancy())->_addNewVacancy($vacancy, $request);
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'vacancy-successfully-added',
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'you-dont-have-ads-count',
+                ], 500);
+            }
         } catch (Exception $exception) {
             return response()->json([
                 'message' => $exception->getMessage(),

@@ -1,32 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Services;
 
-use App\Http\Controllers\Controller;
 use App\Http\Enums\CauserEnum;
 use App\Http\Enums\VacancyAdminEnum;
 use App\Http\Enums\VacancyEnum;
 use App\Models\Vacancy;
 use App\Models\VacancyDescription;
-use App\Services\ScarpingService;
-use Illuminate\Http\Request;
-use GuzzleHttp\Client;
-use Illuminate\Http\Response;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Http;
-use Sunra\PhpSimple\HtmlDomParser;
-use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\DomCrawler\UriResolver;
 
-class ScarpingController extends Controller
+class VacancyScrapingService
 {
-    private $scrapingService;
-
-    public function __construct(ScarpingService $scrapingService)
-    {
-        $this->scrapingService = $scrapingService;
-    }
-
     public function scrape()
     {
         $baseURL = 'https://boss.az/vacancies?action=index&controller=vacancies&only_path=true&page=%d&type=vacancies';
@@ -37,8 +20,7 @@ class ScarpingController extends Controller
             $pageVacancies = $this->scrapeData($html);
             $vacancies = array_merge($vacancies, $pageVacancies);
         }
-        $vacanciesWithUrls = $this->addVacancyUrls($vacancies);
-        return response()->json($vacanciesWithUrls);
+        return $this->addVacancyUrls($vacancies);
     }
 
     private function scrapeData($html)
@@ -67,32 +49,8 @@ class ScarpingController extends Controller
         return $vacancies;
     }
 
-    private function extractData($element, $xpathQuery, $attribute = null)
-    {
-        $xpath = new \DOMXPath($element->ownerDocument);
-        $data = '';
-        $nodes = $xpath->query($xpathQuery, $element);
-        if ($nodes->length > 0) {
-            $node = $nodes->item(0);
-            if ($attribute) {
-                $data = $node->getAttribute($attribute);
-            } else {
-                $data = $node->nodeValue;
-            }
-        }
-        return trim($data);
-    }
-
     private function addVacancyUrls($vacancies)
     {
-//        $baseURL = 'https://boss.az/vacancies/';
-//        $vacanciesWithUrls = [];
-//        $vacancyUrl = $baseURL . '213737';
-//        $html = file_get_contents($vacancyUrl);
-//        $scrapedVacancy = $this->scrapingService->scrapeData($html);
-//        $vacanciesWithUrls[] = $scrapedVacancy;
-//        return $vacanciesWithUrls;
-
         $baseURL = 'https://boss.az/vacancies/';
         $vacanciesWithUrls = [];
         foreach ($vacancies as $key => $vacancy) {
@@ -114,7 +72,7 @@ class ScarpingController extends Controller
             $vacancyDescription = new VacancyDescription();
             $vacancyDescription->vacancy_id =$newVacancy->id;
 //          $vacancyDescription->email = $newVacancy['email'];
-            $vacancyDescription->email = 'email';
+            $vacancyDescription->email = '$newVacancy';
             $vacancyDescription->category_id = $scrapedVacancy['category_id'] ?? 1;
             $vacancyDescription->phone = $scrapedVacancy['phone'];
             $vacancyDescription->job_description = $scrapedVacancy['about_job'];

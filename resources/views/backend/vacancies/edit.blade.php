@@ -55,7 +55,7 @@
                                             <label>@lang('backend.city') <span class="text-danger">*</span></label>
                                             <select class="form-control" name="city">
                                                 @foreach($cities as $city)
-                                                    <option @if($city->id == $vacancy->description->city_id) selected
+                                                    <option @if($city->translation->id == $vacancy->description->city_id) selected
                                                             @endif
                                                             value="{{ $city->id }}">{{ $city->translate(app()->getLocale())->name ?? '-' }}</option>
                                                 @endforeach
@@ -79,9 +79,8 @@
                                             <select class="form-control" name="minimum_salary">
                                                 @foreach($salaries as $salary_min)
                                                     <option
-                                                        value="{{ $salary_min->id }}"
-                                                        @if($salary_min->id == $vacancy->description->min_salary) selected @endif
-                                                    ">{{ $salary_min->salary ?? '-' }}
+                                                        value="{{ $salary_min->salary }}"
+                                                        @if($salary_min->salary == $vacancy->description->min_salary) selected @endif>{{ $salary_min->salary ?? '-' }}
                                                     ₼
                                                     </option>
                                                 @endforeach

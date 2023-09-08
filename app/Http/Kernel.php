@@ -19,7 +19,6 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\BackendLanguage::class,
     ];
-
     protected $middlewareGroups = [
         'web' => [
             \App\Http\Middleware\EncryptCookies::class,
@@ -31,7 +30,6 @@ class Kernel extends HttpKernel
 //            \App\Http\Middleware\ActivityByUser::class,
             \App\Http\Middleware\BackendLanguage::class,
         ],
-
         'api' => [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
@@ -57,7 +55,7 @@ class Kernel extends HttpKernel
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'abilities' => \Laravel\Sanctum\Http\Middleware\CheckAbilities::class,
         'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
-        'adminPanel' => \App\Http\Middleware\User\Admin::class,
         'apiMid' =>  \App\Http\Middleware\TokenMiddleware::class,
+        'admin' => \App\Http\Middleware\Admin::class,
     ];
 }

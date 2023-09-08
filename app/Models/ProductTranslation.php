@@ -10,10 +10,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class ProductTranslation extends Model
 {
     use LogsActivity;
-
     public $timestamps = false;
     protected $fillable = ['name', 'alt'];
-
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->logOnly(['name', 'alt']);

@@ -2,17 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Models\Admin;
-use App\Models\Term;
-use App\Services\UserService;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Validator;
-use JetBrains\PhpStorm\NoReturn;
-use Laravel\Socialite\Facades\Socialite;
+use App\{Http\Controllers\Controller, Models\Term, Models\User, Services\UserService};
+use Illuminate\{Auth\AuthenticationException, Http\Request, Support\Facades\Hash, Support\Facades\Validator};
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
@@ -21,9 +13,8 @@ class UserController extends Controller
     public function __construct(UserService $userService)
     {
         $this->userService = $userService;
-        $this->middleware('apiMid', ['except' => ['login', 'register', 'forgotPassword', 'term', 'resetPassword']]);
+        $this->middleware('apiMid', ['except' => ['login', 'register', 'forgotPassword', 'term', 'resetPassword','checkUser']]);
     }
-
     /**
      * @throws AuthenticationException
      */
@@ -40,12 +31,11 @@ class UserController extends Controller
         }
         return $this->userService->login($request->only('email', 'password'));
     }
-
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:3',
-            'email' => 'required|string|email|unique:admins',
+            'email' => 'required|string|email|unique:users',
             'password' => 'required|string',
             'password_confirmation' => 'same:password',
             'term' => 'required',
@@ -55,50 +45,54 @@ class UserController extends Controller
                 'errors' => $validator->errors(),
             ], 422);
         }
-        return $this->userService->register($request->all());
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->save();
+        $credentials = $request->only('email', 'password');
+        $token = JWTAuth::attempt($credentials);
+        return response()->json([
+            'user' => $user,
+            'company' => false,
+            'authorisation' => [
+                'token' => $token,
+                'type' => 'bearer',
+            ],
+        ], 200);
+        //return $this->userService->register($request->all());
     }
-
     public function forgotPassword(Request $request)
     {
         $result = $this->userService->forgotPassword($request->email);
         return response()->json($result, $result['status'] == 'success' ? 200 : 404);
     }
-
     public function resetPassword(Request $request)
     {
-        $result = $this->userService->resetPassword($request->all());
-        return response()->json($result, $result['status'] == 'success' ? 200 : 500);
+        return $this->userService->resetPassword($request->all());
     }
 
-    public function refresh()
+    public function refresh(Request $request)
     {
         return $this->userService->refresh();
     }
-
     #[NoReturn] public function changePassword(Request $request)
     {
-        return $this->userService->changePassword($request->all());
+        return $this->userService->changePassword($request);
     }
-
     public function logout()
     {
         $result = $this->userService->logout();
-
         return response()->json($result, 200);
     }
-
     public function term()
     {
-        $term = Term::first();
-
-        return response()->json(['term' => $term]);
+        return response()->json(['term' => Term::first()]);
     }
-
     public function redirectToGoogle()
     {
         return Socialite::driver('google')->redirect();
     }
-
     public function handleGoogleCallback()
     {
         $result = $this->userService->handleSocialiteCallback('google');
@@ -111,16 +105,21 @@ class UserController extends Controller
             return redirect()->back();
         }
     }
-
     public function redirectToFacebook()
     {
         return Socialite::driver('facebook')->redirect();
+    }
+    public function check(Request $request)
+    {
+//        $token = $request->header('Authorization');
+//        $authorizationHeader = $request->header('Authorization');
+//        $token = str_replace('Bearer ', '', $authorizationHeader);
+        $token = $request->bearerToken();
+        return $this->userService->checkUser($token);
     }
 
     public function handleFacebookCallback()
     {
         $result = $this->userService->handleSocialiteCallback('facebook');
-
-        // Handle the result accordingly
     }
 }

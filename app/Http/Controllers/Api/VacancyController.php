@@ -2,37 +2,54 @@
 
 namespace App\Http\Controllers\Api;
 
-
 use App\Http\Controllers\General\VacancyController as GeneralVacancy;
-use App\Http\Enums\VacancyAdminEnum;
+use Illuminate\Auth\AuthenticationException;
+use App\Http\Enums\{VacancyEnum, CauserEnum, StatusEnum, VacancyAdminEnum};
+use App\Models\{AltCategory, Category, VacancyUpdate, Company, Vacancy};
 use App\Http\Controllers\Controller;
-use App\Http\Enums\VacancyEnum;
-use App\Http\Enums\CauserEnum;
-use App\Http\Enums\StatusEnum;
-use App\Models\VacancyUpdate;
-use Exception;
 use Illuminate\Http\Request;
-use App\Models\Company;
-use App\Models\Vacancy;
-use Carbon\Carbon;
+use Exception;
+
+use Illuminate\Support\Collection;
+use Illuminate\Support\Carbon;
 
 class VacancyController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('apiMid', ['except' => ['show', 'index']]);
+        $this->middleware('apiMid', ['except' => ['show', 'index', 'count', 'category']]);
     }
 
     public function index()
     {
-        return Vacancy::with('description')->get();
+        return Vacancy::where('end_time', '>', Carbon::now())->with('description')->get();
     }
 
+    public function category($id)
+    {
+        $altCategories = Category::where('id', $id)->with('alt')->first();
+        $altCategoryIds = $altCategories->alt->pluck('id')->toArray();
+
+        return response()->json([
+            'vacancies' => Vacancy::where('end_time', '>', Carbon::now())
+                ->whereHas('description', function ($query) use ($altCategoryIds) {
+                    // Use 'whereIn' instead of 'where' to check if the category_id is in the array
+                    $query->whereIn('category_id', $altCategoryIds);
+                })
+                ->with('description')
+                ->get()
+        ], 200);
+    }
+
+    /**
+     * @throws AuthenticationException
+     */
     public function all()
     {
+        $user = auth('api')->authenticate();
         return response()->json([
-            'on_going' => Vacancy::where('end_time', '>', Carbon::now())->with('description')->get(),
-            'finished' => Vacancy::where('end_time', '<', Carbon::now())->with('description')->get(),
+            'on_going' => Vacancy::where('end_time', '>', Carbon::now())->where('causer_id', $user->id)->where('causer_type', 2)->with('description')->get(),
+            'finished' => Vacancy::where('end_time', '<', Carbon::now())->where('causer_id', $user->id)->where('causer_type', 2)->with('description')->get(),
         ]);
     }
 
@@ -40,24 +57,53 @@ class VacancyController extends Controller
     {
         try {
             $user = auth('api')->authenticate();
-            $company = Company::where('admin_id', $user->id)->with('premium')->first();
-            $vacancy = $this->createVacancy($user, $company, $request);
-            (new GeneralVacancy())->_addNewVacancy($vacancy, $request);
-            return response()->json([
-                'status' => 'success',
-                'message' => 'vacancy-successfully-added',
-            ], 200);
+            if ($user->current_ad_count != 0) {
+                $company = Company::where('user_id', $user->id)->with('premium')->first();
+                $vacancy = $this->createVacancy($user, $company, $request);
+                (new GeneralVacancy())->_addNewVacancy($vacancy, $request);
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'vacancy-successfully-added',
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'you-dont-have-ads-count',
+                ], 500);
+            }
         } catch (Exception $exception) {
             return response()->json([
-                'message' => 'error',
+                'message' => $exception->getMessage(),
             ], 500);
         }
     }
 
+    public function count()
+    {
+        $vacancies = Vacancy::with('description')->get();
+        $categoryCounts = [];
+        foreach ($vacancies as $vacancy) {
+            if ($vacancy->description) {
+                $categoryId = $vacancy->description->category_id;
+                $altCategory = AltCategory::find($categoryId);
+                if ($altCategory) {
+                    $main = $altCategory->category()->first()->id;
+                    if (!isset($categoryCounts[$main])) {
+                        $categoryCounts[$main] = 1;
+                    } else {
+                        $categoryCounts[$main]++;
+                    }
+                }
+            }
+        }
+        return response()->json($categoryCounts);
+    }
+
     public function show($id)
     {
-        if (Vacancy::where('id', $id)->exists()) {
+        if (Vacancy::where('id', $id)->where('end_time', '>', Carbon::now()) and Vacancy::where('id', $id)->exists()) {
             $vacancy = Vacancy::with(['description', 'premium'])->find($id);
+            $vacancy->increment('view_count');
             return response()->json([
                 'vacancy' => $vacancy,
             ], 200);
@@ -111,8 +157,7 @@ class VacancyController extends Controller
             }
         } catch (Exception $exception) {
             return response()->json([
-                'status' => 'error',
-                'message' => 'error',
+                'message' => $exception->getMessage(),
             ], 500);
         }
     }
@@ -131,7 +176,6 @@ class VacancyController extends Controller
         $vacancy->shared_time = Carbon::now();
         $vacancy->end_time = Carbon::now()->addMonth();
         $vacancy->save();
-
         return $vacancy;
     }
 
@@ -145,6 +189,9 @@ class VacancyController extends Controller
 
     private function createVacancyUpdate($oldVacancy, $request)
     {
+        if ($oldVacancy->updates()->exists()) {
+            $oldVacancy->updates()->delete();
+        }
         $newVacancy = new VacancyUpdate();
         $newVacancy->vacancy_id = $oldVacancy->id;
         $newVacancy->relevant_people = $request->relevant_people;
@@ -166,7 +213,6 @@ class VacancyController extends Controller
         $newVacancy->experience_id = $request->experience;
         $newVacancy->shared_time = Carbon::now();
         $newVacancy->admin_status = StatusEnum::DEACTIVE;
-
         return $newVacancy;
     }
 }

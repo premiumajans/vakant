@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class Slider extends Model implements TranslatableContract
 {
     use Translatable,LogsActivity;
-    public $translatedAttributes = ['title','description','alt'];
+    public array $translatedAttributes = ['title','description','alt'];
     protected $fillable = ['photo','order','status'];
 
     public function getActivitylogOptions(): LogOptions

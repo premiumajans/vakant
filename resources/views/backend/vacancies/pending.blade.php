@@ -46,6 +46,11 @@
                                         <a href="tel:{{ $vacancy->description->phone ?? '-'}}">{{ $vacancy->description->phone ?? '-'}}</a>
                                     </td>
                                     <td class="text-center">
+                                        <a class="btn btn-success"
+                                           href="{{ route('backend.approve-vacancy',$vacancy->id) }}"><i
+                                                class="fas fa-clipboard-check"></i></a>
+                                        <a href="{{ route('backend.vacanciesDelete',$vacancy->id) }}"
+                                           class="btn btn-danger waves-effect"><i class="fas fa-times"></i></a>
                                         <a class="btn btn-primary"
                                            href={{ route('backend.vacancies.show',['vacancy'=>$vacancy->id]) }}>
                                             <i class="fas fa-eye"></i>

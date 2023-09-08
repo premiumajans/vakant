@@ -12,16 +12,13 @@ use Illuminate\Database\Eloquent\Model;
 class AltCategory extends Model implements TranslatableContract
 {
     use LogsActivity, Translatable;
-
-    public function category()
+    public function category(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
-
     public $timestamps = false;
     public $translatedAttributes = ['name'];
     protected $fillable = ['status'];
-
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->logOnly(['status']);

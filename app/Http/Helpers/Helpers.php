@@ -88,7 +88,7 @@ function addPermission(string $permissionName): void
             $permission = new \Spatie\Permission\Models\Permission();
             $permission->name = $permissionName . ' ' . $extension;
             $permission->group_name = $permissionName;
-            $permission->guard_name = 'web';
+            $permission->guard_name = 'admin';
             $permission->save();
         }
     } catch (Exception $exception) {
@@ -145,7 +145,7 @@ if (!function_exists('vacancy_tags')) {
             $tagsArray = [];
             $array = json_decode($tags);
             foreach ($array as $t) {
-                array_push($tagsArray, $t->value);
+                $tagsArray[] = $t->value;
             }
             return $tagsArray;
         } catch (Exception $e) {

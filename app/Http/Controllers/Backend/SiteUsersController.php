@@ -9,6 +9,7 @@ use App\Http\Helpers\CRUDHelper;
 use App\Models\Admin;
 use App\Models\Company;
 use App\Http\Requests\Backend\Create\CompanyRequest as CreateCompany;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -27,7 +28,7 @@ class SiteUsersController extends Controller
     public function index()
     {
         checkPermission('users index');
-        $siteUsers = Admin::all();
+        $siteUsers = User::all();
         return view('backend.users.site.index', compact('siteUsers'));
     }
 
@@ -41,7 +42,7 @@ class SiteUsersController extends Controller
     {
         checkPermission('users create');
         try {
-            $admin = new Admin();
+            $admin = new User();
             $admin->fill([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -60,7 +61,7 @@ class SiteUsersController extends Controller
     public function edit($id)
     {
         checkPermission('users edit');
-        $admin = Admin::find($id);
+        $admin = User::find($id);
         return view('backend.users.site.edit', get_defined_vars());
     }
 
@@ -68,7 +69,7 @@ class SiteUsersController extends Controller
     {
         checkPermission('users edit');
         try {
-            $admin = Admin::find($id);
+            $admin = User::find($id);
             $admin->update([
                 'name' => $request->name,
                 'current_ad_count' => $request->current_ad_count,
@@ -86,14 +87,14 @@ class SiteUsersController extends Controller
     public function company($id)
     {
         checkPermission('users index');
-        $company = Admin::find($id)->company()->first();
+        $company = User::find($id)->company()->first();
         return view('backend.users.site.company.index', compact('company', 'id'));
     }
 
     public function companyCreate(CreateCompany $request, $id)
     {
         checkPermission('users create');
-        $user = Admin::find($id);
+        $user = User::find($id);
         $this->premiumCompanyService->createNewCompany($user, $request);
         return redirect()->back();
     }
@@ -104,14 +105,12 @@ class SiteUsersController extends Controller
         $this->premiumCompanyService->makeCompanyPremium($id, 1, PremiumEnum::ADMIN, Auth::guard('web')->id());
         return redirect()->back();
     }
-
     public function getPremiumTime(Request $request, $id)
     {
         checkPermission('users create');
         $this->premiumCompanyService->extendPremiumTime($id, $request->time);
         return redirect()->back();
     }
-
     public function getPremiumCancel($id)
     {
         checkPermission('users create');
@@ -126,6 +125,6 @@ class SiteUsersController extends Controller
     public function delete($id)
     {
         checkPermission('users delete');
-        return CRUDHelper::remove_item('\App\Models\Admin', $id);
+        return CRUDHelper::remove_item('\App\Models\User', $id);
     }
 }

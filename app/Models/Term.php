@@ -11,7 +11,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class Term extends Model implements TranslatableContract
 {
     use LogsActivity, Translatable;
-    public $translatedAttributes = ['description'];
+    public array $translatedAttributes = ['description'];
     protected $guarded = [];
     public function getActivitylogOptions(): LogOptions
     {

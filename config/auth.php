@@ -1,26 +1,14 @@
 <?php
 
 return [
-
-
     'defaults' => [
         'guard' => 'web',
         'passwords' => 'users',
     ],
     'guards' => [
         'api' => [
-//            'driver' => 'jwt',
-//            'provider' => 'admins',
-            'driver' => 'jwt', // or 'sanctum' depending on your setup
-            'provider' => 'admins',
-            'hash' => false,
-            'redirect' => null,
-            'login_path' => 'auth/login',
-            'paths' => [
-                'api/*',
-            ],
-            'allowed_methods' => ['*'],
-            'except' => [],
+            'driver' => 'jwt',
+            'provider' => 'users',
         ],
         'web' => [
             'driver' => 'session',
@@ -40,7 +28,6 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
         ]
-
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -60,7 +47,6 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
-
     ],
     'password_timeout' => 10800,
 ];

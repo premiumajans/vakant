@@ -11,9 +11,9 @@ class Admin
 
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::guard('web')->check()) {
-            return redirect(route('backend.login'));
-        }
-        return $next($request);
+//        if (!Auth::guard('web')->check()) {
+//            return redirect(route('backend.login'));
+//        }
+//        return $next($request);
     }
 }

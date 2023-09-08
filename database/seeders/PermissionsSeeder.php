@@ -7,6 +7,9 @@ use Spatie\Permission\Models\Permission;
 
 class PermissionsSeeder extends Seeder
 {
+    /**
+     * @throws \Exception
+     */
     public function run()
     {
         $permissions = [
@@ -47,7 +50,7 @@ class PermissionsSeeder extends Seeder
             $singPer->name = $single;
             list($group) = explode(' ', $single);
             $singPer->group_name = $group;
-            $singPer->guard_name = 'web';
+            $singPer->guard_name = 'admin';
             $singPer->save();
         }
     }

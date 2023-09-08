@@ -3,7 +3,6 @@
 namespace App\Http\Helpers;
 
 use Exception;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 
 class CRUDHelper
@@ -22,7 +21,6 @@ class CRUDHelper
         }
         return Redirect::back();
     }
-
     public static function status($model, $id): \Illuminate\Http\RedirectResponse
     {
         $status = $model::where('id', $id)->value('status');

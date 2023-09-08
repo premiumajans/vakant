@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Appeal extends Model
 {
-    public function admin()
+    public function admin(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Admin::class);
     }

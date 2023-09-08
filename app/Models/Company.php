@@ -7,9 +7,9 @@ class Company extends Model
 {
     public function admin(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Admin::class);
+        return $this->belongsTo(User::class);
     }
-    public function premium()
+    public function premium(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(PremiumCompany::class);
     }

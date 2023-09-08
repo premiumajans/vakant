@@ -24,7 +24,7 @@ class SiteUser extends Authenticatable
         TwoFactorAuthenticatable,
         LogsActivity;
 
-    protected $guard = ['site-user'];
+    protected array $guard = ['site-user'];
 
     protected $fillable = [
         'name',

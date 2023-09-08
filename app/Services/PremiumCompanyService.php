@@ -4,12 +4,9 @@ namespace App\Services;
 
 use App\Http\Enums\CompanyEnum;
 use App\Http\Requests\Backend\Create\CompanyRequest;
-use App\Models\Admin;
 use App\Models\Company;
 use App\Models\PremiumCompany;
 use App\Models\PremiumCompanyHistory;
-use App\Models\PremiumVacancyHistory;
-use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;

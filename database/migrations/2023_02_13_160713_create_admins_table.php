@@ -9,14 +9,14 @@ return new class extends Migration {
     {
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
+            $table->string('name');
             $table->string('email')->unique();
-            $table->string('password')->nullable();
-            $table->longText('reset_token')->nullable();
-            $table->unsignedInteger('current_ad_count');
-            $table->string('profile_photo_path', 2048)->nullable();
-            $table->string('provider_id')->nullable();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
             $table->rememberToken();
+            $table->foreignId('current_team_id')->nullable();
+            $table->timestamp('last_seen')->nullable();
+            $table->string('profile_photo_path', 2048)->nullable();
             $table->timestamps();
         });
     }

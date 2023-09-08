@@ -2,35 +2,34 @@
 
 namespace App\Providers;
 
-use App\Models\Category;
-use App\Models\Education;
-use App\Models\Experience;
-use App\Models\Salary;
-use App\Models\Mode;
-use App\Models\SiteLanguage;
-use App\Models\Vacancy;
-use App\Models\VacancyUpdate;
 use App\Services\DataCacheService;
-use Illuminate\Support\Facades\Cache;
+use App\Services\ScarpingService;
+use App\Services\ExpiredVacancies;
+use App\Services\VacancyScrapingService;
 use Illuminate\Support\ServiceProvider;
-use App\Models\City;
+
 
 class AppServiceProvider extends ServiceProvider
 {
-    public function register()
+    public function register(): void
     {
         $this->app->register(\L5Swagger\L5SwaggerServiceProvider::class);
         $this->app->singleton(DataCacheService::class, function ($app) {
             return new DataCacheService();
         });
+        $this->app->singleton(VacancyScrapingService::class, function ($app) {
+            return new VacancyScrapingService(new ScarpingService()); // Assuming ScarpingService is already registered in the container.
+        });
     }
 
-    public function boot(DataCacheService $dataCacheService)
+    public function boot(DataCacheService $dataCacheService): void
     {
         $premiumCompanyService = new \App\Services\PremiumCompanyService();
         $premiumCompanyService->cleanUpExpiredPremiumCompanies();
         $premiumVacancyService = new \App\Services\PremiumVacancyService();
         $premiumVacancyService->cleanUpExpiredPremiumVacancies();
+        $deleteExpiredVacancies = new ExpiredVacancies();
+        $deleteExpiredVacancies->cleanUpExpiredVacancies();
         $countApprovedVacancies = $dataCacheService->getCachedCountApprovedVacancies();
         $countPendingVacancies = $dataCacheService->getCountPendingVacancies();
         $countUpdatedVacancies = $dataCacheService->getCountUpdatedVacancies();

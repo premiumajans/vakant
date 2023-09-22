@@ -39,6 +39,10 @@ use Symfony\Component\Process\Process;
 Route::get('/auth/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/auth/login', [AuthController::class, 'login'])->name('loginPost');
 
+Route::get('/show-mail',function (){
+    return view('backend.mail.vakant');
+});
+
 Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/', [BHome::class, 'index']);
     Route::get('/change-language/{lang}', [LChangeLan::class, 'switchLang'])->name('switchLang');

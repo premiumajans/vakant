@@ -119,23 +119,22 @@
                         </ul>
                     </li>
                 @endcanany
-
-                {{--                @can('packages index')--}}
-                {{--                    <li>--}}
-                {{--                        <a href="{{ route('backend.package-components.index') }}" class="waves-effect">--}}
-                {{--                            <i class="fas fa-box-open"></i>--}}
-                {{--                            <span>@lang('backend.component')</span>--}}
-                {{--                        </a>--}}
-                {{--                    </li>--}}
-                {{--                @endcan--}}
-                {{--                @can('packages index')--}}
-                {{--                    <li>--}}
-                {{--                        <a href="{{ route('backend.packages.index') }}" class="waves-effect">--}}
-                {{--                            <i class="fas fa-box"></i>--}}
-                {{--                            <span>@lang('frontend.packages')</span>--}}
-                {{--                        </a>--}}
-                {{--                    </li>--}}
-                {{--                @endcan--}}
+                @can('packages index')
+                    <li>
+                        <a href="{{ route('backend.package-components.index') }}" class="waves-effect">
+                            <i class="fas fa-box-open"></i>
+                            <span>@lang('backend.component')</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('packages index')
+                    <li>
+                        <a href="{{ route('backend.packages.index') }}" class="waves-effect">
+                            <i class="fas fa-box"></i>
+                            <span>@lang('frontend.packages')</span>
+                        </a>
+                    </li>
+                @endcan
                 {{--                @can('appeals index')--}}
                 {{--                    <li>--}}
                 {{--                        <a href="{{ route('backend.appeals.index') }}" class="waves-effect">--}}
@@ -200,14 +199,6 @@
                         <a href="{{ route('backend.permissions.index') }}" class=" waves-effect">
                             <i class="ri-lock-2-fill"></i>
                             <span>@lang('backend.permissions')</span>
-                        </a>
-                    </li>
-                @endcan
-                @can('permissions index')
-                    <li>
-                        <a href="{{ route('backend.givePermission') }}" class=" waves-effect">
-                            <i class="ri-lock-unlock-fill"></i>
-                            <span>@lang('backend.give-permission')</span>
                         </a>
                     </li>
                 @endcan

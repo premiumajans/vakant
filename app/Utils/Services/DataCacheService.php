@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Services;
+namespace App\Utils\Services;
 
-use Illuminate\Support\Facades\Cache;
 use App\Models\Category;
 use App\Models\City;
-use App\Models\Vacancy;
 use App\Models\Education;
-use App\Models\SiteLanguage;
 use App\Models\Experience;
 use App\Models\Mode;
 use App\Models\Salary;
+use App\Models\SiteLanguage;
+use App\Models\Vacancy;
 use App\Models\VacancyUpdate;
+use Illuminate\Support\Facades\Cache;
 
 class DataCacheService
 {

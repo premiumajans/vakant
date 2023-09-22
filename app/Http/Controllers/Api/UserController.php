@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\{Http\Controllers\Controller, Models\Term, Models\User, Services\UserService};
+use App\{Http\Controllers\Controller, Models\Term, Models\User, Utils\Services\UserService};
 use Illuminate\{Auth\AuthenticationException, Http\Request, Support\Facades\Hash, Support\Facades\Validator};
 use Tymon\JWTAuth\Facades\JWTAuth;
 

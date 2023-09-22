@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Utils\Services;
 
 use App\Http\Enums\VacancyEnum;
 use App\Models\PremiumVacancy;

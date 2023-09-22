@@ -10,7 +10,7 @@ use App\Http\Controllers\Api\CategoryController as Category;
 use App\Http\Controllers\Api\SettingController as Setting;
 use App\Http\Controllers\Api\ModeController as Mode;
 use App\Http\Controllers\Api\VacancyController as Vacancy;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Http\Controllers\Payment\PayriffController as Payriff;
 
 Route::get('term', [\App\Http\Controllers\Api\UserController::class, 'term']);
 Route::post('/', [\App\Http\Controllers\Api\DocumentationController::class, 'index'])->name('index');
@@ -64,4 +64,12 @@ Route::group(['prefix' => '/auth'], function () {
     Route::get('/login/google/callback', [\App\Http\Controllers\Api\UserController::class, 'handleGoogleCallback'])->name('loginGoogleCallback');
     Route::get('/login/facebook', [\App\Http\Controllers\Api\UserController::class, 'redirectToFacebook'])->name('loginFacebook');
     Route::get('/login/facebook/callback', [\App\Http\Controllers\Api\UserController::class, 'handleFacebookCallback'])->name('loginFacebookCallback');
+});
+
+
+Route::prefix('payment')->group(function () {
+    Route::post('/inCart', [Payriff::class, 'inCart'])->name('inCart');
+    Route::match(['post', 'get'], '/paymentApproved', [Payriff::class, 'paymentApproved'])->name('paymentApproved');
+    Route::match(['post', 'get'], '/paymentCanceled', [Payriff::class, 'paymentCanceled'])->name('paymentCanceled');
+    Route::match(['post', 'get'], '/paymentDeclined', [Payriff::class, 'paymentDeclined'])->name('paymentDeclined');
 });

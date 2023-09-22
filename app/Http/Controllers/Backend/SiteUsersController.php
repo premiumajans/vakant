@@ -3,20 +3,17 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Http\Enums\CompanyEnum;
 use App\Http\Enums\PremiumEnum;
 use App\Http\Helpers\CRUDHelper;
-use App\Models\Admin;
-use App\Models\Company;
-use App\Http\Requests\Backend\Create\CompanyRequest as CreateCompany;
-use App\Models\User;
-use Exception;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Http\Request;
-use App\Services\PremiumCompanyService;
 use App\Http\Requests\Backend\Create\AdminRequest;
+use App\Http\Requests\Backend\Create\CompanyRequest as CreateCompany;
+use App\Models\Company;
+use App\Models\User;
+use App\Utils\Services\PremiumCompanyService;
+use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class SiteUsersController extends Controller
 {
@@ -24,20 +21,17 @@ class SiteUsersController extends Controller
     {
         $this->premiumCompanyService = $premiumCompanyService;
     }
-
     public function index()
     {
         checkPermission('users index');
         $siteUsers = User::all();
         return view('backend.users.site.index', compact('siteUsers'));
     }
-
     public function create()
     {
         checkPermission('users create');
         return view('backend.users.site.create');
     }
-
     public function store(AdminRequest $request)
     {
         checkPermission('users create');

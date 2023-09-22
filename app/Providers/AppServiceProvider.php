@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Services\DataCacheService;
-use App\Services\ScarpingService;
-use App\Services\ExpiredVacancies;
-use App\Services\VacancyScrapingService;
+use App\Utils\Services\DataCacheService;
+use App\Utils\Services\ExpiredVacancies;
+use App\Utils\Services\ScarpingService;
+use App\Utils\Services\VacancyScrapingService;
 use Illuminate\Support\ServiceProvider;
 
 
@@ -17,16 +17,13 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(DataCacheService::class, function ($app) {
             return new DataCacheService();
         });
-        $this->app->singleton(VacancyScrapingService::class, function ($app) {
-            return new VacancyScrapingService(new ScarpingService()); // Assuming ScarpingService is already registered in the container.
-        });
     }
 
     public function boot(DataCacheService $dataCacheService): void
     {
-        $premiumCompanyService = new \App\Services\PremiumCompanyService();
+        $premiumCompanyService = new \App\Utils\Services\PremiumCompanyService();
         $premiumCompanyService->cleanUpExpiredPremiumCompanies();
-        $premiumVacancyService = new \App\Services\PremiumVacancyService();
+        $premiumVacancyService = new \App\Utils\Services\PremiumVacancyService();
         $premiumVacancyService->cleanUpExpiredPremiumVacancies();
         $deleteExpiredVacancies = new ExpiredVacancies();
         $deleteExpiredVacancies->cleanUpExpiredVacancies();

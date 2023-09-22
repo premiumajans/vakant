@@ -1,11 +1,10 @@
 <?php
-namespace App\Services;
+namespace App\Utils\Services;
 
 use App\Models\User;
-use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\{Auth, Hash, Mail, Validator};
-use Tymon\JWTAuth\Exceptions\{TokenBlacklistedException, JWTException, TokenExpiredException, TokenInvalidException};
+use Tymon\JWTAuth\Exceptions\{JWTException, TokenExpiredException};
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserService

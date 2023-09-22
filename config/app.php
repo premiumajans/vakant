@@ -14,6 +14,8 @@ return [
     'faker_locale' => 'en_US',
     'key' => env('APP_KEY'),
     'cipher' => 'AES-256-CBC',
+    'payriff_secret' => env('PAYRIFF_MERCHANT_SECRET'),
+    'payriff_number' => env('PAYRIFF_MERCHANT_NUMBER'),
     'maintenance' => [
         'driver' => 'file',
         // 'store'  => 'redis',

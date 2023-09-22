@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\General\VacancyController as GeneralVacancy;
 use App\Http\Enums\CauserEnum;
 use App\Http\Enums\StatusEnum;
 use App\Http\Enums\VacancyAdminEnum;
@@ -11,20 +12,21 @@ use App\Http\Helpers\CRUDHelper;
 use App\Http\Requests\Backend\Create\VacancyRequest;
 use App\Models\Vacancy;
 use App\Models\VacancyUpdate;
-use App\Services\PremiumVacancyService;
+use App\Utils\Services\MailService;
+use App\Utils\Services\PremiumVacancyService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
-use Symfony\Component\HttpFoundation\Response;
-use App\Http\Controllers\General\VacancyController as GeneralVacancy;
 
 class VacancyController extends Controller
 {
-    public function __construct(PremiumVacancyService $premiumVacancyService)
+    private MailService $mailService;
+    private PremiumVacancyService $premiumVacancyService;
+
+    public function __construct(PremiumVacancyService $premiumVacancyService, MailService $mailService)
     {
         $this->premiumVacancyService = $premiumVacancyService;
+        $this->mailService = $mailService;
     }
 
     public function index()
@@ -174,6 +176,15 @@ class VacancyController extends Controller
             $vacancy->admin_status = 1;
             $vacancy->admin_id = auth()->user()->id;
             $vacancy->save();
+            $mailDetails = [
+                'subject' => 'Sizin elanınız uğurla dərc olundu!',
+                'subscriber' => $vacancy->description()->email,
+            ];
+            $messageDetail = [
+                'title' => $vacancy->description()->position,
+                'vacancy_id' => $vacancy->id,
+            ];
+            $this->mailService->send($mailDetails, $this->mailService->acceptedMail($messageDetail));
             alert()->success(__('messages.success'));
             return redirect()->route('backend.pendingVacancies');
         } catch (Exception $e) {

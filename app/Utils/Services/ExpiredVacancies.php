@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Utils\Services;
 
 use App\Models\Vacancy;
 use Carbon\Carbon;

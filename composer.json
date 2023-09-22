@@ -26,7 +26,8 @@
         "sunra/php-simple-html-dom-parser": "^1.5",
         "symfony/dom-crawler": "^6.3",
         "tymon/jwt-auth": "^2.0",
-      "ext-libxml": "*"
+      "ext-libxml": "*",
+      "ext-dom": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

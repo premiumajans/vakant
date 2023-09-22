@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use App\Utils\Traits\RelationshipsTrait;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
-use Spatie\Activitylog\{Traits\LogsActivity,LogOptions};
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
-use App\Http\RelationshipsTrait;
+use Spatie\Activitylog\{LogOptions, Traits\LogsActivity};
 
 class Category extends Model implements TranslatableContract
 {

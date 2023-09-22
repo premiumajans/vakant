@@ -7,10 +7,7 @@ use Spatie\Permission\Models\Permission;
 
 class PermissionsSeeder extends Seeder
 {
-    /**
-     * @throws \Exception
-     */
-    public function run()
+    public function run(): void
     {
         $permissions = [
             'slider',
@@ -32,6 +29,7 @@ class PermissionsSeeder extends Seeder
             'experience',
             'mode',
             'packages',
+            'report',
         ];
         foreach ($permissions as $permission) {
             addPermission($permission);

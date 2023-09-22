@@ -2,33 +2,43 @@
 
 namespace App\Models;
 
+use App\Http\Enums\StatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
-use Spatie\Activitylog\LogOptions;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use HasRoles,
         HasPermissions,
         HasApiTokens,
-        HasFactory,
         HasProfilePhoto,
         Notifiable,
-        TwoFactorAuthenticatable,
-        LogsActivity;
-
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+        TwoFactorAuthenticatable;
+    protected $guarded = [];
+    public function company(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Company::class);
+    }
+    public function hasCompany(): bool
+    {
+        return $this->company()->exists();
+    }
+    public function package(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Package::class, 'admin_packages', 'admin_id', 'package_id')->withPivot('current_ads_count', 'status', 'created_at', 'updated_at');
+    }
+    public function scopeActive($query)
+    {
+        return $query->package()
+            ->wherePivot('status', StatusEnum::ACTIVE);
+    }
     protected $hidden = [
         'password',
         'remember_token',
@@ -41,9 +51,12 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
-
-    public function getActivitylogOptions(): LogOptions
+    public function getJWTIdentifier()
     {
-        return LogOptions::defaults()->logOnly(['name', 'email', 'password','login']);
+        return $this->getKey();
+    }
+    public function getJWTCustomClaims(): array
+    {
+        return [];
     }
 }

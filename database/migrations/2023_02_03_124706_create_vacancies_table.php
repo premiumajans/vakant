@@ -5,36 +5,25 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up()
+    public function up(): void
     {
         Schema::create('vacancies', function (Blueprint $table) {
             $table->id();
-            $table->string('position');
-            $table->integer('category_id');
-            $table->integer('min_salary');
-            $table->integer('max_salary');
-            $table->integer('min_age');
-            $table->integer('max_age');
-            $table->integer('education_id');
-            $table->integer('experience_id');
-            $table->integer('city_id');
-            $table->integer('company_type');
-            $table->string('company')->nullable();
-            $table->string('relevant_people');
-            $table->longText('candidate_requirement');
-            $table->longText('job_description');
-            $table->string('email');
-            $table->string('phone');
+            $table->integer('causer_type');
+            $table->integer('causer_id')->nullable();
+            $table->integer('vacancy_type');
             $table->string('admin_status');
-            $table->string('tags')->nullable();
+            $table->string('scrap_id')->nullable();
             $table->string('admin_id')->nullable();
-            $table->string('start_time');
-            $table->string('end_time');
-            $table->timestamps();
+            $table->integer('view_count')->default(0);
+            $table->string('shared_time');
+            $table->string('approved_time')->nullable();
+            $table->string('updated_at')->nullable();
+            $table->string('end_time')->nullable();
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('vacancies');
     }

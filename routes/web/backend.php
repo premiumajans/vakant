@@ -15,7 +15,6 @@ use App\Http\Controllers\Backend\AdminController as BAdmin;
 use App\Http\Controllers\Backend\InformationController as BInformation;
 use App\Http\Controllers\Backend\NewsletterController as BNewsletter;
 use App\Http\Controllers\Backend\ReportController as BReport;
-use App\Http\Controllers\Backend\Statistics as BStatistics;
 use App\Http\Controllers\Backend\SliderController as BSlider;
 use App\Http\Controllers\Backend\PermissionController as BPermission;
 use App\Http\Controllers\Backend\VacancyController as BVacancy;
@@ -26,7 +25,6 @@ use App\Http\Controllers\Backend\AltCategories as BAltCat;
 use App\Http\Controllers\Backend\ProductController as BProduct;
 use App\Http\Controllers\Backend\NewsController as BNews;
 use App\Http\Controllers\Backend\ServiceController as BService;
-use App\Http\Controllers\Backend\TechnicalSupportControlller as BTech;
 use App\Http\Controllers\Backend\ModeController as BMode;
 use App\Http\Controllers\Backend\SalaryController as BSalary;
 use App\Http\Controllers\Backend\CityController as BCity;
@@ -35,10 +33,17 @@ use App\Http\Controllers\Backend\ExperienceController as BExperience;
 use App\Http\Controllers\Backend\PackagesController as BPackage;
 use App\Http\Controllers\Backend\PackageComponentController as BPackageComponent;
 use App\Http\Controllers\Backend\SiteUsersController as BSiteUsers;
+use App\Http\Controllers\Backend\TermController as BTerm;
+use Symfony\Component\Process\Process;
 
+Route::get('/auth/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/auth/login', [AuthController::class, 'login'])->name('loginPost');
 
-Route::group(['middleware' => 'auth:web'], function () {
+Route::get('/show-mail',function (){
+    return view('backend.mail.vakant');
+});
 
+Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/', [BHome::class, 'index']);
     Route::get('/change-language/{lang}', [LChangeLan::class, 'switchLang'])->name('switchLang');
     Route::get('/', [BHome::class, 'index'])->name('index');
@@ -53,13 +58,26 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::post('/packages/components/store', [BPackageComponent::class, 'store'])->name('storeComponentPackage');
     Route::post('/packages/components/{id}/update', [BPackageComponent::class, 'update'])->name('updateComponentPackage');
     Route::get('/packages/components/{id}/edit', [BPackageComponent::class, 'edit'])->name('editComponentPackages');
+
     Route::get('/site-users/{id}/company', [BSiteUsers::class, 'company'])->name('userCompany');
+    Route::get('/site-users/{id}/company/get-premium', [BSiteUsers::class, 'getPremium'])->name('userCompanyPremium');
+    Route::put('/site-users/{id}/company/get-premium-time', [BSiteUsers::class, 'getPremiumTime'])->name('userCompanyPremiumTime');
+    Route::get('/site-users/{id}/company/remove-premium', [BSiteUsers::class, 'getPremiumCancel'])->name('userCompanyPremiumCancel');
+    Route::get('/vacancies/{id}/get-premium', [App\Http\Controllers\Backend\VacancyController::class, 'getPremium'])->name('VacancyPremium');
+    Route::put('/vacancies/{id}/get-premium-time', [App\Http\Controllers\Backend\VacancyController::class, 'getPremiumTime'])->name('VacancyPremiumTime');
+    Route::get('/vacancies/{id}/remove-premium', [App\Http\Controllers\Backend\VacancyController::class, 'getPremiumCancel'])->name('VacancyPremiumCancel');
     Route::post('/site-users/{id}/company/create', [BSiteUsers::class, 'companyCreate'])->name('userCompanyCreate');
     Route::post('/package/add-new-component/', [BPackageComponent::class, 'addNewComponent'])->name('addNewComponent');
+
     Route::get('/vacancies/approved', [BVacancy::class, 'approved'])->name('approvedVacancies');
     Route::get('/vacancies/pending', [BVacancy::class, 'pending'])->name('pendingVacancies');
+    Route::get('/vacancies/updated', [BVacancy::class, 'updated'])->name('updatedVacancies');
+    Route::get('/vacancies/{id}/updated', [BVacancy::class, 'singleUpdated'])->name('updatedVacancy');
+    Route::post('vacancies/{id}/update', [BVacancy::class, 'updateMergedVacancy'])->name('updateMergedVacancy');
 
 
+    Route::get('/vacancy/append/{id}', [BVacancy::class, 'approveVacancy'])->name('approve-vacancy');
+    Route::get('/vacancy/append/{id}/update', [BVacancy::class, 'approveUpdatedVacancy'])->name('approve-updated-vacancy');
 
 //Resources
     Route::resource('/categories', BCategory::class);
@@ -70,7 +88,6 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::resource('/about', BAbout::class);
     Route::resource('/information', BInformation::class);
     Route::resource('/newsletter', BNewsletter::class);
-    Route::resource('/statistics', BStatistics::class);
     Route::resource('/slider', BSlider::class);
     Route::resource('/permissions', BPermission::class);
     Route::resource('/faq', BFaq::class);
@@ -78,7 +95,6 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::resource('/alt-categories', BAltCat::class);
     Route::resource('/products', BProduct::class);
     Route::resource('/services', BService::class);
-    Route::resource('/support', BTech::class);
     Route::resource('/cities', BCity::class);
     Route::resource('/salaries', BSalary::class);
     Route::resource('/education', BEducation::class);
@@ -88,6 +104,7 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::resource('/packages', BPackage::class);
     Route::resource('/site-users', BSiteUsers::class);
     Route::resource('/appeals', BAppeals::class);
+    Route::resource('/term', BTerm::class);
     Route::resource('/package-components', BPackageComponent::class);
 
     Route::get('/slider/{id}/change-order', [BSlider::class, 'sliderOrder'])->name('sliderOrder');
@@ -120,8 +137,7 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::get('/report/clean-all', [BReport::class, 'cleanAllReport'])->name('cleanAllReport');
     Route::get('/permission/{id}/delete', [BPermission::class, 'delPermission'])->name('delPermission');
     Route::get('/newsletter/{id}/delete', [BNewsletter::class, 'delNewsletter'])->name('delNewsletter');
-    Route::get('/statistics/{id}/delete', [BStatistics::class, 'delStat'])->name('delStat');
-    Route::get('/about/vacancies/{id}/delete', [BVacancy::class, 'delVacancy'])->name('delVacancy');
+    Route::get('/about/vacancies/{id}/delete', [BVacancy::class, 'delete'])->name('vacanciesDelete');
     Route::get('/faq/{id}/delete', [BFaq::class, 'delFAQ'])->name('delFAQ');
     Route::get('/project/{id}/delete', [BProject::class, 'delProject'])->name('delProject');
     Route::get('/alt-categories/{id}/delete', [BAltCat::class, 'delAltCategory'])->name('delAltCategory');
@@ -129,7 +145,6 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::get('/news/{id}/delete', [BNews::class, 'delete'])->name('delNews');
     Route::get('/service/{id}/delete', [BService::class, 'delete'])->name('delService');
     Route::get('/appeals/{id}/delete', [BAppeals::class, 'delete'])->name('delAppeals');
-    Route::get('/support/{id}/delete', [BTech::class, 'delete'])->name('delSupport');
     Route::get('/education/{id}/delete', [BEducation::class, 'delete'])->name('delEducation');
     Route::get('/experience/{id}/delete', [BExperience::class, 'delete'])->name('delExperience');
     Route::get('/cities/{id}/delete', [BCity::class, 'delete'])->name('delCity');
@@ -138,7 +153,7 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::get('/package/{id}/delete', [BPackage::class, 'delete'])->name('delPackage');
     Route::get('/component/{id}/delete', [BPackageComponent::class, 'delete'])->name('delPackageComponent');
     Route::get('/package/{component}/component/{package}/delete', [BPackageComponent::class, 'deletePC'])->name('delPC');
-    Route::get('site-users/{id}/delete', [BSiteUsers::class, 'delete'])->name('delSiteUser');
+    Route::get('site-users/{id}/delete', [BSiteUsers::class, 'delete'])->name('site-usersDelete');
 
 //Clear
     Route::get('/clear', function () {
@@ -147,6 +162,8 @@ Route::group(['middleware' => 'auth:web'], function () {
         Artisan::call('route:clear');
         Artisan::call('clear-compiled');
         Artisan::call('config:cache');
+        $process = new Process(['composer', 'dump-autoload']);
+        $process->run();
         dd("Cache cleared");
     });
 });

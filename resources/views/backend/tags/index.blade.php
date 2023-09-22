@@ -41,19 +41,19 @@
                                                 <div class="mb-3">
                                                     <label>@lang('backend.att') <span class="text-danger">*</span></label>
                                                     <div>
-                                                        <input name="attribute" type="text" class="form-control" required="" data-parsley-minlength="6" value="{{ $tag->attribute }}">
+                                                        <input name="attribute" type="text" class="form-control" required=""  value="{{ $tag->attribute }}">
                                                     </div>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label>@lang('backend.att-name') <span class="text-danger">*</span></label>
                                                     <div>
-                                                        <input name="attribute_name" type="text" class="form-control" required="" data-parsley-minlength="6" value="{{ $tag->attribute_name }}">
+                                                        <input name="attribute_name" type="text" class="form-control" required=""  value="{{ $tag->attribute_name }}">
                                                     </div>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label>@lang('backend.content') <span class="text-danger">*</span></label>
                                                     <div>
-                                                        <textarea name="content1" type="text" class="form-control" required="" rows="5" data-parsley-minlength="6">{{ $tag->content }}</textarea>
+                                                        <textarea name="content1" type="text" class="form-control" required="" rows="5" >{{ $tag->content }}</textarea>
                                                     </div>
                                                 </div>
                                                 <div class="mb-5 text-center">

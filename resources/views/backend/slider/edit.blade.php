@@ -42,15 +42,15 @@
                                             <div class="form-group row">
                                                 <div class="mb-3">
                                                     <label>@lang('backend.title') </label>
-                                                    <input type="text" name="title[{{ $lan->code }}]" value="{{ $slider->translate($lan->code)->title }}" class="form-control" id="validationCustom" data-parsley-minlength="6" placeholder="@lang('backend.title')">
+                                                    <input type="text" name="title[{{ $lan->code }}]" value="{{ $slider->translate($lan->code)->title }}" class="form-control" id="validationCustom"  placeholder="@lang('backend.title')">
                                                 </div>
                                                 <div class="mb-3">
                                                     <label>@lang('backend.description') </label>
-                                                    <input type="text" name="description[{{ $lan->code }}]"  value="{{ $slider->translate($lan->code)->description }}" class="form-control" id="validationCustom" data-parsley-minlength="6" placeholder="@lang('backend.description')">
+                                                    <input type="text" name="description[{{ $lan->code }}]"  value="{{ $slider->translate($lan->code)->description }}" class="form-control" id="validationCustom"  placeholder="@lang('backend.description')">
                                                 </div>
                                                 <div class="mb-3">
                                                     <label>@lang('backend.alt') </label>
-                                                    <input type="text" name="alt[{{ $lan->code }}]" class="form-control"  value="{{ $slider->translate($lan->code)->alt }}" id="validationCustom" data-parsley-minlength="6" placeholder="@lang('backend.alt')">
+                                                    <input type="text" name="alt[{{ $lan->code }}]" class="form-control"  value="{{ $slider->translate($lan->code)->alt }}" id="validationCustom"  placeholder="@lang('backend.alt')">
                                                 </div>
                                             </div>
                                         </div>

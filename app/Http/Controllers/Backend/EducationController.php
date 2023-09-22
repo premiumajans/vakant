@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Models\City;
-use App\Models\CityTranslation;
 use App\Models\Education;
 use App\Models\EducationTranslation;
 use Exception;
@@ -18,7 +16,7 @@ class EducationController extends Controller
 
     public function index()
     {
-        abort_if(Gate::denies('education index'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        checkPermission('education');
         $educations = Education::all();
         return view('backend.education.index', get_defined_vars());
     }

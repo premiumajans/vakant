@@ -1,0 +1,90 @@
+/* Reset Styles */
+body, table, td, a {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+table, td {
+    mso-table-lspace: 0pt;
+    mso-table-rspace: 0pt;
+}
+
+img {
+    -ms-interpolation-mode: bicubic;
+    border: 0;
+    height: auto;
+    line-height: 100%;
+    outline: none;
+    text-decoration: none;
+}
+
+table {
+    border-collapse: collapse !important;
+}
+
+/* Main Styles */
+.container {
+    background-color: #233d4d;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.email-table {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.header {
+    padding: 40px 20px 20px 20px;
+    border-radius: 4px 4px 0px 0px;
+    color: #111111;
+    font-family: 'Lato', Helvetica, Arial, sans-serif;
+    font-size: 48px;
+    font-weight: 400;
+    letter-spacing: 4px;
+    line-height: 48px;
+}
+
+.content {
+    padding: 20px 30px 40px 30px;
+    color: #666666;
+    font-family: 'Lato', Helvetica, Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 25px;
+}
+
+.footer {
+    padding: 30px 30px 30px 30px;
+    border-radius: 4px 4px 4px 4px;
+    color: #666666;
+    font-family: 'Lato', Helvetica, Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 25px;
+}
+
+/* Additional Styles */
+.greeting {
+    margin: 0;
+}
+
+.message {
+    margin: 0;
+}
+
+.signature {
+    margin: 0;
+    margin-top: 20px;
+}
+
+.more-help {
+    margin: 0;
+}
+
+@media screen and (max-width: 600px) {
+    .header {
+        font-size: 32px !important;
+        line-height: 32px !important;
+    }
+}

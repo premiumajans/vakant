@@ -12,7 +12,6 @@ return new class extends Migration {
             $table->foreignId('package_id')->unsigned();
             $table->string('locale')->index();
             $table->string('title');
-            $table->longText('description');
             $table->unique(['package_id', 'locale']);
             $table->foreign('package_id')->references('id')->on('packages')->onDelete('cascade');
         });

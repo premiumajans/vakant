@@ -39,7 +39,7 @@
                                                         <label>@lang('backend.name') <span class="text-danger">*</span></label>
                                                         <input name="name[{{ $lan->code }}]" type="text"
                                                                class="form-control" required=""
-                                                               data-parsley-minlength="6"
+
                                                                value="{{ $product->translate($lan->code)->name }}">
                                                         <div class="valid-feedback">
                                                             @lang('backend.name') @lang('messages.is-correct')
@@ -53,7 +53,7 @@
                                                                 class="text-danger">*</span></label>
                                                         <input name="alt[{{ $lan->code }}]" type="text"
                                                                class="form-control" required=""
-                                                               data-parsley-minlength="6"
+
                                                                value="{{ $product->translate($lan->code)->alt }}">
                                                         <div class="valid-feedback">
                                                             @lang('backend.alt') @lang('messages.is-correct')

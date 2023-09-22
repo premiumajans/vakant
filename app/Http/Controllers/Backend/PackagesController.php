@@ -41,7 +41,6 @@ class PackagesController extends Controller
                 $translation->package_id = $package->id;
                 $translation->locale = $lang->code;
                 $translation->title = $request->title[$lang->code];
-                $translation->description = $request->description[$lang->code];
                 $translation->save();
             }
             alert()->success(__('messages.success'));
@@ -70,7 +69,6 @@ class PackagesController extends Controller
                 $package->monthly_payment = $request->cost;
                 foreach (active_langs() as $lang) {
                     $package->translate($lang->code)->title = $request->title[$lang->code];
-                    $package->translate($lang->code)->description = $request->description[$lang->code];
                 }
                 $package->save();
             });

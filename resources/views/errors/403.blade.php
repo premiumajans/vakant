@@ -4,7 +4,6 @@
     @include('backend.includes.meta')
     @include('backend.includes.styles')
 </head>
-
 <body class="auth-body-bg">
 <div class="bg-overlay"></div>
 <div class="my-5 pt-5">

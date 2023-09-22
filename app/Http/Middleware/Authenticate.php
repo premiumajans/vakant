@@ -3,21 +3,15 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Illuminate\Support\Facades\Route;
 
 class Authenticate extends Middleware
 {
-    protected function redirectTo($request)
+    protected function redirectTo($request): ?string
     {
-        if (!$request->expectsJson()) {
-            if (str_contains($request->getRequestUri(), 'user')) {
-                return route('user.loginForm');
-            }
-            if (str_contains($request->getRequestUri(), 'admin')) {
-                return route('login');
-            }
+        if ($request->expectsJson()) {
+            return route('backend.login');
         }
-//        if (!$request->expectsJson()) {
-//            return route('login');
-//        }
+        return null;
     }
 }

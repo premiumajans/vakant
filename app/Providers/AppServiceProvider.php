@@ -2,48 +2,53 @@
 
 namespace App\Providers;
 
-use App\Models\Category;
-use App\Models\Education;
-use App\Models\Experience;
-use App\Models\Salary;
-use App\Models\Mode;
-use App\Models\SiteLanguage;
-use App\Models\Vacancy;
+use App\Utils\Services\DataCacheService;
+use App\Utils\Services\ExpiredVacancies;
+use App\Utils\Services\ScarpingService;
+use App\Utils\Services\VacancyScrapingService;
 use Illuminate\Support\ServiceProvider;
-use App\Models\City;
+
 
 class AppServiceProvider extends ServiceProvider
 {
-    public function register()
+    public function register(): void
     {
+        $this->app->register(\L5Swagger\L5SwaggerServiceProvider::class);
+        $this->app->singleton(DataCacheService::class, function ($app) {
+            return new DataCacheService();
+        });
     }
 
-    public function boot()
+    public function boot(DataCacheService $dataCacheService): void
     {
-        $countApprovedVacancies = Vacancy::where('admin_status',1)->count();
-        $countPendingVacancies = Vacancy::where('admin_status',0)->count();
-        $currentLanguage = SiteLanguage::where('code', app()->getLocale())->first();
-        $categories = Category::all();
-        $cities = City::all();
-        $educations = Education::all();
-        $experiences = Experience::all();
-        $salaries = Salary::all();
-        $modes = Mode::all();
-        $menuCategories = Category::where('status', 1)->get();
-        $languages = SiteLanguage::where('status', 1)->orderBy('id', 'asc')->get();
+        $premiumCompanyService = new \App\Utils\Services\PremiumCompanyService();
+        $premiumCompanyService->cleanUpExpiredPremiumCompanies();
+        $premiumVacancyService = new \App\Utils\Services\PremiumVacancyService();
+        $premiumVacancyService->cleanUpExpiredPremiumVacancies();
+        $deleteExpiredVacancies = new ExpiredVacancies();
+        $deleteExpiredVacancies->cleanUpExpiredVacancies();
+        $countApprovedVacancies = $dataCacheService->getCachedCountApprovedVacancies();
+        $countPendingVacancies = $dataCacheService->getCountPendingVacancies();
+        $countUpdatedVacancies = $dataCacheService->getCountUpdatedVacancies();
+        $modes = $dataCacheService->getCachedModes();
+        $salaries = $dataCacheService->getCachedSalaries();
+        $experiences = $dataCacheService->getCachedExperiences();
+        $educations = $dataCacheService->getCachedEducations();
+        $cities = $dataCacheService->getCachedCities();
+        $languages = $dataCacheService->getCachedLanguages();
+        $categories = $dataCacheService->getCachedCategories();
         view()->share([
             'countApprovedVacancies' => $countApprovedVacancies,
             'countPendingVacancies' => $countPendingVacancies,
+            'countUpdatedVacancies' => $countUpdatedVacancies,
             'modes' => $modes,
             'salaries' => $salaries,
             'experiences' => $experiences,
             'educations' => $educations,
             'cities' => $cities,
             'languages' => $languages,
-            'currentLanguage' => $currentLanguage,
             'locale' => app()->getLocale(),
             'categories' => $categories,
-            'menuCategories' => $menuCategories,
         ]);
     }
 }

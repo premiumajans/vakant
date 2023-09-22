@@ -12,16 +12,12 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class Component extends Model implements TranslatableContract
 {
     use Translatable, LogsActivity;
-
-    public $translatedAttributes = ['title'];
-
+    public array $translatedAttributes = ['title'];
     public function package()
     {
         return $this->belongsToMany(Package::class, 'packages_components', 'component_id', 'package_id');
     }
-
     protected $guarded = [];
-
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->logAll();

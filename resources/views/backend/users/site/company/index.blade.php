@@ -5,7 +5,7 @@
         <div class="page-content">
             <div class="container-fluid">
                 <div class="row justify-content-center">
-                    <div class="col-xl-6 ">
+                    <div class="col-xl-8 ">
                         <div class="card">
                             <div class="card-body">
                                 <div class="col-12">
@@ -26,99 +26,38 @@
                                         <div class="mb-3">
                                             <label>@lang('backend.name') <span class="text-danger">*</span></label>
                                             <input type="text" name="name" class="form-control" required=""
-                                                   data-parsley-minlength="6" placeholder="Premium Ajans MMC">
-                                            <div class="valid-feedback">
-                                                @lang('backend.name') @lang('messages.is-correct')
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                @lang('backend.name') @lang('messages.not-correct')
-                                            </div>
+                                                   placeholder="Premium Ajans MMC">
+                                            {!! validationResponse('backend.name') !!}
                                         </div>
                                         <div class="mb-3">
                                             <label>@lang('backend.email') <span class="text-danger">*</span></label>
                                             <input type="text" name="email" class="form-control" required=""
-                                                   data-parsley-minlength="6" placeholder="taleh@vakant.az">
-                                            <div class="valid-feedback">
-                                                @lang('backend.email') @lang('messages.is-correct')
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                @lang('backend.email') @lang('messages.not-correct')
-                                            </div>
+                                                   placeholder="taleh@vakant.az">
+                                            {!! validationResponse('backend.email') !!}
                                         </div>
-
                                         <div class="mb-3">
                                             <label>@lang('backend.phone') <span class="text-danger">*</span></label>
                                             <input type="number" name="phone" class="form-control" required=""
                                                    placeholder="50 000 0510">
-                                            <div class="valid-feedback">
-                                                @lang('backend.phone') @lang('messages.is-correct')
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                @lang('backend.phone') @lang('messages.not-correct')
-                                            </div>
+                                            {!! validationResponse('backend.phone') !!}
                                         </div>
-
                                         <div class="mb-3">
                                             <label>@lang('backend.adress') <span class="text-danger">*</span></label>
                                             <input type="text" name="address" class="form-control" required=""
-                                                   data-parsley-minlength="6" placeholder="Bakı, Azərbaycan">
-                                            <div class="valid-feedback">
-                                                @lang('backend.address') @lang('messages.is-correct')
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                @lang('backend.address') @lang('messages.not-correct')
-                                            </div>
+                                                   placeholder="Bakı, Azərbaycan">
+                                            {!! validationResponse('backend.address') !!}
                                         </div>
-
-                                        <div class="mb-3">
-                                            <label>@lang('backend.voen') <span class="text-danger">*</span></label>
-                                            <input type="text" name="voen" class="form-control" required=""
-                                                   data-parsley-minlength="6" placeholder="@lang('backend.voen')">
-                                            <div class="valid-feedback">
-                                                @lang('backend.voen') @lang('messages.is-correct')
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                @lang('backend.voen') @lang('messages.not-correct')
-                                            </div>
-                                        </div>
-
-
                                         <div class="mb-3">
                                             <label>@lang('backend.photo')</label>
                                             <input type="file" name="photo" class="form-control">
                                         </div>
-
-
-                                        <ul class="nav nav-pills nav-justified mb-2" role="tablist">
-                                            @foreach(active_langs() as $lan)
-                                                <li class="nav-item waves-effect waves-light">
-                                                    <a class="nav-link @if($loop->first) active @endif"
-                                                       data-bs-toggle="tab"
-                                                       href="#{{ $lan->code }}" role="tab" aria-selected="true">
-                                                    <span class="d-block d-sm-none"><i
-                                                            class="fas fa-flag">&nbsp; {{ $lan->code }}</i></span>
-                                                        <span class="d-none d-sm-block">{{ $lan->name }}</span>
-                                                    </a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                        <div class="tab-content p-3 text-muted">
-                                            @foreach(active_langs() as $key => $lan)
-                                                <div class="tab-pane @if($loop->first) active show @endif"
-                                                     id="{{ $lan->code }}" role="tabpanel">
-                                                    <div class="form-group row">
-                                                        <div class="mb-3">
-                                                            <label>@lang('menus.about')
-                                                                <span
-                                                                    class="text-danger">*</span></label>
-                                                            <textarea id="elm{{$lan->code.$key+1}}" required=""
-                                                                      name="about[{{$lan->code}}]"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
+                                        <div class="mb-3">
+                                            <label>@lang('menus.about')
+                                                <span
+                                                    class="text-danger">*</span></label>
+                                            <textarea id="elmaz1" required=""
+                                                      name="about"></textarea>
                                         </div>
-
                                         <div class="mb-0 text-center">
                                             <div>
                                                 <button type="submit"
@@ -140,97 +79,41 @@
                                         <div class="mb-3">
                                             <label>@lang('backend.name') <span class="text-danger">*</span></label>
                                             <input type="text" name="name" class="form-control" required=""
-                                                   data-parsley-minlength="6" value="{{ $company->name ?? '-' }}">
-                                            <div class="valid-feedback">
-                                                @lang('backend.name') @lang('messages.is-correct')
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                @lang('backend.name') @lang('messages.not-correct')
-                                            </div>
+                                                   value="{{ $company->name ?? '-' }}">
+                                            {!! validationResponse('backend.name') !!}
                                         </div>
                                         <div class="mb-3">
                                             <label>@lang('backend.email') <span class="text-danger">*</span></label>
                                             <input type="text" name="email" class="form-control" required=""
-                                                   data-parsley-minlength="6" value="{{ $company->email ?? '-' }}">
-                                            <div class="valid-feedback">
-                                                @lang('backend.email') @lang('messages.is-correct')
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                @lang('backend.email') @lang('messages.not-correct')
-                                            </div>
+                                                   value="{{ $company->email ?? '-' }}">
+                                            {!! validationResponse('backend.email') !!}
                                         </div>
 
                                         <div class="mb-3">
                                             <label>@lang('backend.phone') <span class="text-danger">*</span></label>
                                             <input type="text" name="phone" class="form-control" required=""
-                                                   data-parsley-minlength="6" value="{{ $company->phone ?? '-' }}">
-                                            <div class="valid-feedback">
-                                                @lang('backend.phone') @lang('messages.is-correct')
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                @lang('backend.phone') @lang('messages.not-correct')
-                                            </div>
+                                                   value="{{ $company->phone ?? '-' }}">
+                                            {!! validationResponse('backend.phone') !!}
                                         </div>
-
                                         <div class="mb-3">
                                             <label>@lang('backend.adress') <span class="text-danger">*</span></label>
                                             <input type="text" name="address" class="form-control" required=""
-                                                   data-parsley-minlength="6" value="{{ $company->adress ?? '-' }}">
-                                            <div class="valid-feedback">
-                                                @lang('backend.address') @lang('messages.is-correct')
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                @lang('backend.address') @lang('messages.not-correct')
-                                            </div>
+                                                   value="{{ $company->adress ?? '-' }}">
+                                            {!! validationResponse('backend.address') !!}
                                         </div>
-
-                                        <div class="mb-3">
-                                            <label>@lang('backend.voen') <span class="text-danger">*</span></label>
-                                            <input type="text" name="voen" class="form-control" required=""
-                                                   data-parsley-minlength="6" value="{{ $company->voen ?? '-' }}">
-                                            <div class="valid-feedback">
-                                                @lang('backend.voen') @lang('messages.is-correct')
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                @lang('backend.voen') @lang('messages.not-correct')
-                                            </div>
-                                        </div>
-
                                         <div class="mb-3">
                                             <label>@lang('backend.photo')</label>
-                                            <input type="file" name="photo" class="form-control">
+                                            <input type="file" name="photo" class="form-control mb-2">
+                                            <img class="form-control" src="{{ asset($company->photo) }}"
+                                                 style="width: 100%;max-height: 500px;">
                                         </div>
-
-
-                                        <ul class="nav nav-pills nav-justified mb-2" role="tablist">
-                                            @foreach(active_langs() as $lan)
-                                                <li class="nav-item waves-effect waves-light">
-                                                    <a class="nav-link @if($loop->first) active @endif"
-                                                       data-bs-toggle="tab"
-                                                       href="#{{ $lan->code }}" role="tab" aria-selected="true">
-                                                    <span class="d-block d-sm-none"><i
-                                                            class="fas fa-flag">&nbsp; {{ $lan->code }}</i></span>
-                                                        <span class="d-none d-sm-block">{{ $lan->name }}</span>
-                                                    </a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-
-                                        <div class="tab-content p-3 text-muted">
-                                            @foreach(active_langs() as $key => $lan)
-                                                <div class="tab-pane @if($loop->first) active show @endif"
-                                                     id="{{ $lan->code }}" role="tabpanel">
-                                                    <div class="form-group row">
-                                                        <div class="mb-3">
-                                                            <label>@lang('menus.about')</label>
-                                                            <textarea id="elm{{$lan->code.$key+1}}"
-                                                                      name="about[{{$lan->code}}]">{!! $company->translate($lan->code)->about ?? '-' !!}</textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
+                                        <div class="mb-3">
+                                            <label>@lang('menus.about')
+                                                <span
+                                                    class="text-danger">*</span></label>
+                                            <textarea id="elmaz1" required=""
+                                                      name="about">{!! $company->about !!}</textarea>
                                         </div>
-
                                         <div class="mb-0 text-center">
                                             <div>
                                                 <button type="submit"
@@ -248,6 +131,81 @@
                             </div>
                         </div>
                     </div>
+                    @if(!empty($company))
+                        <div class="col-xl-4 ">
+                            <div class="card">
+                                <div class="card-body">
+                                    @if($company->premium()->exists())
+                                        <div class="col-12">
+                                            <div
+                                                class="page-title-box d-sm-flex align-items-center justify-content-between">
+
+                                                <span class="text-warning">@lang('backend.premium')&nbsp;<i
+                                                        class="fas fa-crown"></i></span>
+                                                <h4 class="mb-sm-0">@lang('backend.currently-status')
+                                                    :
+                                                    <span
+                                                        class="text-primary">{{\Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$company->premium->end_time )->format('d-m-Y')}}</span>
+                                                </h4>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    @if($company->premium()->exists())
+                                        <div class="d-flex justify-content-between">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                    data-target="#exampleModal" data-whatever="@mdo">
+                                                <i class="fas fa-clock"></i>&nbsp;@lang('backend.get-time')</button>
+                                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title"
+                                                                id="exampleModalLabel">@lang('backend.get-time')</h5>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form
+                                                                action="{{ route('backend.userCompanyPremiumTime',$company->id) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <div class="form-group">
+                                                                    <label for="recipient-name"
+                                                                           class="col-form-label">@lang('backend.time')
+                                                                        :</label>
+                                                                    <input type="text" name="time" value="30"
+                                                                           class="form-control"
+                                                                           id="recipient-name">
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                            data-dismiss="modal">
+                                                                        @lang('backend.cancel')
+                                                                    </button>
+                                                                    <button type="submit" class="btn btn-primary">
+                                                                        @lang('backend.save')
+                                                                    </button>
+                                                                </div>
+                                                            </form>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <a class="btn btn-danger text-white w-45"
+                                               href="{{ route('backend.userCompanyPremiumCancel',$company->id) }}"><i
+                                                    class="fas fa-clock"></i>&nbsp;@lang('backend.cancel')</a>
+                                        </div>
+                                    @else
+                                        <a class="btn btn-warning text-white w-100"
+                                           href="{{ route('backend.userCompanyPremium',$company->id) }}"><i
+                                                class="fas fa-crown"></i>&nbsp;@lang('backend.get-premium')</a>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

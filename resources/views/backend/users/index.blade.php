@@ -66,6 +66,10 @@
                                     </td>
                                     @can('users delete')
                                     <td class="text-center">
+                                        <a class="btn btn-primary" title="@lang('backend.give-permission')"
+                                           href="{{ route('backend.giveUserPermission',['user'=>$user->id]) }}">
+                                            <i class="fas fa-key"></i>
+                                        </a>
                                         @if($user->id != auth()->user()->id)
                                             <a class="btn btn-danger" title="@lang('backend.delete')"
                                                href="{{ route('backend.delAdmin',['id'=>$user->id]) }}">

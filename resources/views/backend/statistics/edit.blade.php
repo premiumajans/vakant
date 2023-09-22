@@ -20,7 +20,7 @@
                                     <div class="mb-3">
                                         <label>@lang('backend.name') <span class="text-danger">*</span></label>
                                         <input type="text" name="name" class="form-control" required=""
-                                               data-parsley-minlength="6" value="{{ $statistic->name }}">
+                                              value="{{ $statistic->name }}">
                                         <div class="valid-feedback">
                                             @lang('backend.name') @lang('messages.is-correct')
                                         </div>

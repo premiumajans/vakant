@@ -9,16 +9,18 @@ return new class extends Migration {
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('admin_id')->unsigned();
+            $table->foreignId('user_id')->unsigned();
             $table->string('name');
             $table->string('phone');
             $table->string('email');
+            $table->string('company_type')->default(\App\Http\Enums\CompanyEnum::SIMPLE);
             $table->longText('voen')->nullable();
             $table->string('adress');
+            $table->longText('about')->nullable();
             $table->longText('photo')->nullable();
-            $table->foreign('admin_id')
+            $table->foreign('user_id')
                 ->references('id')
-                ->on('admins')
+                ->on('users')
                 ->onDelete('cascade');
         });
     }

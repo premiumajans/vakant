@@ -1,14 +1,15 @@
 <?php
 
 return [
-
-
     'defaults' => [
         'guard' => 'web',
         'passwords' => 'users',
     ],
-
     'guards' => [
+        'api' => [
+            'driver' => 'jwt',
+            'provider' => 'users',
+        ],
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
@@ -18,8 +19,6 @@ return [
             'provider' => 'admins',
         ],
     ],
-
-
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
@@ -29,7 +28,6 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
         ]
-
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -49,7 +47,6 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
-
     ],
     'password_timeout' => 10800,
 ];

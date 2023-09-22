@@ -2,48 +2,28 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
-use Spatie\Activitylog\LogOptions;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Admin extends Authenticatable
 {
     use HasRoles,
         HasPermissions,
         HasApiTokens,
-        HasFactory,
         HasProfilePhoto,
         Notifiable,
-        TwoFactorAuthenticatable,
-        LogsActivity;
-
-    protected $guard = 'admin';
-
-    public function company()
-    {
-        return $this->hasMany(Company::class, 'admin_id');
-    }
-
-    public function package()
-    {
-        return $this->belongsToMany(Package::class, 'admin_packages', 'admin_id', 'package_id');
-    }
+        TwoFactorAuthenticatable;
 
     protected $fillable = [
         'name',
         'email',
         'password',
-        'provider_id',
-        'current_ad_count',
     ];
-
     protected $hidden = [
         'password',
         'remember_token',
@@ -56,9 +36,4 @@ class Admin extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()->logOnly(['name', 'email', 'password', 'login']);
-    }
 }

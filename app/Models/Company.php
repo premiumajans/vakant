@@ -1,23 +1,22 @@
 <?php
 
 namespace App\Models;
-
-use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
-use Astrotomic\Translatable\Translatable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 
-class Company extends Model implements TranslatableContract
+class Company extends Model
 {
-    public function admin()
+    public function admin(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Admin::class);
+        return $this->belongsTo(User::class);
     }
-
-    use Translatable;
-
+    public function premium(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(PremiumCompany::class);
+    }
+    public function history(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(PremiumCompanyHistory::class);
+    }
     public $timestamps = false;
-    public $translatedAttributes = ['about'];
-    protected $fillable = ['name', 'adress', 'email', 'phone', 'photo'];
+    protected $fillable = ['name', 'adress', 'email', 'phone', 'photo', 'about'];
 }

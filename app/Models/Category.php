@@ -2,27 +2,23 @@
 
 namespace App\Models;
 
+use App\Utils\Traits\RelationshipsTrait;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\{LogOptions, Traits\LogsActivity};
 
 class Category extends Model implements TranslatableContract
 {
-    public function alt()
+    use Translatable, LogsActivity,RelationshipsTrait;
+    public function alt(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(AltCategory::class, 'category_id');
     }
-
-    use Translatable, LogsActivity;
-
-    public $translatedAttributes = ['name'];
+    public array $translatedAttributes = ['name'];
     protected $fillable = ['slug'];
-
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->logOnly(['slug']);
     }
-
 }

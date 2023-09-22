@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\AltCategory;
-use App\Models\AltcategoryTranslation;
+use App\Models\AltCategoryTranslation;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -35,7 +35,7 @@ class AltCategories extends Controller
             $altCategory = new AltCategory();
             $category->alt()->save($altCategory);
             foreach (active_langs() as $lang) {
-                $translation = new AltcategoryTranslation();
+                $translation = new AltCategoryTranslation();
                 $translation->locale = $lang->code;
                 $translation->alt_category_id = $altCategory->id;
                 $translation->name = $request->name[$lang->code];

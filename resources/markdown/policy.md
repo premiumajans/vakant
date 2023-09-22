@@ -1,3 +1,0 @@
-# Dırnıs Xeyriyyə Cəmiyyəti
-
-dxc

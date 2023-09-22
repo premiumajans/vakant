@@ -1,4 +1,6 @@
-@include('backend.includes.meta')
+<meta charset="utf-8" />
+<title>@lang('backend.login')</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 @section('title',__('backend.login'))
 @include('backend.includes.styles')
 <body class="auth-body-bg">
@@ -12,7 +14,7 @@
                 </h4>
                 <div class="p-3">
                     <form class="form-horizontal mt-3 needs-validation" novalidate method="POST"
-                          action="{{ route('login') }}">
+                          action="{{ route('backend.loginPost') }}">
                         @csrf
                         <div class="form-group mb-3 row">
                             <div class="col-12">

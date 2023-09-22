@@ -44,7 +44,7 @@
                                     <td class="text-center">{{ $salary->id }}</td>
                                     <td class="text-center">{{ $salary->salary }} ₼</td>
                                     @foreach(active_langs() as $lang)
-                                        <td class="text-center">{{ $salary->translate($lang->code)->name }}</td>
+                                        <td class="text-center">{{ $salary->translate($lang->code)->name ?? '-' }}</td>
                                     @endforeach
                                     <td>{{ date('d.m.Y H:i:s',strtotime($salary->created_at))}}</td>
                                     <td class="text-center">

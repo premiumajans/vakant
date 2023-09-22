@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Helpers\CRUDHelper;
 use App\Http\Requests\Backend\Create\SiteLanguageRequest;
 use App\Http\Requests\Backend\Update\SiteLanguageRequest as updateRequest;
 
@@ -14,27 +15,27 @@ class SiteLanguageController extends Controller
 {
     public function index()
     {
-        abort_if(Gate::denies('languages index'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        checkPermission('languages index');
         $siteLanguages = SiteLanguage::all();
         return view('backend.site-languages.index', get_defined_vars());
     }
 
     public function create()
     {
-        abort_if(Gate::denies('languages create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        checkPermission('languages create');
         return view('backend.site-languages.create');
     }
 
     public function edit($id)
     {
-        abort_if(Gate::denies('languages edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        checkPermission('languages edit');
         $language = SiteLanguage::find($id);
         return view('backend.site-languages.edit', get_defined_vars());
     }
 
     public function store(SiteLanguageRequest $request)
     {
-        abort_if(Gate::denies('languages create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        checkPermission('languages create');
         try {
             $icon = upload('flags', $request->file('icon'));
             $siteLanguage = new SiteLanguage();
@@ -53,7 +54,7 @@ class SiteLanguageController extends Controller
 
     public function update(updateRequest $request, $id)
     {
-        abort_if(Gate::denies('languages edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        checkPermission('languages edit');
         try {
             if ($request->hasFile('icon')) {
                 unlink(SiteLanguage::find($id)->icon);
@@ -74,27 +75,13 @@ class SiteLanguageController extends Controller
 
     public function siteLanStatus($id)
     {
-        abort_if(Gate::denies('languages index'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $status = SiteLanguage::where('id', $id)->value('status');
-        if ($status == 1) {
-            SiteLanguage::where('id', $id)->update(['status' => 0]);
-        } else {
-            SiteLanguage::where('id', $id)->update(['status' => 1]);
-        }
-        return redirect()->route('backend.site-languages.index');
+        checkPermission('languages edit');
+        item_status('\App\Models\SiteLanguage',$id);
     }
 
     public function delSiteLang($id)
     {
-        abort_if(Gate::denies('languages delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        try {
-            unlink(SiteLanguage::find($id)->icon);
-            SiteLanguage::find($id)->delete();
-            alert()->success(__('messages.success'));
-            return redirect()->route('backend.site-languages.index');
-        } catch (\Exception $e) {
-            alert()->error(__('messages.error'));
-            return redirect()->route('backend.site-languages.index');
-        }
+        checkPermission('languages delete');
+        CRUDHelper::remove_item('\App\Models\SiteLanguage', $id);
     }
 }

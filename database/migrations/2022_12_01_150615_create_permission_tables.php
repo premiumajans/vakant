@@ -5,7 +5,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Spatie\Permission\PermissionRegistrar;
 
-class CreatePermissionTables extends Migration
+class
+CreatePermissionTables extends Migration
 {
     /**
      * Run the migrations.
@@ -29,6 +30,7 @@ class CreatePermissionTables extends Migration
             $table->bigIncrements('id'); // permission id
             $table->string('name');       // For MySQL 8.0 use string('name', 125);
             $table->string('guard_name'); // For MySQL 8.0 use string('guard_name', 125);
+            $table->string('group_name')->nullable();
             $table->timestamps();
 
             $table->unique(['name', 'guard_name']);

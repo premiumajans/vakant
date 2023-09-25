@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\General\VacancyController as GeneralVacancy;
-use App\Http\Enums\CauserEnum;
-use App\Http\Enums\StatusEnum;
-use App\Http\Enums\VacancyAdminEnum;
-use App\Http\Enums\VacancyEnum;
 use App\Http\Helpers\CRUDHelper;
 use App\Http\Requests\Backend\Create\VacancyRequest;
 use App\Models\Vacancy;
 use App\Models\VacancyUpdate;
+use App\Utils\Enums\CauserEnum;
+use App\Utils\Enums\StatusEnum;
+use App\Utils\Enums\VacancyAdminEnum;
+use App\Utils\Enums\VacancyEnum;
 use App\Utils\Services\MailService;
 use App\Utils\Services\PremiumVacancyService;
 use Carbon\Carbon;

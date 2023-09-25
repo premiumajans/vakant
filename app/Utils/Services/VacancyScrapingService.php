@@ -3,10 +3,10 @@
 
 namespace App\Utils\Services;
 
-use App\Http\Enums\CauserEnum;
-use App\Http\Enums\VacancyAdminEnum;
-use App\Http\Enums\VacancyEnum;
 use App\Models\Vacancy;
+use App\Utils\Enums\CauserEnum;
+use App\Utils\Enums\VacancyAdminEnum;
+use App\Utils\Enums\VacancyEnum;
 
 class VacancyScrapingService
 {

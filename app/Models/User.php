@@ -2,8 +2,7 @@
 
 namespace App\Models;
 
-use App\Http\Enums\StatusEnum;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Utils\Enums\StatusEnum;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;

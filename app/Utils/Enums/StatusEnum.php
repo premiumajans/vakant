@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Enums;
+namespace App\Utils\Enums;
 
 use Illuminate\Validation\Rules\Enum;
 

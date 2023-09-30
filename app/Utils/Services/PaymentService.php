@@ -24,8 +24,10 @@ class PaymentService
 
     public function __construct($orderId = null, $sessionId = null)
     {
-        $this->merchantSecretKey = config('app.payriff_secret');
-        $this->merchantUniqueNumber = config('app.payriff_number');
+//        $this->merchantSecretKey = config('app.payriff_secret');
+//        $this->merchantUniqueNumber = config('app.payriff_number');
+        $this->merchantSecretKey = 'AD30294EF68E428793B5834C4E15DDDF';
+        $this->merchantUniqueNumber = 'ES1092103';
         $this->encryptionToken = time() . rand();
         $this->authorization = sha1($this->merchantSecretKey . $this->encryptionToken);
         $this->baseUrl = "https://api.payriff.com/api/v2/";
@@ -72,7 +74,7 @@ class PaymentService
         ?string $approveURL = null,
         ?string $cancelURL = null,
         ?string $declineURL = null
-    ): string
+    )
     {
         $body = [
             "amount" => $amount,
@@ -94,42 +96,7 @@ class PaymentService
 
             return $response->payload;
         }
-    }
-
-    public function createInstallment(
-        float   $amount,
-        ?string $description = null,
-        string  $currencyType = 'AZN',
-        string  $language = 'AZ',
-        int     $installmentPeriod = 3,
-        string  $installmentProductType = "BIRKART",
-        ?string $approveURL = null,
-        ?string $cancelURL = null,
-        ?string $declineURL = null
-    ): string
-    {
-        $body = [
-            "amount" => $amount,
-            "approveURL" => $approveURL,
-            "cancelURL" => $cancelURL,
-            "currencyType" => $currencyType,
-            "declineURL" => $declineURL,
-            "description" => $description,
-            "language" => $language,
-            "installmentPeriod" => $installmentPeriod,
-            "installmentProductType" => $installmentProductType,
-        ];
-
-        $response = $this->sendRequest('createOrder', $body);
-
-        if ($response->code == self::SUCCESS) {
-            $this->setOrderId($response->payload->orderId);
-            $this->setSessionId($response->payload->sessionId);
-
-            return $response->payload;
-        }
-
-        return view('frontend.payment.error');
+        return $response;
     }
 
     public function getOrderInformation(
@@ -185,9 +152,7 @@ class PaymentService
             "orderId" => $orderId ?? $this->orderId,
             "sessionId" => $sessionId ?? $this->sessionId,
         ];
-
         $response = $this->sendRequest('refund', $body);
-
         return $response->internalMessage;
     }
 
@@ -273,7 +238,7 @@ class PaymentService
         ?string $approveURL = null,
         ?string $cancelURL = null,
         ?string $declineURL = null
-    ): string
+    )
     {
         $body = [
             "amount" => $amount,

@@ -2,9 +2,6 @@
 
 namespace App\Utils\Services;
 
-use App\Http\Enums\CauserEnum;
-use App\Http\Enums\VacancyAdminEnum;
-use App\Http\Enums\VacancyEnum;
 use App\Models\Vacancy;
 use App\Models\VacancyDescription;
 

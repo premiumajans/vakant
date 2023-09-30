@@ -4,12 +4,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Enums\CompanyEnum;
-use App\Http\Enums\PremiumEnum;
 use App\Models\Company;
 use App\Models\PremiumCompany;
 use App\Models\PremiumCompanyHistory;
 use App\Models\User;
+use App\Utils\Enums\CompanyEnum;
+use App\Utils\Enums\PremiumEnum;
 use App\Utils\Services\PremiumCompanyService;
 use Carbon\Carbon;
 use Illuminate\Auth\AuthenticationException;

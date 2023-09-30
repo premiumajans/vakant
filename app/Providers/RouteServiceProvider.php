@@ -13,17 +13,8 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->configureRateLimiting();
         $this->routes(function () {
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('routes/api.php'));
-//            Route::middleware(['web', 'frontLanguage'])
-//                ->group(base_path('routes/web.php'));
-//            Route::middleware('frontLanguage')
-//                ->group(base_path('routes/web.php'));
-            Route::middleware(['web', 'backendLanguage'])
-                ->prefix('/')
-                ->name('backend.')
-                ->group(base_path('routes/web/backend.php'));
+            Route::middleware('api')->prefix('api')->group(base_path('routes/api.php'));
+            Route::middleware(['web', 'backendLanguage'])->prefix('/')->name('backend.')->group(base_path('routes/web/backend.php'));
         });
     }
     protected function configureRateLimiting(): void

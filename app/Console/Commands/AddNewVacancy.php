@@ -2,8 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Enums\{CauserEnum, VacancyAdminEnum, VacancyEnum};
-use App\Models\{Vacancy, VacancyDescription};
 use App\Utils\Services\ScarpingService;
 use Illuminate\Console\Command;
 

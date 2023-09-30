@@ -100,6 +100,11 @@ class VacancyScrapingService
                 $this->createVacancyService->createVacancy($scrapedVacancy, $vacancyDetails);
             }
         }
+//        foreach ($vacancyIDs as $keyID => $vid) {
+//            if (in_array($vid, $vacancies)) {
+//                Vacancy::where('scrap_id', $vid)->first()->delete();
+//            }
+//        }
         return $vacanciesWithUrls;
     }
 }

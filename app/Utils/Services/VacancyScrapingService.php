@@ -3,10 +3,10 @@
 
 namespace App\Utils\Services;
 
-use App\Http\Enums\CauserEnum;
-use App\Http\Enums\VacancyAdminEnum;
-use App\Http\Enums\VacancyEnum;
 use App\Models\Vacancy;
+use App\Utils\Enums\CauserEnum;
+use App\Utils\Enums\VacancyAdminEnum;
+use App\Utils\Enums\VacancyEnum;
 
 class VacancyScrapingService
 {
@@ -100,6 +100,11 @@ class VacancyScrapingService
                 $this->createVacancyService->createVacancy($scrapedVacancy, $vacancyDetails);
             }
         }
+//        foreach ($vacancyIDs as $keyID => $vid) {
+//            if (in_array($vid, $vacancies)) {
+//                Vacancy::where('scrap_id', $vid)->first()->delete();
+//            }
+//        }
         return $vacanciesWithUrls;
     }
 }

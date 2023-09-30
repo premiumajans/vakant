@@ -2,9 +2,9 @@
 
 namespace App\Utils\Services;
 
-use App\Http\Enums\VacancyEnum;
 use App\Models\PremiumVacancy;
 use App\Models\Vacancy;
+use App\Utils\Enums\VacancyEnum;
 use Carbon\Carbon;
 use Exception;
 

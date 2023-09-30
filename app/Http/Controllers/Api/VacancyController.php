@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\General\VacancyController as GeneralVacancy;
-use Illuminate\Auth\AuthenticationException;
-use App\Http\Enums\{VacancyEnum, CauserEnum, StatusEnum, VacancyAdminEnum};
-use App\Models\{AltCategory, Category, VacancyUpdate, Company, Vacancy};
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Controllers\General\VacancyController as GeneralVacancy;
+use App\Models\{AltCategory, Category, Company, Vacancy, VacancyUpdate};
+use App\Utils\Enums\{CauserEnum};
+use App\Utils\Enums\StatusEnum;
+use App\Utils\Enums\VacancyAdminEnum;
+use App\Utils\Enums\VacancyEnum;
 use Exception;
-
-use Illuminate\Support\Collection;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
 class VacancyController extends Controller
@@ -22,7 +23,7 @@ class VacancyController extends Controller
 
     public function index()
     {
-        return Vacancy::where('end_time', '>', Carbon::now())->with('description')->get();
+        return Vacancy::where('end_time', '>', Carbon::now())->with('description')->orderBy('id','desc')->get();
     }
 
     public function category($id)
@@ -33,7 +34,6 @@ class VacancyController extends Controller
         return response()->json([
             'vacancies' => Vacancy::where('end_time', '>', Carbon::now())
                 ->whereHas('description', function ($query) use ($altCategoryIds) {
-                    // Use 'whereIn' instead of 'where' to check if the category_id is in the array
                     $query->whereIn('category_id', $altCategoryIds);
                 })
                 ->with('description')

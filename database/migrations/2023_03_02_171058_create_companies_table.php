@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->string('name');
             $table->string('phone');
             $table->string('email');
-            $table->string('company_type')->default(\App\Http\Enums\CompanyEnum::SIMPLE);
+            $table->string('company_type')->default(\App\Utils\Enums\CompanyEnum::SIMPLE);
             $table->longText('voen')->nullable();
             $table->string('adress');
             $table->longText('about')->nullable();

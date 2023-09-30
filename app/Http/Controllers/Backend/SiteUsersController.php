@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Http\Enums\PremiumEnum;
 use App\Http\Helpers\CRUDHelper;
 use App\Http\Requests\Backend\Create\AdminRequest;
 use App\Http\Requests\Backend\Create\CompanyRequest as CreateCompany;
 use App\Models\Company;
 use App\Models\User;
+use App\Utils\Enums\PremiumEnum;
 use App\Utils\Services\PremiumCompanyService;
 use Exception;
 use Illuminate\Http\Request;

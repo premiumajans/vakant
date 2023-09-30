@@ -2,11 +2,11 @@
 
 namespace App\Utils\Services;
 
-use App\Http\Enums\CompanyEnum;
 use App\Http\Requests\Backend\Create\CompanyRequest;
 use App\Models\Company;
 use App\Models\PremiumCompany;
 use App\Models\PremiumCompanyHistory;
+use App\Utils\Enums\CompanyEnum;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;

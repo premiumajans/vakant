@@ -52,24 +52,27 @@ Route::group(['prefix' => '/vacancies'], function () {
 });
 
 Route::group(['prefix' => '/auth'], function () {
-    Route::post('/login', [\App\Http\Controllers\Api\UserController::class, 'login']);
-    Route::post('/register', [\App\Http\Controllers\Api\UserController::class, 'register']);
-    Route::post('/logout', [\App\Http\Controllers\Api\UserController::class, 'logout']);
-    Route::post('/refresh', [\App\Http\Controllers\Api\UserController::class, 'refresh']);
-    Route::post('/check-user', [\App\Http\Controllers\Api\UserController::class, 'check']);
-    Route::post('/change-password', [\App\Http\Controllers\Api\UserController::class, 'changePassword']);
-    Route::post('/forgot-password', [\App\Http\Controllers\Api\UserController::class, 'forgotPassword']);
-    Route::post('/reset-password', [\App\Http\Controllers\Api\UserController::class, 'resetPassword']);
-    Route::get('/login/google', [\App\Http\Controllers\Api\UserController::class, 'redirectToGoogle'])->name('loginGoogle');
-    Route::get('/login/google/callback', [\App\Http\Controllers\Api\UserController::class, 'handleGoogleCallback'])->name('loginGoogleCallback');
-    Route::get('/login/facebook', [\App\Http\Controllers\Api\UserController::class, 'redirectToFacebook'])->name('loginFacebook');
-    Route::get('/login/facebook/callback', [\App\Http\Controllers\Api\UserController::class, 'handleFacebookCallback'])->name('loginFacebookCallback');
+    Route::post('/login', [App\Http\Controllers\Api\UserController::class, 'login']);
+    Route::post('/register', [App\Http\Controllers\Api\UserController::class, 'register']);
+    Route::post('/logout', [App\Http\Controllers\Api\UserController::class, 'logout']);
+    Route::post('/refresh', [App\Http\Controllers\Api\UserController::class, 'refresh']);
+    Route::post('/check-user', [App\Http\Controllers\Api\UserController::class, 'check']);
+    Route::post('/change-password', [App\Http\Controllers\Api\UserController::class, 'changePassword']);
+    Route::post('/forgot-password', [App\Http\Controllers\Api\UserController::class, 'forgotPassword']);
+    Route::post('/reset-password', [App\Http\Controllers\Api\UserController::class, 'resetPassword']);
+    Route::get('/login/google', [App\Http\Controllers\Api\UserController::class, 'redirectToGoogle'])->name('loginGoogle');
+    Route::get('/login/google/callback', [App\Http\Controllers\Api\UserController::class, 'handleGoogleCallback'])->name('loginGoogleCallback');
+    Route::get('/login/facebook', [App\Http\Controllers\Api\UserController::class, 'redirectToFacebook'])->name('loginFacebook');
+    Route::get('/login/facebook/callback', [App\Http\Controllers\Api\UserController::class, 'handleFacebookCallback'])->name('loginFacebookCallback');
 });
+Route::post('/payment', [\App\Http\Controllers\Payment\PayriffController::class, 'index']);
 
 
 Route::prefix('payment')->group(function () {
-    Route::post('/inCart', [Payriff::class, 'inCart'])->name('inCart');
     Route::match(['post', 'get'], '/paymentApproved', [Payriff::class, 'paymentApproved'])->name('paymentApproved');
     Route::match(['post', 'get'], '/paymentCanceled', [Payriff::class, 'paymentCanceled'])->name('paymentCanceled');
     Route::match(['post', 'get'], '/paymentDeclined', [Payriff::class, 'paymentDeclined'])->name('paymentDeclined');
+    Route::match(['post'], '/paymentDeclined', [Payriff::class, 'paymentDeclined'])->name('paymentDeclined');
+    Route::post('/package', [Payriff::class, 'payPackage']);
+    Route::post('/selection', [Payriff::class, 'paySelection']);
 });
